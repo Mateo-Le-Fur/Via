@@ -20,5 +20,11 @@
     "sequelize": "^6.21.3",
     "socket.io": "^4.5.1",
     "swagger": "^0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.21.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "faker": "^5.5.3"
   }
 }
