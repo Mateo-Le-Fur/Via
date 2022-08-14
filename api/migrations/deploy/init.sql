@@ -2,9 +2,17 @@
 
 BEGIN;
 
+CREATE DOMAIN "email" AS text CHECK (
+   value ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$'
+);
+
+CREATE DOMAIN "phone" AS text CHECK (
+  value ~ '^(?:(?:\+|00)33|0)\s*[1-9](?:[\s.-]*\d{2}){4}$'
+);
+
 CREATE TABLE "user" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "email" TEXT NOT NULL,
+  "email" EMAIL NOT NULL,
   "password" TEXT NOT NULL,
   "nickname" TEXT NOT NULL,
   "firstname" TEXT,
@@ -12,7 +20,7 @@ CREATE TABLE "user" (
   "description" TEXT,
   "address" TEXT,
   "city" TEXT,
-  "phone" TEXT,
+  "phone" PHONE,
   "avatar" TEXT,
   "is_admin" BOOLEAN DEFAULT FALSE,
   "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
