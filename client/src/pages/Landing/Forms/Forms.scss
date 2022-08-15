@@ -1,0 +1,94 @@
+@use "../../../vars";
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    .field {
+        width: 100%;
+        position: relative;
+        margin-bottom: 1rem;
+
+        &-input {
+            width: 100%;
+            padding: .7em;
+            font-size: 1em;
+            outline: none;
+            border: 1px solid vars.$gray;
+            box-shadow: vars.$box-shadow;
+            border-radius: 1rem;
+            height: 2.5em;
+            color: vars.$primary-color;
+
+            &::placeholder {
+                color: vars.$primary-color;
+            }
+
+            &:focus {
+                border-color: vars.$primary-color ;
+
+                &+.field-label {
+                    color: vars.$primary-color;
+
+                    &.error {
+                        color: tomato;
+                    }
+                }
+            }
+
+            &.error {
+                border-color: tomato;
+            }
+        }
+
+        &-label {
+            display: none;
+            position: absolute;
+            top: .2rem;
+            left: .7rem;
+            color: #999;
+            font-size: .7em;
+            text-transform: uppercase;
+            animation: labelSlideUpAndShow .3s;
+
+            &.error {
+                color: tomato;
+            }
+        }
+
+        &--has-content {
+            .field-label {
+                display: block;
+            }
+
+            .field-input {
+                padding: 1.4em .7em .4em;
+            }
+        }
+    }
+
+
+    @keyframes labelSlideUpAndShow {
+        0% {
+            transform: translateY(1em);
+            opacity: 0;
+        }
+
+        100% {
+            transform: translateY(0em);
+            opacity: 1;
+        }
+    }
+
+    p {
+        color: tomato;
+        text-align: center;
+        margin-top: .2rem;
+    }
+}
+
+.btn{
+    width: 60%;
+
+}
