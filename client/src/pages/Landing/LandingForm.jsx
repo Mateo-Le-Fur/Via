@@ -14,7 +14,7 @@ const LandingForm = () => {
         <div className="logo">
           <img src='/via.png' alt="" />
         </div>
-        <div className="form">
+        <div className={isMember ? "form form--member": "form" }>
           {isMember ? (
             <Login />
           ) : (

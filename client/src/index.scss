@@ -20,6 +20,7 @@ body{
   background-color: lighten(vars.$primary-color, 35%);
   border: 1px solid  vars.$primary-color;
   cursor: pointer;
+  transition: color .5s ease-in-out;
   &:hover{
     background: linear-gradient(25deg, darken(vars.$tertiary-color, 10%) 20%, lighten(vars.$primary-color, 20%) 100%); 
     color: #fff;

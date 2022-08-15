@@ -8,6 +8,7 @@
             width: 100%;
             left: 0;
         }
+        animation: bargeIn .3s ease-in;
         position: absolute;
         z-index: 2000;
         top: 0;
@@ -17,19 +18,25 @@
         background-color: white;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        padding: 1rem;
+        justify-content: space-between;
         align-items: center;
-        gap: 5%;
+
+        @keyframes bargeIn {
+            0%{
+                transform: translateX(-100%)
+            }
+            100%{
+                transform: translateX(0)
+            }
+        }
 
         .container {
             display: flex;
             width: 100%;
             flex-direction: column;
             align-items: center;
-            @media (max-width: 800px){
-               gap: 2%
-            }
-            gap: 10%;
+            justify-content: space-evenly;
             min-height: 75%;
 
             .logo {
@@ -50,12 +57,15 @@
                 display: flex;
                 flex-direction: column;
                 align-items: center;
-
+                @media (max-width: 800px) {
+                    width: 95%;
+                }
+              
                 h1 {
-                    color: vars.$gray;
-                    @media (max-width: 800px){
-                       padding-bottom: 1rem;
+                    @media (max-width: 800px) {
+                        padding-bottom: 1rem;
                     }
+                    color: vars.$gray;
                     padding-bottom: 2rem;
                     font-size: 1.6rem;
                 }
