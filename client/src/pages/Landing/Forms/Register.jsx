@@ -23,7 +23,7 @@ const Register = () => {
     
         }),
         onSubmit: (values) => {
-          dispatch(register())
+          dispatch(register(values))
         }
       })
   return (

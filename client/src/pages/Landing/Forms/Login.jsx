@@ -17,7 +17,7 @@ const Login = () => {
           password: Yup.string().required('Le mot de passe est obligatoire').min(6, "Le mot de passe doit contenir 6 charactères").matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Le mot doit avoir au moins une majuscule et un chiffre")
         }),
         onSubmit: (values) => {
-          dispatch(login())
+          dispatch(login(values))
         }
       })
 
