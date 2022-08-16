@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const argon2 = require('argon2');
 const User = require('../models/User');
 
 const auth = {
@@ -7,30 +8,56 @@ const auth = {
     return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1800s' });
   },
 
-  register(req, res) {
+  async register(req, res) {
+    const {
+      nickname, city, email, password, confirmPassword,
+    } = req.body;
+
     if (
-      !req.body.nickname
-      || !req.body.city
-      || !req.body.email
-      || !req.body.password
-      || !req.body.confirm_password
+      !nickname
+      || !city
+      || !email
+      || !password
+      || !confirmPassword
     ) {
       res.json({ msg: 'Tous les champs sont requis !' });
+      return;
     }
 
     // TODO Ajouté des verification avec JOI
 
     if (req.body.password !== req.body.confirm_password) {
       res.json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
+      return;
     }
 
     // TODO Vérifié si l'utilisateur n'est pas deja dans la DB
 
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (user) {
+      res.json({ msg: 'Cet utilisateur existe déjà' });
+      return;
+    }
+
     delete req.body.confirm_password;
 
-    // TODO Chiffrer le mot de passe avec argon2
+    try {
+      const hashPassword = await argon2.hash(password);
 
-    // TODO Enregistrer l'utilisateur en DB
+      User.create({
+        email,
+        password: hashPassword,
+        nickname,
+        city,
+      });
+    } catch (err) {
+      res.json(err);
+    }
   },
 
   async login(req, res) {
