@@ -1,5 +1,16 @@
 {
     "login": {
-        "id": 1
-    }
+        "token": "eyJhbGciOiJIUzI1NiIsInR5c…..",
+        "id": "1",
+        "city": "Marseille",
+        "location": { "lat": "43.27", "long": "5.36" },
+        "is_admin": true
+      },
+      "register": {
+        "token": "apbJhbGciODDIUzI1Ni232nR5c…..",
+        "id": "2",
+        "city": "Montpellier",
+        "location": { "lat": "43.62", "long": "3.85" },
+        "is_admin": false
+      }
 }
