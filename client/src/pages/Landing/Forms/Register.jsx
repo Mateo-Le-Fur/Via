@@ -12,14 +12,14 @@ const Register = () => {
           city: "",
           email: "",
           password: "",
-          confirm_password: ""
+          confirmPassword: ""
         },
         validationSchema: Yup.object({
           nickname: Yup.string().min(5, "Le pseudo doit contenir au moins 5 charactères").required("Ce champ est obligatoire"),
           city: Yup.string().min(3, "La ville doit comprendre au minmum 3 charactères ").required("Ce champ est obligatoire"),
           email: Yup.string().email("L'email n'est pas valide").required("Ce champ est obligatoire"),
           password: Yup.string().required('Ce champ est obligatoire').min(6, "Le mot de passe doit contenir au moins 6 charactères ").matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Le mot de passe doit avoir au moins une majuscule et un chiffre "),
-          confirm_password: Yup.string().required("Ce champ est obligatoire").oneOf([Yup.ref('password'), null], 'Les mots de passe ne correspondent pas')
+          confirmPassword: Yup.string().required("Ce champ est obligatoire").oneOf([Yup.ref('password'), null], 'Les mots de passe ne correspondent pas')
     
         }),
         onSubmit: (values) => {
@@ -50,10 +50,10 @@ const Register = () => {
         <label htmlFor="password" className={registerForm.touched.password && registerForm.errors.password ? "field-label error" : "field-label"} >Mot de passe</label>
         {registerForm.touched.password && registerForm.errors.password ? <p>{registerForm.errors.password}</p> : null}
       </div>
-      <div className={registerForm.values.confirm_password.length > 0 ? "field field--has-content" : "field"}>
-        <input type="password" id="confirm_password" className={registerForm.touched.confirm_password && registerForm.errors.confirm_password ? "field-input error" : "field-input"} name="confirm_password" placeholder="Confirmer le mot de passe " onBlur={registerForm.handleBlur} onChange={registerForm.handleChange} value={registerForm.values.confirm_password} />
-        <label htmlFor="confirm_password" className={registerForm.touched.confirm_password && registerForm.errors.confirm_password ? "field-label error" : "field-label"} >Confirmer le mot de passe</label>
-        {registerForm.touched.confirm_password && registerForm.errors.confirm_password ? <p>{registerForm.errors.confirm_password}</p> : null}
+      <div className={registerForm.values.confirmPassword.length > 0 ? "field field--has-content" : "field"}>
+        <input type="password" id="confirmPassword" className={registerForm.touched.confirmPassword && registerForm.errors.confirmPassword ? "field-input error" : "field-input"} name="confirmPassword" placeholder="Confirmer le mot de passe " onBlur={registerForm.handleBlur} onChange={registerForm.handleChange} value={registerForm.values.confirmPassword} />
+        <label htmlFor="confirmPassword" className={registerForm.touched.confirmPassword && registerForm.errors.confirmPassword ? "field-label error" : "field-label"} >Confirmer le mot de passe</label>
+        {registerForm.touched.confirmPassword && registerForm.errors.confirmPassword ? <p>{registerForm.errors.confirmPassword}</p> : null}
       </div>
       <button className="btn" type="submit">C'est parti</button>
     </form>
