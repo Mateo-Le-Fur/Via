@@ -21,6 +21,13 @@ body{
   border: 1px solid  vars.$primary-color;
   cursor: pointer;
   transition: color .5s ease-in-out;
+  &.disabled{
+    cursor: not-allowed;
+    background-color: lighten(vars.$primary-color, 45%);
+    &:hover{
+      background: linear-gradient(25deg, darken(vars.$tertiary-color, 20%) 20%, lighten(vars.$primary-color, 20%) 100%); 
+    }
+  }
   &:hover{
     background: linear-gradient(25deg, darken(vars.$tertiary-color, 10%) 20%, lighten(vars.$primary-color, 20%) 100%); 
     color: #fff;
@@ -28,4 +35,5 @@ body{
   &:active{
     scale: 0.8
   }
+
 }

@@ -1,9 +1,11 @@
 import { useFormik } from "formik"
+import { useDispatch } from 'react-redux'
 import * as Yup from "yup"
+import { register } from '../../../features/auth/authSlice'
 import "./Forms.scss"
 
 const Register = () => {
-
+    const dispatch = useDispatch()
     const registerForm = useFormik({
         initialValues: {
           nickname: "",
@@ -21,11 +23,9 @@ const Register = () => {
     
         }),
         onSubmit: (values) => {
-          console.log(values)
+          dispatch(register())
         }
       })
-    
-
   return (
     <>
     <h1>Inscription</h1>
