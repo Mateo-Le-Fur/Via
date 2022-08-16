@@ -4,6 +4,7 @@ const axios = require('axios');
 const client = require('../app/config/pg');
 const addressData = require('./address-data.json');
 
+<<<<<<< HEAD
 const streetNumbers = [];
 const streets = [];
 const postalCodes = [];
@@ -44,6 +45,8 @@ const bookmarkNb = 0;
 const participationNb = 0;
 const activityTypeNb = 0;
 
+=======
+>>>>>>> 6c146ad6ed7c7993fc75db29f9e305cb9751eab2
 const users = [];
 const activities = [];
 const messages = [];
@@ -64,6 +67,7 @@ const types = [];
 const bookmarks = [];
 const participations = [];
 const activityTypes = [];
+<<<<<<< HEAD
 
 const city = 'Paris';
 
@@ -78,6 +82,8 @@ function pgQuoteEscape(row) {
   });
   return newRow;
 }
+=======
+>>>>>>> 6c146ad6ed7c7993fc75db29f9e305cb9751eab2
 
 // Generate users and add them to the database table "user"
 function generateUsers(userNb) {
@@ -163,6 +169,7 @@ function generateActivities(activityNb) {
   return activities;
 }
 
+<<<<<<< HEAD
 async function insertActivities(activities) {
   await client.query('TRUNCATE TABLE "activity" RESTART IDENTITY CASCADE');
 
@@ -197,6 +204,34 @@ async function insertActivities(activities) {
    `;
   const result = await client.query(queryStr);
   return result.rows;
+=======
+// Generate messages and add them to the database table "message"
+function generateMessages(messageNb) {
+  for (let i = 0; i < messageNb; i++) {
+    const message = {
+      text: faker.lorem.paragraph(number = 3, string = ' '),
+      sender: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      receiver: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+    };
+
+    messages.push(message);
+  }
+  return messages;
+}
+
+// Generate comments and add them to the database table "comment"
+function generateComments(commentNb) {
+  for (let i = 0; i < commentNb; i++) {
+    const comment = {
+      text: faker.lorem.paragraph(number = 3, string = ' '),
+      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)]) + 1,
+    };
+
+    comments.push(comment);
+  }
+  return comments;
+>>>>>>> 6c146ad6ed7c7993fc75db29f9e305cb9751eab2
 }
 
 // Generate types and add them to the database table "type"
@@ -211,6 +246,7 @@ function generateTypes() {
   return types;
 }
 
+<<<<<<< HEAD
 async function insertTypes(types) {
   await client.query('TRUNCATE TABLE "type" RESTART IDENTITY CASCADE');
 
@@ -411,6 +447,47 @@ async function insertTypes(types) {
   const usersData = await insertUsers(users);
   const activitiesData = await insertActivities(activities);
   const typesData = await insertTypes(types);
+=======
+// Generate bookmarks from users and add them to the database table "user_has_activity"
+function generateUserBookmarks(bookmarkNb) {
+  for (let i = 0; i < bookmarkNb; i++) {
+    const bookmark = {
+      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)]) + 1,
+    };
+
+    bookmarks.push(bookmark);
+  }
+  return bookmarks;
+}
+
+// Generate participations to activity and add them to the database table "user_to_activity"
+function generateUserParticipations(participationNb) {
+  for (let i = 0; i < participationNb; i++) {
+    const participation = {
+      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)]) + 1,
+    };
+
+    participations.push(participation);
+  }
+  return participations;
+}
+
+// TODO Affiner l'assignation des types aux activités (éviter de se retrouver avec une activité ayant des types contradictoires ou incohérents)
+// Generate types belongin to activity and add them to the database table "activity_has_type"
+function generateUserActivityTypes(activityTypeNb) {
+  for (let i = 0; i < activityTypeNb; i++) {
+    const activityType = {
+      type_id: types.indexOf(types[Math.floor(Math.random() * types.length)]) + 1,
+      activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)]) + 1,
+    };
+
+    activityTypes.push(activityType);
+  }
+  return activityTypes;
+}
+>>>>>>> 6c146ad6ed7c7993fc75db29f9e305cb9751eab2
 
   client.end();
 })();
