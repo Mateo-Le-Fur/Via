@@ -37,10 +37,13 @@ const auth = {
 
     // TODO récupérer l'utilisateur en DB
 
-    let user;
+    const user = {
+      email: 'mat@hotmail.com',
+      password: '1234',
+    };
 
-    if (email !== user.mail || password !== user.password) {
-      res.json(401, { msg: 'Email ou mot de passe incorrect' });
+    if (email !== user.email || password !== user.password) {
+      res.status(401).json({ msg: 'Email ou mot de passe incorrect' });
       return;
     }
 
@@ -52,6 +55,8 @@ const auth = {
   protect(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
 
+    console.log(token);
+
     if (!token) {
       res.status(401);
       return;
@@ -59,7 +64,8 @@ const auth = {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        res.json(401, { msg: 'Token invalide' });
+        res.status(401).json({ msg: 'Token invalide' });
+        return;
       }
 
       req.user = user;
