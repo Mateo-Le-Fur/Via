@@ -1,7 +1,7 @@
 const http = require('http');
 require('dotenv').config();
 const debug = require('debug')('app:server');
-const app = require('./app');
+const app = require('./backend');
 
 const port = process.env.PORT ?? 8080;
 

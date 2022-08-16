@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 require('dotenv').config();
 const { faker } = require('@faker-js/faker');
-const axios = require('axios');
-const client = require('../app/config/pg');
+const client = require('../app/config/sequelize');
 const addressData = require('./address-data.json');
+const User = require('../app/models/User');
 
 const streetNumbers = [];
 const streets = [];
@@ -137,7 +137,7 @@ async function insertUsers(users) {
            )
            VALUES
            ${userValues}
-           RETURNING id
+           
    `;
   const result = await client.query(queryStr);
   return result.rows;
@@ -192,7 +192,7 @@ async function insertActivities(activities) {
            )
            VALUES
            ${activityValues}
-           RETURNING id
+           
    `;
   const result = await client.query(queryStr);
   return result.rows;
@@ -226,7 +226,7 @@ async function insertTypes(types) {
            )
            VALUES
            ${typeValues}
-           RETURNING id
+           
    `;
   const result = await client.query(queryStr);
   return result.rows;
@@ -366,6 +366,4 @@ async function insertTypes(types) {
   const usersData = await insertUsers(users);
   const activitiesData = await insertActivities(activities);
   const typesData = await insertTypes(types);
-
-  client.end();
 })();

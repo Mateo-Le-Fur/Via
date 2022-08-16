@@ -23,14 +23,14 @@ const auth = {
       || !password
       || !confirmPassword
     ) {
-      res.json({ msg: 'Tous les champs sont requis !' });
+      res.status(401).json({ msg: 'Tous les champs sont requis !' });
       return;
     }
 
     // TODO Ajouté des verification avec JOI
 
     if (req.body.password !== req.body.confirmPassword) {
-      res.json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
+      res.status(401).json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
       return;
     }
 
@@ -42,10 +42,8 @@ const auth = {
       },
     });
 
-    console.log(req.body);
-
     if (user) {
-      res.json({ msg: 'Cet utilisateur existe déjà' });
+      res.status(401).json({ msg: 'Cet utilisateur existe déjà' });
       return;
     }
 
@@ -61,7 +59,9 @@ const auth = {
         city,
       });
 
-      res.json({ msg: 'Utilisateur créer' });
+      const token = auth.generateToken({ user });
+
+      res.json({ msg: 'Utilisateur créer', token });
     } catch (err) {
       res.json(err);
     }
@@ -76,7 +76,14 @@ const auth = {
       },
     });
 
-    if (email !== user.email || password !== user.password) {
+    if (!user) {
+      res.status(401).json({ msg: 'utilisateur introuvable' });
+      return;
+    }
+
+    const goodPassword = await argon2.verify(user.password, password);
+
+    if (!goodPassword) {
       res.status(401).json({ msg: 'Email ou mot de passe incorrect' });
       return;
     }
@@ -90,7 +97,7 @@ const auth = {
     const token = req.headers.authorization.split(' ')[1];
 
     if (!token) {
-      res.status(401);
+      res.status(401).json('something went wrong');
       return;
     }
 
