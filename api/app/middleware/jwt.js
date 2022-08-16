@@ -10,9 +10,12 @@ const auth = {
 
   async register(req, res) {
     const {
-      nickname, city, email, password, confirmPassword,
+      nickname,
+      city,
+      email,
+      password,
+      confirmPassword,
     } = req.body;
-
     if (
       !nickname
       || !city
@@ -26,7 +29,7 @@ const auth = {
 
     // TODO Ajouté des verification avec JOI
 
-    if (req.body.password !== req.body.confirm_password) {
+    if (req.body.password !== req.body.confirmPassword) {
       res.json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
       return;
     }
@@ -38,6 +41,8 @@ const auth = {
         email,
       },
     });
+
+    console.log(req.body);
 
     if (user) {
       res.json({ msg: 'Cet utilisateur existe déjà' });
@@ -55,6 +60,8 @@ const auth = {
         nickname,
         city,
       });
+
+      res.json({ msg: 'Utilisateur créer' });
     } catch (err) {
       res.json(err);
     }

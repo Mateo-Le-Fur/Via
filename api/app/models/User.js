@@ -1,9 +1,7 @@
 const { Model, Sequelize } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-class User extends Model {
-
-}
+class User extends Model {}
 
 User.init({
   email: Sequelize.STRING,
@@ -19,8 +17,7 @@ User.init({
   is_admin: Sequelize.BOOLEAN,
 }, {
   sequelize,
-  // eslint-disable-next-line quotes
-  tableName: "user",
+  tableName: 'user',
 });
 
 module.exports = User;
