@@ -5,6 +5,7 @@ import { register } from '../../../features/auth/authSlice'
 import "./Forms.scss"
 
 const Register = () => {
+    const {isLoading, isError} = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const registerForm = useFormik({
         initialValues: {
@@ -55,7 +56,7 @@ const Register = () => {
         <label htmlFor="confirmPassword" className={registerForm.touched.confirmPassword && registerForm.errors.confirmPassword ? "field-label error" : "field-label"} >Confirmer le mot de passe</label>
         {registerForm.touched.confirmPassword && registerForm.errors.confirmPassword ? <p>{registerForm.errors.confirmPassword}</p> : null}
       </div>
-      <button className="btn" type="submit">C'est parti</button>
+        <button className={isLoading || isError ? "btn disabled" : "btn"} type="submit" disabled={isLoading || isError}>{isLoading ? "Envoi...": "C'est parti"}</button>
     </form>
   </>
   )
