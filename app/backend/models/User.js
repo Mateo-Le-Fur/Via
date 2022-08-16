@@ -1,7 +1,7 @@
 const { Model, Sequelize } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-class User extends Model {}
+class User extends Model { }
 
 User.init({
   email: Sequelize.STRING,
