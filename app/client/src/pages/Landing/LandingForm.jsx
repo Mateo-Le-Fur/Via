@@ -14,10 +14,10 @@ const LandingForm = () => {
     }
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const {user, isLoading, isError, isSuccess, message} = useSelector(state => state.auth)
+    const {user, message} = useSelector(state => state.auth)
 
     useEffect(() => {
-      if(isError){
+      if(message){
         setTimeout(() => {
           dispatch(reset())
         }, 2000)
@@ -26,7 +26,7 @@ const LandingForm = () => {
       if(user){
         navigate('/home')
       }
-    }, [user, isError, navigate, dispatch])
+    }, [user, message, navigate, dispatch])
 
   return (
     <div className="landingForm">
