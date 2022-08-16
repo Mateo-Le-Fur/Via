@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
 const auth = {
 
@@ -32,30 +33,27 @@ const auth = {
     // TODO Enregistrer l'utilisateur en DB
   },
 
-  login(req, res) {
+  async login(req, res) {
     const { email, password } = req.body;
 
-    // TODO récupérer l'utilisateur en DB
-
-    const user = {
-      email: 'mat@hotmail.com',
-      password: '1234',
-    };
+    const user = await User.findOne({
+      where: {
+        email,
+      },
+    });
 
     if (email !== user.email || password !== user.password) {
       res.status(401).json({ msg: 'Email ou mot de passe incorrect' });
       return;
     }
 
-    const token = auth.generateToken(user);
+    const token = auth.generateToken({ user });
 
     res.json({ token });
   },
 
   protect(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
-
-    console.log(token);
 
     if (!token) {
       res.status(401);
@@ -68,7 +66,7 @@ const auth = {
         return;
       }
 
-      req.user = user;
+      req.user = { ...user, token };
       next();
     });
   },

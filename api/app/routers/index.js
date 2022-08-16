@@ -7,7 +7,7 @@ router.post('/api/auth/login', auth.login);
 
 // ! Route de test
 router.get('/home', auth.protect, (req, res) => {
-  res.json({ user: req.user });
+  res.json(req.user);
 });
 
 module.exports = router;
