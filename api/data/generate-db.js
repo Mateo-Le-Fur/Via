@@ -1,25 +1,23 @@
 require('dotenv').config();
-const client = require('../app/config/pg');
 const { faker } = require('@faker-js/faker');
 const axios = require('axios');
+const client = require('../app/config/pg');
 const addressData = require('./address-data.json');
 
 const streetNumbers = [];
 const streets = [];
 const postalCodes = [];
 
-addressData.forEach(address => {
+addressData.forEach((address) => {
   streets.push(address.name);
   postalCodes.push(address.postcode);
 });
 
-const newAddress = addressData.map(address => {
-  return {
-    street: address.name,
-    postalCode: address.postcode,
-    city: address.city[0]
-  }
-});
+const newAddress = addressData.map((address) => ({
+  street: address.name,
+  postalCode: address.postcode,
+  city: address.city[0],
+}));
 
 function randomAddress() {
   const rand = Math.floor(Math.random() * newAddress.length);
@@ -28,11 +26,11 @@ function randomAddress() {
     nb: 15,
     street: newAddress[rand].street,
     postalCode: newAddress[rand].postalCode,
-    city: newAddress[rand].city
-  }
+    city: newAddress[rand].city,
+  };
 
   return randAddress;
-};
+}
 
 // console.log(randomAddress());
 
@@ -58,10 +56,10 @@ const baseTypes = [
   'Cinéma',
   'Cuisine',
   'Danse',
-  'Jardinage', 
+  'Jardinage',
   'Jeux',
-  'Bricolage'
-]
+  'Bricolage',
+];
 const types = [];
 const bookmarks = [];
 const participations = [];
@@ -72,18 +70,18 @@ const city = 'Paris';
 function pgQuoteEscape(row) {
   const newRow = {};
   Object.entries(row).forEach(([prop, value]) => {
-      if (typeof value !== 'string') {
-          newRow[prop] = value;
-          return;
-      }
-      newRow[prop] = value.replaceAll("'", "''");
+    if (typeof value !== 'string') {
+      newRow[prop] = value;
+      return;
+    }
+    newRow[prop] = value.replaceAll("'", "''");
   });
   return newRow;
 }
 
 // Generate users and add them to the database table "user"
 function generateUsers(userNb) {
-  for (let i = 0 ; i < userNb ; i++ ) {
+  for (let i = 0; i < userNb; i++) {
     const user = {
       email: faker.internet.email(),
       password: faker.internet.password(),
@@ -97,7 +95,7 @@ function generateUsers(userNb) {
       avatar: faker.image.people(400, 400),
       is_admin: false,
     };
-  
+
     users.push(user);
   }
   return users;
@@ -107,8 +105,8 @@ async function insertUsers(users) {
   await client.query('TRUNCATE TABLE "user" RESTART IDENTITY CASCADE');
 
   const userValues = users.map((user) => {
-      const newUser = pgQuoteEscape(user);
-      return `(
+    const newUser = pgQuoteEscape(user);
+    return `(
           '${newUser.email}',
           '${newUser.password}',
           '${newUser.nickname}',
@@ -148,7 +146,7 @@ async function insertUsers(users) {
 
 // Generate activities and add them to the database table "activity"
 function generateActivities(activityNb) {
-  for (let i = 0 ; i < activityNb ; i++ ) {
+  for (let i = 0; i < activityNb; i++) {
     const activity = {
       name: faker.lorem.sentence(),
       description: faker.lorem.paragraph(number = 2, string = ' '),
@@ -157,9 +155,9 @@ function generateActivities(activityNb) {
       city: randomAddress().city,
       lat: faker.address.latitude(),
       long: faker.address.longitude(),
-      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1
+      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
     };
-  
+
     activities.push(activity);
   }
   return activities;
@@ -169,8 +167,8 @@ async function insertActivities(activities) {
   await client.query('TRUNCATE TABLE "activity" RESTART IDENTITY CASCADE');
 
   const activityValues = activities.map((activity) => {
-      const newActivity = pgQuoteEscape(activity);
-      return `(
+    const newActivity = pgQuoteEscape(activity);
+    return `(
           '${newActivity.name}',
           '${newActivity.description}',
           '${newActivity.date}',
@@ -203,11 +201,11 @@ async function insertActivities(activities) {
 
 // Generate types and add them to the database table "type"
 function generateTypes() {
-  for (let i = 0 ; i < baseTypes.length ; i++ ) {
+  for (let i = 0; i < baseTypes.length; i++) {
     const type = {
       label: baseTypes[i],
     };
-  
+
     types.push(type);
   }
   return types;
@@ -217,8 +215,8 @@ async function insertTypes(types) {
   await client.query('TRUNCATE TABLE "type" RESTART IDENTITY CASCADE');
 
   const typeValues = types.map((type) => {
-      const newType = pgQuoteEscape(type);
-      return `(
+    const newType = pgQuoteEscape(type);
+    return `(
           '${newType.label}'
       )`;
   });
@@ -243,7 +241,7 @@ async function insertTypes(types) {
 //       sender: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       receiver: users.indexOf(users[Math.floor(Math.random() * users.length)])+1
 //     };
-  
+
 //     messages.push(message);
 //   }
 //   return messages;
@@ -283,7 +281,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-  
+
 //     comments.push(comment);
 //   }
 //   return comments;
@@ -322,7 +320,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-  
+
 //     bookmarks.push(bookmark);
 //   }
 //   return bookmarks;
@@ -335,7 +333,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-  
+
 //     participations.push(participation);
 //   }
 //   return participations;
@@ -349,7 +347,7 @@ async function insertTypes(types) {
 //       type_id: types.indexOf(types[Math.floor(Math.random() * types.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-  
+
 //     activityTypes.push(activityType);
 //   }
 //   return activityTypes;
@@ -360,7 +358,7 @@ async function insertTypes(types) {
 //     // Stop la propagation par défaut
 //           event.preventDefault();
 //           event.stopPropagation();
-  
+
 //           let rue = $("#inputRue").val();
 //           $.get('https://api-adresse.data.gouv.fr/search/', {
 //               q: rue,
@@ -375,22 +373,22 @@ async function insertTypes(types) {
 //                   liste += '<li><a href="#" name="'+obj.properties.label+'" data-name="'+obj.properties.name+'" data-postcode="'+obj.properties.postcode+'" data-city="'+obj.properties.city+'">'+obj.properties.label+'</a></li>';
 //               });
 //               $('.adress-feedback ul').html(liste);
-  
+
 //               // ToDo: Au clic du lien voulu, on envoie l'info en $_POST
 //               $('.adress-feedback ul>li').on("click","a", function(event) {
 //                   // Stop la propagation par défaut
 //                   event.preventDefault();
 //                   event.stopPropagation();
-  
+
 //                   let adresse = $(this).attr("name");
-  
+
 //                   $("#inputRue").val($(this).attr("data-name"));
 //                   $("#inputCodePostal").val($(this).attr("data-postcode"));
 //                   $("#inputVille").val($(this).attr("data-city"));
-  
+
 //                   $('.adress-feedback ul').empty();
 //               });
-  
+
 //           }).error(function () {
 //               // alert( "error" );
 //           }).always(function () {
