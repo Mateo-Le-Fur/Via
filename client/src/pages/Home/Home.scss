@@ -1,0 +1,7 @@
+@use "../../vars";
+
+.home{
+    background-color: vars.$secondary-color;
+    width: 100%;
+    height: 100%;
+}
