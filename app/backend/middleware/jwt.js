@@ -1,12 +1,28 @@
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
+const axios = require('axios').default;
 const User = require('../models/User');
+const client = require('../config/redis');
 
 const auth = {
 
   generateToken(user) {
-    return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1800s' });
+    return new Promise((resolve, reject) => {
+      jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1800s' }, (err, token) => {
+        if (err) {
+          reject(err);
+        }
+
+        client.set(user.user.id.toString(), token);
+
+        resolve(token);
+      });
+    });
   },
+
+  // generateToken(user) {
+  //   return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1800s' });
+  // },
 
   async register(req, res) {
     const {
@@ -55,11 +71,25 @@ const auth = {
         city,
       });
 
-      const token = auth.generateToken({ user: createdUser });
+      let createdUserValues = createdUser.get();
+
+      // !!
+      await auth.generateToken({ user: createdUserValues });
 
       delete createdUser.dataValues.password;
 
-      res.json({ user: createdUser.dataValues, token });
+      const result = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${createdUser.dataValues.city}&type=municipality&limit=1`);
+
+      const geometry = result.data;
+      const { coordinates } = geometry.features[0].geometry;
+
+      createdUserValues = { ...createdUserValues, coordinates };
+
+      res.cookie('tokenId', createdUserValues.id, {
+        httpOnly: true,
+      });
+
+      res.json({ user: createdUserValues });
     } catch (err) {
       res.json(err);
     }
@@ -86,26 +116,29 @@ const auth = {
       return;
     }
 
+    delete user.dataValues.password;
+
     const token = auth.generateToken({ user });
 
     res.json({ user, token });
   },
 
-  protect(req, res, next) {
-    const token = req.headers.authorization.split(' ')[1];
+  async protect(req, res, next) {
+    const { tokenId } = req.cookies;
+
+    const token = await client.get(tokenId);
 
     if (!token) {
       res.status(401).json('Aucun token trouvé');
       return;
     }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    jwt.verify(token, process.env.JWT_SECRET, (err) => {
       if (err) {
-        res.status(401).json({ msg: 'Token invalide' });
+        res.status(403).json({ msg: 'Token invalide' });
         return;
       }
 
-      req.user = { ...user, token };
       next();
     });
   },
