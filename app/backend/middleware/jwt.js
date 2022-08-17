@@ -23,27 +23,23 @@ const auth = {
       || !password
       || !confirmPassword
     ) {
-      res.status(401).json({ msg: 'Tous les champs sont requis !' });
+      res.status(400).json({ msg: 'Tous les champs sont requis !' });
       return;
     }
-
-    // TODO Ajouté des verification avec JOI
 
     if (req.body.password !== req.body.confirmPassword) {
       res.status(401).json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
       return;
     }
 
-    // TODO Vérifié si l'utilisateur n'est pas deja dans la DB
-
-    const user = await User.findOne({
+    const isUserExist = await User.findOne({
       where: {
         email,
       },
     });
 
-    if (user) {
-      res.status(401).json({ msg: 'Cet utilisateur existe déjà' });
+    if (isUserExist) {
+      res.status(400).json({ msg: 'Cet utilisateur existe déjà' });
       return;
     }
 
@@ -52,16 +48,18 @@ const auth = {
     try {
       const hashPassword = await argon2.hash(password);
 
-      User.create({
+      const createdUser = await User.create({
         email,
         password: hashPassword,
         nickname,
         city,
       });
 
-      const token = auth.generateToken({ user });
+      const token = auth.generateToken({ user: createdUser });
 
-      res.json({ msg: 'Utilisateur créer', token });
+      delete createdUser.dataValues.password;
+
+      res.json({ user: createdUser.dataValues, token });
     } catch (err) {
       res.json(err);
     }
@@ -77,27 +75,27 @@ const auth = {
     });
 
     if (!user) {
-      res.status(401).json({ msg: 'utilisateur introuvable' });
+      res.status(400).json({ msg: 'Utilisateur introuvable' });
       return;
     }
 
     const goodPassword = await argon2.verify(user.password, password);
 
     if (!goodPassword) {
-      res.status(401).json({ msg: 'Email ou mot de passe incorrect' });
+      res.status(400).json({ msg: 'Email ou mot de passe incorrect' });
       return;
     }
 
     const token = auth.generateToken({ user });
 
-    res.json({ token });
+    res.json({ user, token });
   },
 
   protect(req, res, next) {
     const token = req.headers.authorization.split(' ')[1];
 
     if (!token) {
-      res.status(401).json('something went wrong');
+      res.status(401).json('Aucun token trouvé');
       return;
     }
 

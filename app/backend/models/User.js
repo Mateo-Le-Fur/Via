@@ -1,21 +1,45 @@
-const { Model, Sequelize } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
-class User extends Model { }
+class User extends Model {}
 
 User.init({
-  email: Sequelize.STRING,
+  email: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    unique: true,
+  },
 
-  password: Sequelize.STRING,
-  nickname: Sequelize.STRING,
-  firstname: Sequelize.STRING,
-  lastname: Sequelize.STRING,
-  description: Sequelize.STRING,
-  address: Sequelize.STRING,
-  city: Sequelize.STRING,
-  phone: Sequelize.STRING,
-  avatar: Sequelize.STRING,
-  is_admin: Sequelize.BOOLEAN,
+  password: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  nickname: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+
+  firstname: {
+    type: DataTypes.TEXT,
+  },
+
+  lastname: DataTypes.TEXT,
+
+  description: DataTypes.TEXT,
+
+  address: DataTypes.TEXT,
+
+  city: DataTypes.TEXT,
+
+  phone: DataTypes.TEXT,
+
+  avatar: DataTypes.TEXT,
+
+  is_admin: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+
 }, {
   sequelize,
   tableName: 'user',
