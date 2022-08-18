@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const path = require('path');
 const auth = require('../middleware/jwt');
+const authController = require('../controllers/authController');
 
 // Authentification
-router.post('/api/auth/register', auth.register);
-router.post('/api/auth/login', auth.login);
+router.post('/api/auth/register', authController.register);
+router.post('/api/auth/login', authController.login);
 
 // ! Route de test
 
