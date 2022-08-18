@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const axios = require('axios').default;
 const User = require('../models/User');
-const generateRedisKey = require('../services/generateUserToken');
-const redis = require('../config/redis');
+// const generateRedisKey = require('../services/generateUserToken');
+// const redis = require('../config/redis');
 
 const auth = {
 
@@ -14,6 +14,8 @@ const auth = {
   generateCookie(res, name, value) {
     res.cookie(name, value, {
       httpOnly: true,
+      signed: true,
+      secret: 'yourSecretGoesHere',
     });
   },
 
@@ -64,18 +66,17 @@ const auth = {
 
     createdUser = createdUser.get();
 
-    const token = auth.generateToken(createdUser);
-
     const coordinates = await auth.getCoordinates(createdUser.city);
 
     createdUser = { ...createdUser, coordinates };
 
-    const userUUID = generateRedisKey(createdUser, token);
+    const token = auth.generateToken(createdUser);
 
-    auth.generateCookie(res, 'tokenId', userUUID);
+    // const userUUID = generateRedisKey(createdUser, token);
 
-    const user = createdUser;
-    res.json(user);
+    auth.generateCookie(res, 'token', token);
+
+    res.json(createdUser);
   },
 
   async login(req, res) {
@@ -102,9 +103,9 @@ const auth = {
     }
     const token = auth.generateToken(user);
 
-    const userUUID = generateRedisKey(user, token);
+    // const userUUID = generateRedisKey(user, token);
 
-    auth.generateCookie(res, 'tokenId', userUUID);
+    auth.generateCookie(res, 'token', token);
 
     delete user.password;
 
@@ -112,16 +113,16 @@ const auth = {
   },
 
   async logout(req, res) {
-    const { tokenId } = req.cookies;
+    const { token } = req.cookies;
 
-    if (!tokenId) {
+    if (!token) {
       res.status(401).json({ msg: 'Le token n\'existe pas' });
       return;
     }
 
-    redis.del(tokenId);
+    // redis.del(token);
 
-    res.clearCookie(tokenId);
+    res.clearCookie(token);
   },
 };
 

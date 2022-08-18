@@ -6,10 +6,10 @@ class Comment extends Model {}
 Comment.init({
   text: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   user_id: Datatypes.INTEGER,
-  activity_id: Datatypes.INTEGER
+  activity_id: Datatypes.INTEGER,
 }, {
   sequelize,
   tableName: 'comment',
