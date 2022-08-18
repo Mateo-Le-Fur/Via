@@ -24,7 +24,8 @@
     "redis": "^4.2.0",
     "sequelize": "^6.21.3",
     "socket.io": "^4.5.1",
-    "swagger": "^0.0.1"
+    "swagger": "^0.0.1",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",

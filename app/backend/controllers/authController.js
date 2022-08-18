@@ -2,12 +2,19 @@ const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const axios = require('axios').default;
 const User = require('../models/User');
-const client = require('../config/redis');
+const generateRedisKey = require('../services/generateUserToken');
+const redis = require('../config/redis');
 
 const auth = {
 
   generateToken(user) {
-    return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '1800s' });
+    return jwt.sign(user, process.env.JWT_SECRET, { expiresIn: `${process.env.JWT_EXPIRE}s` });
+  },
+
+  generateCookie(res, name, value) {
+    res.cookie(name, value, {
+      httpOnly: true,
+    });
   },
 
   async getCoordinates(city) {
@@ -63,25 +70,24 @@ const auth = {
 
     createdUser = { ...createdUser, coordinates };
 
-    await client.set(createdUser.id.toString(), token);
+    const userUUID = generateRedisKey(createdUser, token);
 
-    delete createdUser.password;
+    auth.generateCookie(res, 'tokenId', userUUID);
 
-    res.cookie('tokenId', createdUser.id, {
-      httpOnly: true,
-    });
-
-    res.json({ user: createdUser });
+    const user = createdUser;
+    res.json(user);
   },
 
   async login(req, res) {
     const { email, password } = req.body;
 
-    const user = await User.findOne({
+    let user = await User.findOne({
       where: {
         email,
       },
     });
+
+    user = user.get();
 
     if (!user) {
       res.status(400).json({ msg: 'Utilisateur introuvable' });
@@ -94,12 +100,28 @@ const auth = {
       res.status(400).json({ msg: 'Email ou mot de passe incorrect' });
       return;
     }
+    const token = auth.generateToken(user);
 
-    delete user.dataValues.password;
+    const userUUID = generateRedisKey(user, token);
 
-    const token = auth.generateToken({ user });
+    auth.generateCookie(res, 'tokenId', userUUID);
 
-    res.json({ user, token });
+    delete user.password;
+
+    res.json(user);
+  },
+
+  async logout(req, res) {
+    const { tokenId } = req.cookies;
+
+    if (!tokenId) {
+      res.status(401).json({ msg: 'Le token n\'existe pas' });
+      return;
+    }
+
+    redis.del(tokenId);
+
+    res.clearCookie(tokenId);
   },
 };
 
