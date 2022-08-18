@@ -39,6 +39,22 @@ const userController = {
     res.json(user);
   },
 
+  async getUserActivities(req, res) {
+    const { id } = req.params;
+    const result = await User.findByPk(id, {
+      include: ['activities'],
+    });
+
+    console.log(result.get());
+
+    // const user = result.get();
+
+    // const activities = user.activities.map((elem) => {
+
+    // });
+
+    // const eval = { ...tag, quizList: quizzes };
+  },
 };
 
 module.exports = userController;

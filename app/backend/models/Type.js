@@ -6,8 +6,8 @@ class Type extends Model {}
 Type.init({
   label: {
     type: Datatypes.STRING,
-    allowNull: false
-  }
+    allowNull: false,
+  },
 }, {
   sequelize,
   tableName: 'type',

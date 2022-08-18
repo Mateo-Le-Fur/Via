@@ -6,33 +6,33 @@ class Activity extends Model {}
 Activity.init({
   name: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   description: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   date: {
     type: Datatypes.TIMESTAMPTZ,
-    allowNull: false
+    allowNull: false,
   },
   address: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   city: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   lat: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   long: {
     type: Datatypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
-  user_id: Datatypes.INTEGER
+  user_id: Datatypes.INTEGER,
 }, {
   sequelize,
   tableName: 'activity',
