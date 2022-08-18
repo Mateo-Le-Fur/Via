@@ -14,7 +14,7 @@ function App() {
   
 const dispatch = useDispatch()
 
-const {isLoading ,user, message} = useSelector(state => state.auth)
+const {isLoading} = useSelector(state => state.auth)
 
 useEffect(() => {
   dispatch(checkUser())

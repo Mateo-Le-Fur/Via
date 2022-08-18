@@ -5,7 +5,7 @@ import "./Landing.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
-import { checkUser, reset } from '../../features/auth/authSlice';
+import { reset } from '../../features/auth/authSlice';
 
 const LandingForm = () => {
     const [isMember, setIsMember] = useState(true)
@@ -16,9 +16,6 @@ const LandingForm = () => {
     const dispatch = useDispatch()
 
     const {isLoading ,user, message} = useSelector(state => state.auth)
-
-
-
 
     useEffect(() => {
       if(message){
@@ -42,7 +39,7 @@ const LandingForm = () => {
           <img src='/via.png' alt="" />
         </div>
         <div className="form">
-          {message && <p className='server-error'></p>}
+          {message && message !== "Le token n'existe pas" && <p className='server-error'>{message}</p>}
           {isMember ? (
             <Login />
           ) : (
