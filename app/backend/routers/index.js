@@ -2,7 +2,7 @@ const router = require('express').Router();
 const authJWT = require('../middleware/jwt');
 const auth = require('./auth');
 
-router.use('/auth', auth);
+router.use('/api/auth', auth);
 
 // ! Route de test
 

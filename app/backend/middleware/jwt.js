@@ -1,17 +1,17 @@
 const jwt = require('jsonwebtoken');
-const redis = require('../config/redis');
+// const redis = require('../config/redis');
 
 const authJWT = {
 
   async protect(req, res, next) {
-    const { tokenId } = req.cookies;
+    const { token } = req.signedCookies;
 
-    if (Object.entries(tokenId).length === 0) {
+    if (!token) {
       res.status(401).json({ msg: 'Le token n\'existe pas' });
       return;
     }
 
-    const token = await redis.get(tokenId);
+    // const token = await redis.get(token);
 
     if (!token) {
       res.status(401).json('Aucun token trouvé');
