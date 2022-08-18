@@ -1,40 +1,13 @@
-/* eslint-disable no-unused-vars */
-require('dotenv').config();
+// require('dotenv').config();
+const client = require('../backend/config/sequelize');
 const { faker } = require('@faker-js/faker');
-const client = require('../app/config/sequelize');
 const addressData = require('./address-data.json');
-const User = require('../app/models/User');
 
-const streetNumbers = [];
-const streets = [];
-const postalCodes = [];
-
-// addressData.forEach(address => {
-//   streets.push(address.name);
-//   postalCodes.push(address.postcode);
-// });
-
-const newAddress = addressData.map((address) => ({
-  street: address.name,
-  postalCode: address.postcode,
-  city: address.city[0],
-}));
-
-function randomAddress() {
-  const rand = Math.floor(Math.random() * newAddress.length);
-
-  const randAddress = {
-    nb: 15,
-    street: newAddress[rand].street,
-    postalCode: newAddress[rand].postalCode,
-    city: newAddress[rand].city,
-  };
-
-  return randAddress;
-}
-
+// Sets the addresses in french format
 faker.locale = 'fr';
 
+// Initializes entities variables
+// Sets the number of rows per entity
 const userNb = 20;
 const activityNb = 25;
 const messageNb = 0;
@@ -43,6 +16,7 @@ const bookmarkNb = 0;
 const participationNb = 0;
 const activityTypeNb = 0;
 
+// Initializes entities arrays
 const users = [];
 const activities = [];
 const messages = [];
@@ -55,32 +29,112 @@ const baseTypes = [
   'Cinéma',
   'Cuisine',
   'Danse',
-  'Jardinage',
+  'Jardinage', 
   'Jeux',
-  'Bricolage',
-];
+  'Bricolage'
+]
 const types = [];
 const bookmarks = [];
 const participations = [];
 const activityTypes = [];
 
-const city = 'Paris';
+// Creates a model for an address
+const newAddress = addressData.map(address => {
+  // Get the streetNumbers, latitudes and logitudes from a single address
+  const streetNumbers = [];
+  const latitudes = [];
+  const longitudes = [];
+  const addressKeys = Object.keys(address);
+  
+  addressKeys.forEach(item => {
+    const numberRegex = /housenumbers.[0-9]{1,}\.id/;
+
+    if (item.match(numberRegex)) {
+      streetNumbers.push(item);
+    }
+  });
+
+  for (const [key, value] of Object.entries(address)) {
+    const latRegex = /housenumbers.[0-9]{1,}\.lat/;
+
+    if (key.match(latRegex)) {
+      latitudes.push({key, value});
+    }
+  }
+
+  for (const [key, value] of Object.entries(address)) {
+    const lonRegex = /housenumbers.[0-9]{1,}\.lon/;
+
+    if (key.match(lonRegex)) {
+      longitudes.push({key, value});
+    }
+  }
+  
+  return {
+    streetNumbers,
+    street: address.name,
+    postalCode: address.postcode,
+    city: address.city[0],
+    latitudes,
+    longitudes
+  }
+});
+
+// Create a random address
+function randomAddress() {
+  const rand = Math.floor(Math.random() * newAddress.length +1);
+  const randStreetNumber = Math.floor(Math.random() * newAddress[rand].streetNumbers.length +1);
+  let number = 1;
+  let lat =  newAddress[rand].lat;
+  let lon = newAddress[rand].lon;
+  
+  if (newAddress[rand].streetNumbers[randStreetNumber]) {
+    const numberRegex = /[0-9]{1,}/;
+
+    number = newAddress[rand].streetNumbers[randStreetNumber].match(numberRegex);
+  }
+
+  newAddress[rand].latitudes.forEach(latitude => {
+    if (latitude.key === 'housenumbers.' + number + '.lat') {
+      lat = latitude.value;
+    }
+  });
+
+  newAddress[rand].longitudes.forEach(longitude => {
+    if (longitude.key === 'housenumbers.' + number + '.lon') {
+      lon = longitude.value;
+    }
+  });
+
+  const randAddress = {
+    number,
+    street: newAddress[rand].street,
+    postalCode: newAddress[rand].postalCode,
+    city: newAddress[rand].city,
+    lat,
+    lon
+  };
+
+  return randAddress;
+};
 
 function pgQuoteEscape(row) {
   const newRow = {};
   Object.entries(row).forEach(([prop, value]) => {
-    if (typeof value !== 'string') {
-      newRow[prop] = value;
-      return;
-    }
-    newRow[prop] = value.replaceAll("'", "''");
+      if (typeof value !== 'string') {
+          newRow[prop] = value;
+          return;
+      }
+      newRow[prop] = value.replaceAll("'", "''");
   });
   return newRow;
-}
+};
 
 // Generate users and add them to the database table "user"
 function generateUsers(userNb) {
   for (let i = 0; i < userNb; i++) {
+    const address = randomAddress();
+
     const user = {
       email: faker.internet.email(),
       password: faker.internet.password(),
@@ -88,24 +142,24 @@ function generateUsers(userNb) {
       firstname: faker.name.firstName(),
       lastname: faker.name.lastName(),
       description: faker.lorem.paragraph(number = 2, string = ' '),
-      address: `${randomAddress().nb} ${randomAddress().street} ${randomAddress().postalCode}`,
-      city: randomAddress().city,
+      address: `${address.number} ${address.street} ${address.postalCode}`,
+      city: address.city,
       phone: faker.phone.number('06 ## ## ## ##', string),
       avatar: faker.image.people(400, 400),
       is_admin: false,
     };
-
+  
     users.push(user);
   }
   return users;
-}
+};
 
 async function insertUsers(users) {
   await client.query('TRUNCATE TABLE "user" RESTART IDENTITY CASCADE');
 
   const userValues = users.map((user) => {
-    const newUser = pgQuoteEscape(user);
-    return `(
+      const newUser = pgQuoteEscape(user);
+      return `(
           '${newUser.email}',
           '${newUser.password}',
           '${newUser.nickname}',
@@ -137,37 +191,39 @@ async function insertUsers(users) {
            )
            VALUES
            ${userValues}
-           
+           RETURNING id
    `;
   const result = await client.query(queryStr);
   return result.rows;
-}
+};
 
 // Generate activities and add them to the database table "activity"
 function generateActivities(activityNb) {
   for (let i = 0; i < activityNb; i++) {
+    const address = randomAddress();
+
     const activity = {
       name: faker.lorem.sentence(),
       description: faker.lorem.paragraph(number = 2, string = ' '),
       date: faker.date.future(0.5),
-      address: `${randomAddress().nb} ${randomAddress().street} ${randomAddress().postalCode}`,
-      city: randomAddress().city,
-      lat: faker.address.latitude(),
-      long: faker.address.longitude(),
-      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      address: `${address.number} ${address.street} ${address.postalCode}`,
+      city: address.city,
+      lat: address.lat,
+      long: address.lon,
+      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1
     };
-
+  
     activities.push(activity);
   }
   return activities;
-}
+};
 
 async function insertActivities(activities) {
   await client.query('TRUNCATE TABLE "activity" RESTART IDENTITY CASCADE');
 
   const activityValues = activities.map((activity) => {
-    const newActivity = pgQuoteEscape(activity);
-    return `(
+      const newActivity = pgQuoteEscape(activity);
+      return `(
           '${newActivity.name}',
           '${newActivity.description}',
           '${newActivity.date}',
@@ -192,30 +248,30 @@ async function insertActivities(activities) {
            )
            VALUES
            ${activityValues}
-           
+           RETURNING id
    `;
   const result = await client.query(queryStr);
   return result.rows;
-}
+};
 
 // Generate types and add them to the database table "type"
 function generateTypes() {
-  for (let i = 0; i < baseTypes.length; i++) {
+  for (let i = 0 ; i < baseTypes.length ; i++ ) {
     const type = {
       label: baseTypes[i],
     };
-
+  
     types.push(type);
   }
   return types;
-}
+};
 
 async function insertTypes(types) {
   await client.query('TRUNCATE TABLE "type" RESTART IDENTITY CASCADE');
 
   const typeValues = types.map((type) => {
-    const newType = pgQuoteEscape(type);
-    return `(
+      const newType = pgQuoteEscape(type);
+      return `(
           '${newType.label}'
       )`;
   });
@@ -226,11 +282,11 @@ async function insertTypes(types) {
            )
            VALUES
            ${typeValues}
-           
+           RETURNING id
    `;
   const result = await client.query(queryStr);
   return result.rows;
-}
+};
 
 // // Generate messages and add them to the database table "message"
 // function generateMessages(messageNb) {
@@ -240,7 +296,7 @@ async function insertTypes(types) {
 //       sender: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       receiver: users.indexOf(users[Math.floor(Math.random() * users.length)])+1
 //     };
-
+  
 //     messages.push(message);
 //   }
 //   return messages;
@@ -280,7 +336,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-
+  
 //     comments.push(comment);
 //   }
 //   return comments;
@@ -319,7 +375,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-
+  
 //     bookmarks.push(bookmark);
 //   }
 //   return bookmarks;
@@ -332,7 +388,7 @@ async function insertTypes(types) {
 //       user_id: users.indexOf(users[Math.floor(Math.random() * users.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-
+  
 //     participations.push(participation);
 //   }
 //   return participations;
@@ -346,7 +402,7 @@ async function insertTypes(types) {
 //       type_id: types.indexOf(types[Math.floor(Math.random() * types.length)])+1,
 //       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
 //     };
-
+  
 //     activityTypes.push(activityType);
 //   }
 //   return activityTypes;
@@ -366,4 +422,6 @@ async function insertTypes(types) {
   const usersData = await insertUsers(users);
   const activitiesData = await insertActivities(activities);
   const typesData = await insertTypes(types);
+
+  // client.end();
 })();
