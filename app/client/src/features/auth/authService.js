@@ -1,28 +1,27 @@
+import { privateReq, publicReq } from '../../utils/axiosMethod'
 
-import axios from 'axios'
-const API_URL = '/api/auth/'
 
 // Register user
 const register = async (userData) => {
-  const response = await axios.post(API_URL + 'register', userData)
+  const response = await publicReq.post('/auth/register', userData)
           return response.data.user 
 }
 
 // Login user
 const login = async (userData) => {
-  const response = await axios.post(API_URL + 'login', userData)
+  const response = await publicReq.post('/auth/login', userData)
     return response.data.user
 }
 
 // Login user
 const checkUser = async () => {
-  const response = await axios.get(API_URL + 'current')
+  const response = await privateReq.get('/auth//current')
     return response.data.user
 }
 
 // Logout user
 const logout = async () => {
-  const response = await axios.post(API_URL + 'logout')
+  const response = await privateReq.post('/auth/logout')
   return response.data
 }
 
