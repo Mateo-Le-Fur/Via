@@ -14,7 +14,11 @@ const LandingForm = () => {
     }
     const navigate = useNavigate()
     const dispatch = useDispatch()
+
     const {isLoading ,user, message} = useSelector(state => state.auth)
+
+
+
 
     useEffect(() => {
       if(message){
@@ -26,8 +30,9 @@ const LandingForm = () => {
       if(!isLoading && user){
         navigate("/home")
       }
-
+      
     }, [user, message, isLoading, navigate, dispatch])
+
 
 
   return (

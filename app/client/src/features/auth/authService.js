@@ -14,11 +14,13 @@ const login = async (userData) => {
     return response.data
 }
 
+
 // Checkout user
 const checkUser = async () => {
   const response = await privateReq.get('/auth/current')
   console.log(response.data)
     return response.data
+
 }
 
 // Logout user
