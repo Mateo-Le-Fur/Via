@@ -14,7 +14,7 @@ const LandingForm = () => {
     }
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const {user, message} = useSelector(state => state.auth)
+    const {checking,user, message} = useSelector(state => state.auth)
 
     useEffect(() => {
       if(message){
@@ -23,10 +23,15 @@ const LandingForm = () => {
         }, 2000)
       }
 
-      if(user){
+      if(!checking && user){
         navigate('/home')
       }
-    }, [user, message, navigate, dispatch])
+    }, [user, message, checking, navigate, dispatch])
+
+
+  if (checking){
+    return <p>loading...</p>
+  }
 
   return (
     <div className="landingForm">

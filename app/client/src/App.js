@@ -4,9 +4,21 @@ import Landing from './pages/Landing/Landing';
 import Home from './pages/Home/Home';
 import NotFound from './pages/404/NotFound';
 import ProtectedRoute from './pages/ProtectedRoute';
+import { useEffect } from 'react';
+import {checkUser} from "./features/auth/authSlice"
+import { useDispatch } from 'react-redux';
+
 
 function App() {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(checkUser())
+  }, [dispatch])
+
   return (
+
+    
     <BrowserRouter>
       <div className='App'>
         <Routes>
