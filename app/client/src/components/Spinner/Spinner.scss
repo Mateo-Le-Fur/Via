@@ -1,13 +1,12 @@
 @use "../../vars";
 
 .loadingSpinnerContainer {
-    position: absolute;
-    z-index: 3000;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
+    background: transparent;
     left: 0;
-    background-color: transparent;
     z-index: 5000;
     display: flex;
     justify-content: center;
