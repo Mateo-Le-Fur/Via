@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const { User, Activity } = require('../models');
 
 const userController = {
 
@@ -45,15 +45,44 @@ const userController = {
       include: ['activities'],
     });
 
-    console.log(result.get());
+    const user = result.get();
 
-    // const user = result.get();
+    const activities = user.activities.map((el) => el.get());
 
-    // const activities = user.activities.map((elem) => {
+    const val = { ...user, activities };
 
-    // });
+    res.json(val);
+  },
 
-    // const eval = { ...tag, quizList: quizzes };
+  async updateUserActivity(req, res) {
+    const { userId, activityId } = req.params;
+    const {
+      name,
+      description,
+      date,
+      address,
+      city,
+      lat,
+      long,
+    } = req.body;
+
+    const userActivity = await Activity.update({
+      name,
+      description,
+      date,
+      address,
+      city,
+      lat,
+      long,
+      userId,
+
+    }, {
+      where: activityId,
+    });
+
+    console.log(userActivity);
+
+    res.json(userActivity);
   },
 };
 
