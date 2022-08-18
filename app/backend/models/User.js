@@ -1,4 +1,4 @@
-const { Model, DataTypes } = require('sequelize');
+const { Model, Datatypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
 class User extends Model {}
@@ -39,7 +39,6 @@ User.init({
     type: DataTypes.BOOLEAN,
     defaultValue: false,
   },
-
 }, {
   sequelize,
   tableName: 'user',
