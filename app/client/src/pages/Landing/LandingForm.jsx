@@ -5,7 +5,7 @@ import "./Landing.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
-import { reset } from '../../features/auth/authSlice';
+import { checkUser, reset } from '../../features/auth/authSlice';
 
 const LandingForm = () => {
     const [isMember, setIsMember] = useState(true)
@@ -15,26 +15,24 @@ const LandingForm = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const {checking,user, message} = useSelector(state => state.auth)
+    const {isLoading ,user, message} = useSelector(state => state.auth)
+
+
 
 
     useEffect(() => {
       if(message){
         setTimeout(() => {
           dispatch(reset())
-        }, 2000)
+        }, 3000)
       }
-
-      if(!checking && user){
-        navigate('/home')
+      
+      if(!isLoading && user){
+        navigate("/home")
       }
+      
+    }, [user, message, isLoading, navigate, dispatch])
 
-    }, [user, message, checking, navigate, dispatch])
-
-
-  if (checking){
-    return <p>loading...</p>
-  }
 
 
   return (
