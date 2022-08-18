@@ -12,7 +12,7 @@ CREATE DOMAIN "phone" AS text CHECK (
 
 CREATE TABLE "user" (
   "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  "email" EMAIL NOT NULL,
+  "email" EMAIL NOT NULL UNIQUE,
   "password" TEXT NOT NULL,
   "nickname" TEXT NOT NULL,
   "firstname" TEXT,
