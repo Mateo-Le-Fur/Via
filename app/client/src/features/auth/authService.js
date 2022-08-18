@@ -4,19 +4,21 @@ import { privateReq, publicReq } from '../../utils/axiosMethod'
 // Register user
 const register = async (userData) => {
   const response = await publicReq.post('/auth/register', userData)
-          return response.data.user 
+          return response.data 
 }
 
 // Login user
 const login = async (userData) => {
   const response = await publicReq.post('/auth/login', userData)
-    return response.data.user
+  console.log(response.data)
+    return response.data
 }
 
-// Login user
+// Checkout user
 const checkUser = async () => {
-  const response = await privateReq.get('/auth//current')
-    return response.data.user
+  const response = await privateReq.get('/auth/current')
+  console.log(response.data)
+    return response.data
 }
 
 // Logout user

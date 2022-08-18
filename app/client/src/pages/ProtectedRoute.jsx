@@ -1,14 +1,15 @@
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { Navigate } from "react-router-dom"
+import { useEffect } from 'react'
+import { checkUser } from '../features/auth/authSlice'
+import Spinner from '../components/Spinner/Spinner'
 
 const ProtectedRoute = ({children}) => {
-const {user, checking} = useSelector(state => state.auth)
+const {user, isLoading, isError, message} = useSelector(state => state.auth)
 
-if(checking){
-    return <p>Loading...</p>
-}
 
- if(!checking && !user){
+
+ if(!isLoading && !user){
   return <Navigate to="/" />
  }
 
