@@ -1,15 +1,15 @@
-const { Model, Datatypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
 class Comment extends Model {}
 
 Comment.init({
   text: {
-    type: Datatypes.STRING,
+    type: DataTypes.STRING,
     allowNull: false,
   },
-  user_id: Datatypes.INTEGER,
-  activity_id: Datatypes.INTEGER,
+  user_id: DataTypes.INTEGER,
+  activity_id: DataTypes.INTEGER,
 }, {
   sequelize,
   tableName: 'comment',

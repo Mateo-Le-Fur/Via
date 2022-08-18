@@ -1,38 +1,38 @@
-const { Model, Datatypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/sequelize');
 
 class Activity extends Model {}
 
 Activity.init({
   name: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   description: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   date: {
-    type: Datatypes.TIMESTAMPTZ,
+    type: DataTypes.DATE,
     allowNull: false,
   },
   address: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   city: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   lat: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   long: {
-    type: Datatypes.STRING,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
-  user_id: Datatypes.INTEGER,
+  user_id: DataTypes.INTEGER,
 }, {
   sequelize,
   tableName: 'activity',

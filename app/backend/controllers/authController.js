@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const axios = require('axios').default;
-const User = require('../models/User');
+const { User } = require('../models');
 // const generateRedisKey = require('../services/generateUserToken');
 // const redis = require('../config/redis');
 

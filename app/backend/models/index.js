@@ -58,7 +58,7 @@ Type.belongsToMany(Activity, {
   as: 'activities',
 });
 
-User.hasMany(Activity, {
+User.belongsToMany(Activity, {
   through: 'user_has_activity',
   foreignKey: 'user_id',
   otherKey: 'activity_id',
@@ -72,7 +72,7 @@ Activity.belongsToMany(User, {
   as: 'users',
 });
 
-User.hasMany(Activity, {
+User.belongsToMany(Activity, {
   through: 'user_to_activity',
   foreignKey: 'user_id',
   otherKey: 'activity_id',
