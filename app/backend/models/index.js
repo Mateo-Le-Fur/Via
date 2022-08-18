@@ -59,17 +59,19 @@ Type.belongsToMany(Activity, {
 });
 
 User.belongsToMany(Activity, {
+  as: 'bookmarks',
   through: 'user_has_activity',
   foreignKey: 'user_id',
   otherKey: 'activity_id',
-  as: 'bookmarks',
+  timestamps: false,
 });
 
 Activity.belongsToMany(User, {
+  as: 'users',
   through: 'user_has_activity',
   foreignKey: 'activity_id',
   otherKey: 'user_id',
-  as: 'users',
+  timestamps: false,
 });
 
 User.belongsToMany(Activity, {
@@ -80,7 +82,7 @@ User.belongsToMany(Activity, {
 });
 
 Activity.belongsToMany(User, {
-  through: 'user_has_activity',
+  through: 'user_to_activity',
   foreignKey: 'activity_id',
   otherKey: 'user_id',
   as: 'userParticip',

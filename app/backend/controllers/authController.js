@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
-const axios = require('axios').default;
 const { User } = require('../models');
+const getCoordinates = require('../services/getCoordinates');
 // const generateRedisKey = require('../services/generateUserToken');
 // const redis = require('../config/redis');
 
@@ -17,14 +17,6 @@ const auth = {
       signed: true,
       secret: 'yourSecretGoesHere',
     });
-  },
-
-  async getCoordinates(city) {
-    const result = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${city}&type=municipality&limit=1`);
-    const geometry = result.data;
-    const { coordinates } = geometry.features[0].geometry;
-
-    return coordinates;
   },
 
   async register(req, res) {
@@ -66,7 +58,7 @@ const auth = {
 
     createdUser = createdUser.get();
 
-    const coordinates = await auth.getCoordinates(createdUser.city);
+    const coordinates = await getCoordinates(createdUser.city);
 
     createdUser = { ...createdUser, coordinates };
 
