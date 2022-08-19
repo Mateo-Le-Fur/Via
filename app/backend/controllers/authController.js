@@ -45,28 +45,36 @@ const auth = {
       return;
     }
 
-    delete req.body.confirm_password;
+    delete req.body.confirmPassword;
 
     const hashPassword = await argon2.hash(password);
+
+    const coordinates = await getCoordinates(city);
+
+    // TODO remplacer par error handler
+    if (!coordinates) {
+      res.json({ msg: 'Ville incorrect' });
+      return;
+    }
 
     let createdUser = await User.create({
       email,
       password: hashPassword,
       nickname,
       city,
+      lat: coordinates[0],
+      long: coordinates[1],
     });
 
     createdUser = createdUser.get();
-
-    const coordinates = await getCoordinates(createdUser.city);
-
-    createdUser = { ...createdUser, coordinates };
 
     const token = auth.generateToken(createdUser);
 
     // const userUUID = generateRedisKey(createdUser, token);
 
     auth.generateCookie(res, 'token', token);
+
+    delete createdUser.password;
 
     res.json(createdUser);
   },
@@ -100,10 +108,6 @@ const auth = {
     auth.generateCookie(res, 'token', token);
 
     delete user.password;
-
-    const coordinates = await getCoordinates(user.city);
-
-    user = { ...user, coordinates };
 
     res.json(user);
   },

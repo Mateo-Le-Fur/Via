@@ -35,6 +35,10 @@ User.init({
 
   avatar: DataTypes.TEXT,
 
+  lat: DataTypes.TEXT,
+
+  long: DataTypes.TEXT,
+
   is_admin: {
     type: DataTypes.BOOLEAN,
     defaultValue: false,

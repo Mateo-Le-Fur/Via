@@ -88,10 +88,10 @@ const userController = {
   async createActivity(req, res) {
     const { id } = req.params;
 
-    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
+    const coordinates = await getCoordinates(res, `${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
-    const lat = coordinates[1];
-    const long = coordinates[0];
+    const lat = coordinates[0];
+    const long = coordinates[1];
 
     const newBody = {
       ...req.body, user_id: id, lat, long,
@@ -134,7 +134,7 @@ const userController = {
     res.json({ msg: 'ok' });
   },
 
-  async getBookmark(req, res) {
+  async getUserBookmark(req, res) {
     const { id } = req.params;
 
     const user = await User.findByPk(id, {
@@ -142,6 +142,24 @@ const userController = {
     });
 
     res.json(user.get().bookmarks);
+  },
+
+  async deleteUserBookmark(req, res) {
+    const { userId, activityId } = req.params;
+
+    let user = await User.findByPk(userId, {
+      include: ['bookmarks'],
+    });
+
+    const activity = await Activity.findByPk(activityId);
+
+    await activity.removeUser(user);
+
+    user = await User.findByPk(userId, {
+      include: ['bookmarks'],
+    });
+
+    res.json({ msg: 'ok' });
   },
 
 };
