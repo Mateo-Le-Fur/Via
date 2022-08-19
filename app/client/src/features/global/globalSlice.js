@@ -14,6 +14,9 @@ const globalSlice = createSlice({
         handleShowSidebar: (state) => {
             state.showSidebar = true
         },
+        handleHideSidebar: (state) => {
+            state.showSidebar = false
+        },
         activePanel: (state, action) => {
             state.panel = action.payload
         },
@@ -26,6 +29,6 @@ const globalSlice = createSlice({
     }
 })
 
-export const {handleShowSidebar, activePanel, handleShowFilter, activeFilter} = globalSlice.actions
+export const {handleShowSidebar, handleHideSidebar,activePanel, handleShowFilter, activeFilter} = globalSlice.actions
 
 export default globalSlice.reducer

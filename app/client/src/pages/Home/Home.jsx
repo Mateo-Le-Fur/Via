@@ -1,6 +1,7 @@
 import { Marker, Popup } from 'react-leaflet'
 import { useSelector } from 'react-redux'
 import Map from '../../components/Map/Map'
+import OutsideWrapper from '../../hooks/ClickOutsideHook'
 import "./Home.scss"
 import Sidebar from './Sidebar/Sidebar'
 
@@ -17,7 +18,9 @@ const Home = () => {
         </Marker>
       </Map>
     )}
-    <Sidebar />
+    <OutsideWrapper component={"sidebar"}>
+      <Sidebar />
+    </OutsideWrapper>
     </div>
   )
 }
