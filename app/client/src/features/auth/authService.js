@@ -16,7 +16,7 @@ const login = async (userData) => {
 
 // Checkout user
 const checkUser = async () => {
-  const response = await privateReq.get('/auth/current')
+  const response = await privateReq.get('/current')
     return response.data
 
 }
