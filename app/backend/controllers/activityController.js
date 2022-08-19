@@ -5,7 +5,7 @@ const activity = {
     const activities = await Activity.findAll();
 
     if (!activities) {
-      res.json(`Aucune activité n'a été trouvée`);
+      res.json('Aucune activité n\'a été trouvée');
       return;
     }
 
@@ -15,7 +15,7 @@ const activity = {
   async getActivity(req, res) {
     const { id } = req.params;
 
-    const activity = await Activity.findbyPk(id);
+    const activity = await Activity.findByPk(id);
 
     if (!activity) {
       res.json(`L'activité portant l'id ${id} n'existe pas`);
@@ -23,7 +23,7 @@ const activity = {
     }
 
     res.json(activity);
-  }
+  },
 };
 
 module.exports = activity;
