@@ -13,11 +13,6 @@ const authJWT = {
 
     // const token = await redis.get(token);
 
-    if (!token) {
-      res.status(401).json('Aucun token trouvé');
-      return;
-    }
-
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         res.status(403).json({ msg: 'Token invalide' });
