@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 
 const router = require('./routers');
+const { errorHandler } = require('./helpers/errorHandler');
 
 const app = express();
 
@@ -17,7 +18,8 @@ app.use(cors('*'));
 app.use(cookieParser('yourSecretGoesHere'));
 
 app.use('/api', router);
-app.use(router);
+
+app.use(errorHandler);
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
