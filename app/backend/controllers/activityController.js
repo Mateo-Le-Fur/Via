@@ -1,8 +1,8 @@
 const { Activity } = require('../models');
 
 const activity = {
-  getActivities(req, res) {
-    const activities = Activity.findAll();
+  async getActivities(req, res) {
+    const activities = await Activity.findAll();
 
     if (!activities) {
       res.json(`Aucune activité n'a été trouvée`);
@@ -12,10 +12,10 @@ const activity = {
     res.json(activities);
   },
 
-  getActivity(req, res) {
+  async getActivity(req, res) {
     const { id } = req.params;
 
-    const activity = Activity.findbyPk(id);
+    const activity = await Activity.findbyPk(id);
 
     if (!activity) {
       res.json(`L'activité portant l'id ${id} n'existe pas`);
