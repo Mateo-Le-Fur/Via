@@ -1,17 +1,18 @@
 const router = require('express').Router();
 const authJWT = require('../middleware/jwt');
 const auth = require('./auth');
+const user = require('./user');
+const activity = require('./activity');
+const dashboard = require('./dashboard');
+
+router.use('/', authJWT.protect);
 
 router.use('/auth', auth);
-
-// ! Route de test
-
-router.get('/api/profil', authJWT.protect, (req, res) => {
-  res.json({ user: req.user });
-});
-
-router.get('/api/auth/current', authJWT.protect, (req, res) => {
-  res.json({ user: req.user });
+router.use('/user', authJWT.protect, user);
+router.use('/activity', authJWT.protect, activity);
+router.use('/dashboard', authJWT.protect, dashboard);
+router.route('/current', authJWT.protect, (req, res) => {
+    res.json({ user: req.user });
 });
 
 module.exports = router;
