@@ -5,6 +5,7 @@ const userController = {
 
   async getUser(req, res) {
     const { id } = req.params;
+
     const user = await User.findByPk(id);
 
     res.json(user);
@@ -24,7 +25,9 @@ const userController = {
       phone,
       avatar,
     }, {
-      where: id,
+      where: {
+        id,
+      },
     });
 
     res.json(user);
@@ -34,7 +37,9 @@ const userController = {
     const { id } = req.params;
 
     const user = await User.destroy({
-      where: id,
+      where: {
+        id,
+      },
     });
 
     res.json(user);
@@ -112,7 +117,7 @@ const userController = {
       },
     });
 
-    res.status(201).json({ msg: 'ok' });
+    res.status(201).json({ msg: 'Activité supprimer' });
   },
 
   async addBookmark(req, res) {
@@ -131,10 +136,10 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'ok' });
+    res.json({ msg: 'activité ajouter au favori' });
   },
 
-  async getUserBookmark(req, res) {
+  async getUserBookmarks(req, res) {
     const { id } = req.params;
 
     const user = await User.findByPk(id, {
@@ -159,7 +164,7 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'ok' });
+    res.json({ msg: 'favori supprimer' });
   },
 
 };

@@ -35,4 +35,17 @@ module.exports = Joi.object({
 
   avatar: Joi.string(),
 
+  name: Joi.string()
+    .max(50)
+    .messages({
+      'string.max': 'Le nom de l\'activité ne peut dépasser 50 caractères',
+    }),
+
+  date: Joi.string(),
+
+  city: Joi.string()
+    .max(80)
+    .messages({
+      'string.max': 'La ville ne peut dépasser plus de 80 caractères',
+    }),
 });

@@ -1,11 +1,13 @@
 const router = require('express').Router();
 const authController = require('../controllers/authController');
-const authJWT = require('../middleware/jwt');
-const validator = require('../validation/validator');
-const registerSchema = require('../validation/schema/register');
 
-router.post('/register', validator('body', registerSchema), authController.register);
-router.post('/login', authController.login);
-router.get('/logout', authJWT.protect, authController.logout);
+router.route('/register')
+  .post(authController.register); // Sends user registration info
+
+router.route('/login')
+  .post(authController.login); // Sends user login info
+
+router.route('/logout')
+  .get(authController.logout); // Log out user from app
 
 module.exports = router;
