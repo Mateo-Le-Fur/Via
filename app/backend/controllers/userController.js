@@ -90,8 +90,8 @@ const userController = {
 
     const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
-    const lat = coordinates[1];
-    const long = coordinates[0];
+    const lat = coordinates[0];
+    const long = coordinates[1];
 
     const newBody = {
       ...req.body, user_id: id, lat, long,
