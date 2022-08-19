@@ -15,8 +15,13 @@ function useClickOuside(ref, component) {
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         if(component === "sidebar"){
+            console.log("I'm running")
             dispatch(handleHideSidebar())
-            dispatch(activePanel(null))
+            dispatch(activePanel(""))
+        }
+
+        if(component === "panel"){
+            dispatch(activePanel(""))
         }
       }
     }
@@ -26,7 +31,7 @@ function useClickOuside(ref, component) {
       // Unbind the event listener on clean up
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ref]);
+  }, [ref, component, dispatch]);
 }
 
 /**
