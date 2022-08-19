@@ -19,7 +19,8 @@ const Register = () => {
           nickname: Yup.string().min(5, "Le pseudo doit contenir au moins 5 charactères").required("Ce champ est obligatoire"),
           city: Yup.string().min(3, "La ville doit comprendre au minmum 3 charactères ").required("Ce champ est obligatoire"),
           email: Yup.string().email("L'email n'est pas valide").required("Ce champ est obligatoire"),
-          password: Yup.string().required('Ce champ est obligatoire').min(6, "Le mot de passe doit contenir au moins 6 charactères ").matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Le mot de passe doit avoir au moins une majuscule et un chiffre "),
+          password: Yup.string().required('Ce champ est obligatoire').min(8, "Le mot de passe doit contenir au moins 8 charactères ").matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+          , "Le mot de passe doit contenir 8 caractère un chiffre et un caractère spécial"),
           confirmPassword: Yup.string().required("Ce champ est obligatoire").oneOf([Yup.ref('password'), null], 'Les mots de passe ne correspondent pas')
     
         }),
