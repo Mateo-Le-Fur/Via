@@ -12,6 +12,10 @@ body{
   font-family: "Roboto" sans-serif;
 }
 
+li{
+  list-style: none;
+}
+
 .server-error{
   padding-bottom: 1rem;
   color: tomato;
