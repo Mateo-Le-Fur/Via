@@ -14,7 +14,8 @@ const Login = () => {
         },
         validationSchema: Yup.object({
           email: Yup.string().email("L'email n'est pas valide").required("Ce champ est obligatoire"),
-          password: Yup.string().required('Le mot de passe est obligatoire').min(6, "Le mot de passe doit contenir 6 charactères").matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/, "Le mot doit avoir au moins une majuscule et un chiffre")
+          password: Yup.string().required('Le mot de passe est obligatoire').min(8, "Le mot de passe doit contenir 8 charactères").matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+          , "Le mot doit contenir 8 caractère, un caractère spécial et un chiffre")
         }),
         onSubmit: (values) => {
           dispatch(login(values))
