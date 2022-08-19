@@ -10,6 +10,11 @@
 
 body{
   font-family: "Roboto" sans-serif;
+  overflow: hidden;
+}
+
+li{
+  list-style: none;
 }
 
 .server-error{
