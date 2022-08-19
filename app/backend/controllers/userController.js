@@ -112,7 +112,7 @@ const userController = {
       },
     });
 
-    res.status(201).json({ msg: 'ok' });
+    res.status(201).json({ msg: 'Activité supprimer' });
   },
 
   async addBookmark(req, res) {
@@ -131,7 +131,7 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'ok' });
+    res.json({ msg: 'activité ajouter au favori' });
   },
 
   async getUserBookmark(req, res) {
@@ -159,7 +159,7 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'ok' });
+    res.json({ msg: 'favori supprimer' });
   },
 
 };
