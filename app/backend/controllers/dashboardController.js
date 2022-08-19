@@ -1,4 +1,6 @@
-const { User, Activity, Type, Message, Comment } = require('../models');
+const {
+  User, Activity, Type, Message, Comment,
+} = require('../models');
 
 const dashboard = {
   async getAllData(req, res) {
@@ -13,12 +15,12 @@ const dashboard = {
       activities,
       types,
       messages,
-      comments
+      comments,
     ];
 
     const data = await Promise.all(allData);
 
-    res.json({data});
+    res.json({ data });
   },
 
   async updateUser(req, res) {
@@ -26,7 +28,7 @@ const dashboard = {
     const user = await User.findByPk(Number(id));
 
     if (!user) {
-      res.json(`Cet utilisateur n'existe pas`);
+      res.json('Cet utilisateur n\'existe pas');
       return;
     }
 
@@ -39,7 +41,7 @@ const dashboard = {
     const user = await User.findByPk(Number(id));
 
     if (!user) {
-      res.json(`Cet utilisateur n'existe pas`);
+      res.json('Cet utilisateur n\'existe pas');
       return;
     }
 
@@ -52,7 +54,7 @@ const dashboard = {
     const activity = await Activity.findByPk(Number(id));
 
     if (!activity) {
-      res.json(`Cette activité n'existe pas`);
+      res.json('Cette activité n\'existe pas');
       return;
     }
 
@@ -65,7 +67,7 @@ const dashboard = {
     const activity = await Activity.findByPk(Number(id));
 
     if (!activity) {
-      res.json(`Cette activité n'existe pas`);
+      res.json('Cette activité n\'existe pas');
       return;
     }
 
@@ -89,7 +91,7 @@ const dashboard = {
     const type = await Type.findByPk(Number(id));
 
     if (!type) {
-      res.json(`Ce type n'existe pas`);
+      res.json('Ce type n\'existe pas');
       return;
     }
 
@@ -102,7 +104,7 @@ const dashboard = {
     const type = await Type.findByPk(Number(id));
 
     if (!type) {
-      res.json(`Ce type n'existe pas`);
+      res.json('Ce type n\'existe pas');
       return;
     }
 
@@ -115,7 +117,7 @@ const dashboard = {
     const message = await Message.findByPk(Number(id));
 
     if (!message) {
-      res.json(`Ce message n'existe pas`);
+      res.json('Ce message n\'existe pas');
       return;
     }
 
@@ -128,7 +130,7 @@ const dashboard = {
     const message = await Message.findByPk(Number(id));
 
     if (!message) {
-      res.json(`Ce message n'existe pas`);
+      res.json('Ce message n\'existe pas');
       return;
     }
 
@@ -141,7 +143,7 @@ const dashboard = {
     const comment = await Comment.findByPk(Number(id));
 
     if (!comment) {
-      res.json(`Ce commentaire n'existe pas`);
+      res.json('Ce commentaire n\'existe pas');
       return;
     }
 
@@ -154,13 +156,13 @@ const dashboard = {
     const comment = await Comment.findByPk(Number(id));
 
     if (!comment) {
-      res.json(`Ce commentaire n'existe pas`);
+      res.json('Ce commentaire n\'existe pas');
       return;
     }
 
     await comment.destroy();
     res.status(204).json('Commentaire supprimé !');
-  }
-}
+  },
+};
 
 module.exports = dashboard;

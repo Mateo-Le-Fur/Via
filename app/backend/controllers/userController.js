@@ -17,6 +17,8 @@ const userController = {
       firstname, lastname, description, address, phone, avatar,
     } = req.body;
 
+    const coordinates = await getCoordinates(address, 'housenumber');
+
     const user = await User.update({
       firstname,
       lastname,
@@ -24,6 +26,8 @@ const userController = {
       address,
       phone,
       avatar,
+      lat: coordinates[0],
+      long: coordinates[1],
     }, {
       where: {
         id,

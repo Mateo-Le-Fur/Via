@@ -9,8 +9,8 @@ router.use('/auth', auth);
 router.use('/user', authJWT.protect, user);
 router.use('/activity', authJWT.protect, activity);
 router.use('/dashboard', authJWT.protect, dashboard);
-router.route('/current', authJWT.protect, (req, res) => {
-  res.json({ user: req.user });
+router.use('/current', authJWT.protect, (req, res) => {
+  res.json(req.user);
 });
 
 module.exports = router;
