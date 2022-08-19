@@ -2,15 +2,25 @@ const { Activity } = require('../models');
 
 const activity = {
   getActivities(req, res) {
-    const activites = Activity.findAll();
+    const activities = Activity.findAll();
 
-    res.json(activites);
+    if (!activities) {
+      res.json(`Aucune activité n'a été trouvée`);
+      return;
+    }
+
+    res.json(activities);
   },
 
   getActivity(req, res) {
     const { id } = req.params;
 
     const activity = Activity.findbyPk(id);
+
+    if (!activity) {
+      res.json(`L'activité portant l'id ${id} n'existe pas`);
+      return;
+    }
 
     res.json(activity);
   }
