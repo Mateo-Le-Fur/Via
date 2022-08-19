@@ -67,13 +67,15 @@ CREATE TABLE "type" (
   "updated_at" TIMESTAMPTZ
 );
 
+-- TODO Ajouter un DELETE ON CASCADE sur activity_id
 CREATE TABLE "user_has_activity" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "user_id" int NOT NULL REFERENCES "user"(id),
-    "activity_id" int NOT NULL REFERENCES activity(id),
+    "activity_id" int NOT NULL REFERENCES activity(id), 
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- TODO Ajouter un DELETE ON CASCADE sur activity_id
 CREATE TABLE "user_to_activity" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "user_id" int NOT NULL REFERENCES "user"(id),
