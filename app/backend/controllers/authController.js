@@ -80,12 +80,12 @@ const auth = {
       },
     });
 
-    user = user.get();
-
     if (!user) {
       res.status(400).json({ msg: 'Utilisateur introuvable' });
       return;
     }
+
+    user = user.get();
 
     const goodPassword = await argon2.verify(user.password, password);
 
@@ -101,11 +101,15 @@ const auth = {
 
     delete user.password;
 
+    const coordinates = await getCoordinates(user.city);
+
+    user = { ...user, coordinates };
+
     res.json(user);
   },
 
-  async logout(req, res) {
-    const { token } = req.cookies;
+  logout(req, res) {
+    const { token } = req.signedCookies;
 
     if (!token) {
       res.status(401).json({ msg: 'Le token n\'existe pas' });
@@ -114,7 +118,9 @@ const auth = {
 
     // redis.del(token);
 
-    res.clearCookie(token);
+    res.clearCookie('token');
+
+    res.json({ msg: 'déconnecté' });
   },
 };
 

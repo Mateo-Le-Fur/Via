@@ -16,7 +16,7 @@ app.use(cors('*'));
 
 app.use(cookieParser('yourSecretGoesHere'));
 
-// app.use('/api', router);
+app.use('/api', router);
 app.use(router);
 
 app.get('*', (req, res) => {
