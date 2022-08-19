@@ -5,6 +5,7 @@ const userController = {
 
   async getUser(req, res) {
     const { id } = req.params;
+
     const user = await User.findByPk(id);
 
     res.json(user);
@@ -24,7 +25,9 @@ const userController = {
       phone,
       avatar,
     }, {
-      where: id,
+      where: {
+        id,
+      },
     });
 
     res.json(user);
@@ -34,7 +37,9 @@ const userController = {
     const { id } = req.params;
 
     const user = await User.destroy({
-      where: id,
+      where: {
+        id,
+      },
     });
 
     res.json(user);
@@ -134,7 +139,7 @@ const userController = {
     res.json({ msg: 'activité ajouter au favori' });
   },
 
-  async getUserBookmark(req, res) {
+  async getUserBookmarks(req, res) {
     const { id } = req.params;
 
     const user = await User.findByPk(id, {

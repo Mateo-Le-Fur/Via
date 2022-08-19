@@ -2,7 +2,7 @@ const router = require('express').Router();
 const dashboardController = require('../controllers/dashboardController');
 
 router.route('/')
-  .get(dashboardController.getAllData) // Gets all users
+  .get(dashboardController.getAllData); // Gets all users
 
 router.route('/user/:id')
   .update(dashboardController.updateUser) // Update user via the dashboard
