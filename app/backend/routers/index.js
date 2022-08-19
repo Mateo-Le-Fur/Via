@@ -17,7 +17,8 @@ router.post('/user/:id/activity', userController.createActivity);
 router.delete('/user/:userId/activity/:activityId', userController.deleteUserActivity);
 
 router.post('/user/:userId/bookmark', userController.addBookmark);
-router.get('/user/:id/bookmark', userController.getBookmark);
+router.get('/user/:id/bookmark', userController.getUserBookmark);
+router.delete('/user/:userId/bookmark/:activityId', userController.deleteUserBookmark);
 
 router.get('/profil', authJWT.protect, (req, res) => {
   const { user } = req;
