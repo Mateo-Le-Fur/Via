@@ -10,7 +10,7 @@ import {
   HiThumbUp
 } from 'react-icons/hi';
 
-const Card = () => {
+const Card = ({kind}) => {
   return (
     <div className='card'>
       <div className='top'>

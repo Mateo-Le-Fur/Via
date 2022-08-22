@@ -22,19 +22,16 @@ const List = () => {
         )}
         
         <div className="wrapper">
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
+          <Card  kind="list"/>       
         </div>
     </div>
   )
