@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { useDispatch } from 'react-redux';
-import { activePanel, handleHideSidebar } from '../features/global/globalSlice';
+import { activePanel, handleHideList, handleHideSidebar} from '../features/global/globalSlice';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -14,14 +14,14 @@ function useClickOuside(ref, component) {
      */
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if(component === "sidebar"){
-            console.log("I'm running")
-            dispatch(handleHideSidebar())
-            dispatch(activePanel(""))
+    
+        if(component === "panel" && window.innerWidth > 600){
+          dispatch(handleHideSidebar())
+          dispatch(activePanel(""))
         }
 
-        if(component === "panel"){
-            dispatch(activePanel(""))
+        if(component === "list" && window.innerWidth > 600){
+          dispatch(handleHideList())
         }
       }
     }

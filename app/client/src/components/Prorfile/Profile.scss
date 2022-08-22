@@ -1,0 +1,21 @@
+@use "../../vars";
+
+.profile{
+    width: 100%;
+    height: 100%;
+
+    h2{
+        font-size: 1.1rem;
+        letter-spacing: 5px;
+    }
+    
+    .editForm {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        .field{
+            width: 50%;
+        }
+    }
+}

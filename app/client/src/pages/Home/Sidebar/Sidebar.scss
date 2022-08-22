@@ -18,8 +18,11 @@
     transition: background-color 0.8s ease-in-out;
     &.show{
         background-color: white;
+        @media (max-width: 600px){
+            background-color: transparent;
+        }
     }
-    .menu {
+    .main {
         display: flex;
         flex-direction: column;
         height: 300px;
@@ -36,10 +39,12 @@
         }
     }
 
-    button{
-        background: transparent;
-        border: none;
+    .bottom{
+        li{
+            margin-bottom: 1rem;
+        }
     }
+
 }
 
 .icon {

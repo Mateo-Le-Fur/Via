@@ -1,6 +1,12 @@
 @use "../../../vars";
 
+
+
 .panel{
+    @media (max-width: 600px){
+        display: none;
+        width: 100%;
+    }
     position: absolute;
     z-index: 2000;
     top: 0;
@@ -10,13 +16,44 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    padding: 2rem;
-    gap: 2%;
+    color: vars.$gray;
     align-items: center;
-    justify-content: space-between;
     transform: translateX(120%);
     transition: transform 1s ease-in-out;
-    &.showPanel{
+    .leave{
+        position: fixed;
+        top: 1%;
+        left: 1%;
+        cursor: pointer;
+        .x{
+         fill: vars.$secondary-color;
+         border: 1px solid vars.$secondary-color;
+         border-radius: 50%;
+         font-size: 1.6rem;
+         padding: .2rem;
+        }   
+    }
+    .cover{
+        height: 10%; 
+        width: 100%;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        color: vars.$primary-color;
+        text-transform: uppercase;
+        letter-spacing: 10px;
+        h1{
+            font-size: 1.3rem;
+        }
+     }
+     .container{
+         height:90%;
+         width: 100%;
+         padding: 0 1rem;
+     }
+
+     &.showPanel{
         transform: translateX(0);
     }
 }
