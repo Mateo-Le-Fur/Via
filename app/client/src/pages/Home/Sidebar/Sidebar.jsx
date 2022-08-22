@@ -9,8 +9,10 @@ import {FaGuitar} from "react-icons/fa"
 import {FaGamepad} from "react-icons/fa"
 import {RiLogoutBoxRFill} from "react-icons/ri"
 import { activePanel, activeFilter, handleShowFilter, handleShowSidebar } from '../../../features/global/globalSlice';
+import {MdAdminPanelSettings} from "react-icons/md"
 
 const Sidebar = () => {
+  const {user} = useSelector(state => state.auth)
     const dispatch = useDispatch()
     const {showSidebar, panel, showFilter, filter} = useSelector(state => state.global)
     const handlePanel = (panel) => {
@@ -20,7 +22,7 @@ const Sidebar = () => {
 
   return (
     <div className={showSidebar ? "sidebar show": "sidebar"}>
-      <ul className='menu'>
+      <ul className='main'>
         <div>
         <li onClick={() => handlePanel('profile')}>
             <FaUser className={panel === "profile" ? "icon active": "icon"} />
@@ -48,10 +50,16 @@ const Sidebar = () => {
                 </ul>
             )}
       </ul>
-      
-      <button onClick={() => dispatch(logout())}>
+      <ul className='bottom'>
+        {user && user.is_admin && (
+          <li onClick={() => handlePanel('dashboard')}>
+          <MdAdminPanelSettings  className={panel === "dashboard" ? "icon active": "icon"} />
+          </li>
+        )}
+        <li onClick={() => dispatch(logout())}>
         <RiLogoutBoxRFill className="icon" />
-      </button>
+        </li>
+      </ul>
     </div>
   )
 }

@@ -14,13 +14,12 @@ function useClickOuside(ref, component) {
      */
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
-        if(component === "sidebar"){
-            console.log("I'm running")
+        if(component === "sidebar" && window.innerWidth > 600){
             dispatch(handleHideSidebar())
             dispatch(activePanel(""))
         }
 
-        if(component === "panel"){
+        if(component === "panel" && window.innerWidth > 600){
             dispatch(activePanel(""))
         }
       }
