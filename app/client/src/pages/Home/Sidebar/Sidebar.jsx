@@ -20,6 +20,11 @@ const Sidebar = () => {
         dispatch(activePanel(panel))
     }
 
+    const handleFIlter = (filter) => {
+      dispatch(handleShowFilter())
+      dispatch(activeFilter(filter))
+    }
+
   return (
     <div className={showSidebar ? "sidebar show": "sidebar"}>
       <ul className='main'>
@@ -41,10 +46,10 @@ const Sidebar = () => {
         </div>
         {showFilter && (
                 <ul className='filter'>
-                    <li  className="filterLi" onClick={() => dispatch(activeFilter("music"))}>
+                    <li  className="filterLi" onClick={() => handleFIlter("music")}>
                         <FaGuitar className={filter === "music" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => dispatch(activeFilter("game"))}>
+                    <li  className="filterLi" onClick={() => handleFIlter("game")}>
                         <FaGamepad className={filter === "game" ? "icon active filterIcon": "icon filterIcon"}/>
                     </li>
                 </ul>

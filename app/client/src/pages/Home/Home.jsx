@@ -6,6 +6,7 @@ import "./Home.scss"
 import Panel from './Panel/Panel'
 import Sidebar from './Sidebar/Sidebar'
 import Modal from "./Modal/Modal"
+import List from './List/List'
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
@@ -21,13 +22,15 @@ const Home = () => {
         </Map>
       )}
       <OutsideWrapper component="sidebar">
-
         <Sidebar />
       </OutsideWrapper>
-
-          <Panel />
-  
+      <OutsideWrapper component="panel">
+        <Panel />
+        </OutsideWrapper>
         <Modal />
+        <OutsideWrapper component="list">
+          <List />  
+        </OutsideWrapper>
     </div>
   )
 }

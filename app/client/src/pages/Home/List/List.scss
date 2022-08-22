@@ -1,0 +1,33 @@
+@use "../../../vars";
+
+.list{
+    position: absolute;
+    z-index: 3600;
+    bottom: 0;
+    left: 0;
+    height: 40%;
+    width: 100%;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    color: vars.$gray;
+    align-items: center;
+    transform: translateY(90%);
+    transition: all .6s ease-in-out;
+    background-color: transparent;
+    @media (max-width: 600px) {
+        height: 100%;
+        transform: translateY(95%)
+    }
+    .chevron{
+        .chevronIcon{
+            font-size: 2rem;
+            fill: vars.$tertiary-color;
+            cursor: pointer;
+        }
+    }
+    &.showList{
+        transform: translateY(0%);
+        background-color: white;
+    }
+}
