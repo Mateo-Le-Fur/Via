@@ -127,7 +127,11 @@ const userController = {
   async createActivity(req, res) {
     const { id } = req.params;
 
-    const coordinates = await getCoordinates(res, `${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
+    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
     const lat = coordinates[0];
     const long = coordinates[1];

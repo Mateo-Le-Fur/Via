@@ -12,7 +12,7 @@ router.route('/:id')
 
 router.route('/:id/activity')
   .get(controllerHandler(userController.getUserActivities)) // Gets all activities created by user
-  .post(validator('body', userValidator), controllerHandler(userController.createActivity)); // Creates a user  activity
+  .post(validator('body', activityValidator), controllerHandler(userController.createActivity)); // Creates a user  activity
 
 router.route('/:id/activity/:id')
   .put(validator('body', activityValidator), controllerHandler(userController.updateUserActivity)) // Modify one activity created by user
