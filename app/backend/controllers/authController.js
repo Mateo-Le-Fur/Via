@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const argon2 = require('argon2');
 const { User } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
+const ApiError = require('../errors/apiError');
 // const generateRedisKey = require('../services/generateUserToken');
 // const redis = require('../config/redis');
 
@@ -51,12 +52,6 @@ const auth = {
 
     const coordinates = await getCoordinates(city);
 
-    // TODO remplacer par error handler
-    if (!coordinates) {
-      res.json({ msg: 'Ville incorrect' });
-      return;
-    }
-
     let createdUser = await User.create({
       email,
       password: hashPassword,
@@ -68,13 +63,13 @@ const auth = {
 
     createdUser = createdUser.get();
 
+    delete createdUser.password;
+
     const token = auth.generateToken(createdUser);
 
     // const userUUID = generateRedisKey(createdUser, token);
 
     auth.generateCookie(res, 'token', token);
-
-    delete createdUser.password;
 
     res.json(createdUser);
   },

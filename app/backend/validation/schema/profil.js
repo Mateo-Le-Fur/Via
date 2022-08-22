@@ -6,6 +6,7 @@ module.exports = Joi.object({
     .max(50)
     .pattern(/^[a-zA-Z]+$/)
     .messages({
+      'string.empty': 'firstname: Chaine vide !',
       'string.max': 'Le prénom ne peut dépasser 50 caractères',
       'string.pattern.base': 'prenom: format invalide',
     }),

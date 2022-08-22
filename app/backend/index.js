@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, '../client/build/')));
 
 app.use(cors('*'));
 
-app.use(cookieParser('yourSecretGoesHere'));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.use('/api', router);
 

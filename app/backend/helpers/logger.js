@@ -16,8 +16,8 @@ module.exports = winston.createLogger({
     new winston.transports.DailyRotateFile({
       filename: './backend/log/application-%DATE%.log',
       datePattern: 'YYYY-MM-DD-HH',
-      maxSize: '0.1m',
-      maxFiles: '4',
+      maxSize: '1m',
+      maxFiles: '7d',
     }),
 
   ],

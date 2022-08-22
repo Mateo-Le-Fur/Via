@@ -1,0 +1,15 @@
+{
+  level: 'error',
+  message: "Cet utilisateur n'existe pas",
+  timestamp: '2022-08-22 12:08:09'
+}
+{
+  level: 'error',
+  message: 'Gouv Api Error',
+  timestamp: '2022-08-22 12:09:47'
+}
+{
+  level: 'error',
+  message: "La ville n'a pas était trouvé",
+  timestamp: '2022-08-22 12:11:32'
+}

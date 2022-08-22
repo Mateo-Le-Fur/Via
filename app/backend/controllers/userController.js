@@ -1,5 +1,6 @@
 const { User, Activity } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
+const ApiError = require('../errors/apiError')
 
 const userController = {
 
@@ -8,17 +9,22 @@ const userController = {
 
     const user = await User.findByPk(id);
 
+    if (!user) {
+      throw new ApiError('Cet utilisateur n\'existe pas', 400)
+    }
+
     res.json(user);
   },
 
-  async updateUser(req, res) {
+  async updateUser(req, res, next) {
     const { id } = req.params;
     const {
       firstname, lastname, description, address, phone, avatar,
     } = req.body;
 
-    const coordinates = await getCoordinates(address, 'housenumber');
+    const coordinates = await getCoordinates(address, 'housenumber', next);
 
+    
     const user = await User.update({
       firstname,
       lastname,

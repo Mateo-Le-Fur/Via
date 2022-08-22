@@ -1,9 +1,11 @@
 const logger = require('./logger');
 const ApiError = require('../errors/apiError');
 
-const errorHandler = (err, _, res, next) => {
+const errorHandler = (err, req, res, next) => {
   let { message } = err;
-  let statusCode = err.infos?.statusCode;
+  let statusCode = err.statusCode;
+
+  console.log(err);
 
   if (!statusCode || Number.isNaN(Number(statusCode))) {
     statusCode = 500;
@@ -13,7 +15,10 @@ const errorHandler = (err, _, res, next) => {
     logger.log('error', `${err.message}`);
   }
 
-  // Si l'application n'est pas en développement on reste vague sur l'erreur serveur
+  if (statusCode === 400) {
+    logger.log('error', `${err.message}`);
+  }
+
   if (statusCode === 500 && process.env.NODE_ENV === 'production') {
     message = 'Internal Server Error';
   }
