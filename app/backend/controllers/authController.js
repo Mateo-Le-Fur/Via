@@ -16,24 +16,14 @@ const auth = {
     res.cookie(name, value, {
       httpOnly: true,
       signed: true,
-      secret: 'yourSecretGoesHere',
+      secret: process.env.COOKIE_SECRET,
     });
   },
 
   async register(req, res) {
     const {
-      nickname, city, email, password, confirmPassword,
+      nickname, city, email, password,
     } = req.body;
-
-    if (!nickname || !city || !email || !password || !confirmPassword) {
-      res.status(400).json({ msg: 'Tous les champs sont requis !' });
-      return;
-    }
-
-    if (req.body.password !== req.body.confirmPassword) {
-      res.status(401).json({ msg: 'Les deux mots de passes ne sont pas indentiques !' });
-      return;
-    }
 
     const isUserExist = await User.findOne({
       where: {
@@ -42,8 +32,7 @@ const auth = {
     });
 
     if (isUserExist) {
-      res.status(400).json({ msg: 'Cet utilisateur existe déjà' });
-      return;
+      throw new ApiError('Cet utilisateur existe déjà', 400);
     }
 
     delete req.body.confirmPassword;
@@ -84,17 +73,15 @@ const auth = {
     });
 
     if (!user) {
-      res.status(400).json({ msg: 'Utilisateur introuvable' });
-      return;
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     user = user.get();
 
-    const goodPassword = await argon2.verify(user.password, password);
+    const isGoodPassword = await argon2.verify(user.password, password);
 
-    if (!goodPassword) {
-      res.status(400).json({ msg: 'Email ou mot de passe incorrect' });
-      return;
+    if (!isGoodPassword) {
+      throw new ApiError('Email ou mot de passe incorrect', 400);
     }
     const token = auth.generateToken(user);
 
@@ -111,15 +98,14 @@ const auth = {
     const { token } = req.signedCookies;
 
     if (!token) {
-      res.status(401).json({ msg: 'Le token n\'existe pas' });
-      return;
+      throw new ApiError('Aucun token existant', 500);
     }
 
     // redis.del(token);
 
     res.clearCookie('token');
 
-    res.json({ msg: 'déconnecté' });
+    res.json({ msg: 'déconnecter' });
   },
 };
 

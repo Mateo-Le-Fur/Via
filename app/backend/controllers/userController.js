@@ -1,6 +1,6 @@
 const { User, Activity } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
-const ApiError = require('../errors/apiError')
+const ApiError = require('../errors/apiError');
 
 const userController = {
 
@@ -10,7 +10,7 @@ const userController = {
     const user = await User.findByPk(id);
 
     if (!user) {
-      throw new ApiError('Cet utilisateur n\'existe pas', 400)
+      throw new ApiError('Cet utilisateur n\'existe pas', 400);
     }
 
     res.json(user);
@@ -24,7 +24,6 @@ const userController = {
 
     const coordinates = await getCoordinates(address, 'housenumber', next);
 
-    
     const user = await User.update({
       firstname,
       lastname,
@@ -52,6 +51,10 @@ const userController = {
       },
     });
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     res.json(user);
   },
 
@@ -61,6 +64,9 @@ const userController = {
       include: ['activities'],
     });
 
+    if (!result) {
+      throw new ApiError('Activité introuvable', 400);
+    }
     const user = result.get();
 
     const activities = user.activities.map((el) => el.get());
@@ -120,12 +126,16 @@ const userController = {
   deleteUserActivity(req, res) {
     const { userId, activityId } = req.params;
 
-    Activity.destroy({
+    const activity = Activity.destroy({
       where: {
         id: activityId,
         user_id: userId,
       },
     });
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     res.status(201).json({ msg: 'Activité supprimer' });
   },
@@ -138,7 +148,15 @@ const userController = {
       include: ['bookmarks'],
     });
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const activity = await Activity.findByPk(activityId);
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     await activity.addUser(user);
 
@@ -146,7 +164,7 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'activité ajouter au favori' });
+    res.status(201).json({ msg: 'Activité ajouter au favori' });
   },
 
   async getUserBookmarks(req, res) {
@@ -155,6 +173,10 @@ const userController = {
     const user = await User.findByPk(id, {
       include: ['bookmarks'],
     });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
 
     res.json(user.get().bookmarks);
   },
@@ -166,7 +188,15 @@ const userController = {
       include: ['bookmarks'],
     });
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const activity = await Activity.findByPk(activityId);
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     await activity.removeUser(user);
 

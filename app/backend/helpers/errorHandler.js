@@ -3,9 +3,7 @@ const ApiError = require('../errors/apiError');
 
 const errorHandler = (err, req, res, next) => {
   let { message } = err;
-  let statusCode = err.statusCode;
-
-  console.log(err);
+  let { statusCode } = err;
 
   if (!statusCode || Number.isNaN(Number(statusCode))) {
     statusCode = 500;

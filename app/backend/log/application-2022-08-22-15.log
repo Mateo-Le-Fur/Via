@@ -1,0 +1,40 @@
+{
+  level: 'error',
+  message: 'Cet utilisateur existe déjà',
+  timestamp: '2022-08-22 15:22:03'
+}
+{
+  level: 'error',
+  message: 'Cet utilisateur existe déjà',
+  timestamp: '2022-08-22 15:23:48'
+}
+{
+  level: 'error',
+  message: 'champ vide',
+  timestamp: '2022-08-22 15:25:20'
+}
+{
+  level: 'error',
+  message: 'Les mots de passes doivent être indentique',
+  timestamp: '2022-08-22 15:25:26'
+}
+{
+  level: 'error',
+  message: 'Cet utilisateur existe déjà',
+  timestamp: '2022-08-22 15:25:32'
+}
+{
+  level: 'error',
+  message: 'Les mots de passes doivent être indentique',
+  timestamp: '2022-08-22 15:25:36'
+}
+{
+  level: 'error',
+  message: 'Les mots de passes doivent être indentique',
+  timestamp: '2022-08-22 15:25:59'
+}
+{
+  level: 'error',
+  message: 'Les mots de passes doivent être indentique',
+  timestamp: '2022-08-22 15:26:00'
+}
