@@ -203,6 +203,7 @@ router
     controllerHandler(userController.createActivity)
   ); // Creates a user  activity
 
+
 router
   .route("/:id/activity/:id")
   /**

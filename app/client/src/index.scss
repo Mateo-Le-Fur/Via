@@ -1,6 +1,11 @@
 @use "./vars";
 @use 'sass:color';
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
+
+  @font-face {
+    font-family: 'Roboto';
+    src: url('./assets/fonts/Roboto-Regular.ttf');
+  }
 
 * {
   margin: 0;
@@ -8,8 +13,9 @@
   box-sizing: border-box;
 }
 
+
 body{
-  font-family: "Roboto" sans-serif;
+  font-family: 'Roboto', sans-serif;
   overflow: hidden;
 }
 
@@ -47,3 +53,5 @@ li{
   }
 
 }
+
+

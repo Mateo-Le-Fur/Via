@@ -5,6 +5,7 @@ module.exports = Joi.object({
   name: Joi.string()
     .max(50)
     .messages({
+      'string.empty': 'name: Chaine vide !',
       'string.max': 'Le nom de l\'activité ne peut dépasser 50 caractères',
     }),
 

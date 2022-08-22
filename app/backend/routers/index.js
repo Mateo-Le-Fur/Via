@@ -10,6 +10,7 @@ router.use("/user", user);
 router.use("/activity", authJWT.protect, activity);
 router.use("/dashboard", authJWT.protect, dashboard);
 router.use("/current", authJWT.protect, (req, res) => {
+
   res.json(req.user);
 });
 

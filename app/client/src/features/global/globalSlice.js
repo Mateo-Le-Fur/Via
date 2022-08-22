@@ -5,6 +5,7 @@ const initialState = {
     panel: "",
     showFilter: false,
     filter: "",
+    showList: false
 }
 
 const globalSlice = createSlice({
@@ -25,10 +26,16 @@ const globalSlice = createSlice({
         },
         activeFilter: (state, action) => {
             state.filter = action.payload
+        },
+        handleShowList: (state) => {
+            state.showList = true
+        },
+        handleHideList : (state) => {
+            state.showList = false
         }
     }
 })
 
-export const {handleShowSidebar, handleHideSidebar,activePanel, handleShowFilter, activeFilter} = globalSlice.actions
+export const {handleShowSidebar, handleHideSidebar,activePanel, handleShowFilter, activeFilter, handleShowList, handleHideList} = globalSlice.actions
 
 export default globalSlice.reducer

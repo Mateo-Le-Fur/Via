@@ -5,10 +5,11 @@ import OutsideWrapper from '../../hooks/ClickOutsideHook'
 import "./Home.scss"
 import Panel from './Panel/Panel'
 import Sidebar from './Sidebar/Sidebar'
+import Modal from "./Modal/Modal"
+import List from './List/List'
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
-  const { panel } = useSelector(state => state.global)
   return (
     <div className='home'>
       {user && (
@@ -20,11 +21,15 @@ const Home = () => {
           </Marker>
         </Map>
       )}
-      <OutsideWrapper component={"sidebar"}>
+      <OutsideWrapper component="sidebar">
         <Sidebar />
       </OutsideWrapper>
-        <OutsideWrapper component={"panel"}>
-          <Panel />
+      <OutsideWrapper component="panel">
+        <Panel />
+        </OutsideWrapper>
+        <Modal />
+        <OutsideWrapper component="list">
+          <List />  
         </OutsideWrapper>
     </div>
   )
