@@ -27,7 +27,7 @@
     "redis": "^4.2.0",
     "sequelize": "^6.21.3",
     "socket.io": "^4.5.1",
-    "swagger": "^0.0.1",
+    "swagger-editor": "^3.18.2",
     "uuid": "^8.3.2",
     "winston": "^3.8.1",
     "winston-daily-rotate-file": "^4.7.1"
