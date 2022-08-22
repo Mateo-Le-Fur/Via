@@ -9,15 +9,24 @@ const userController = {
 
     const user = await User.findByPk(id);
 
-    if (!user) {
+    const {
+      // eslint-disable-next-line camelcase
+      password, is_admin, created_at, updated_at, ...newUser
+    } = user.dataValues;
+
+    if (!newUser) {
       throw new ApiError('Cet utilisateur n\'existe pas', 400);
     }
 
-    res.json(user);
+    res.json(newUser);
   },
 
   async updateUser(req, res, next) {
     const { id } = req.params;
+
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
     const {
       firstname, lastname, description, address, phone, avatar,
     } = req.body;
@@ -44,6 +53,10 @@ const userController = {
 
   async deleteUser(req, res) {
     const { id } = req.params;
+
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
 
     const user = await User.destroy({
       where: {
@@ -78,6 +91,11 @@ const userController = {
 
   async updateUserActivity(req, res) {
     const { activityId, userId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const {
       name,
       description,
@@ -126,6 +144,10 @@ const userController = {
   deleteUserActivity(req, res) {
     const { userId, activityId } = req.params;
 
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const activity = Activity.destroy({
       where: {
         id: activityId,
@@ -143,6 +165,10 @@ const userController = {
   async addBookmark(req, res) {
     const { userId } = req.params;
     const { activityId } = req.body;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
 
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],
@@ -170,6 +196,10 @@ const userController = {
   async getUserBookmarks(req, res) {
     const { id } = req.params;
 
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const user = await User.findByPk(id, {
       include: ['bookmarks'],
     });
@@ -183,6 +213,10 @@ const userController = {
 
   async deleteUserBookmark(req, res) {
     const { userId, activityId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
 
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],

@@ -1,1 +1,6 @@
 2022-08-22 16:09:29 - error: Les mots de passes doivent être indentique
+2022-08-22 17:01:43 - error: Cannot destructure property 'password' of 'user[0]' as it is undefined.
+2022-08-22 17:04:35 - error: "lat" is not allowed
+2022-08-22 17:08:55 - error: "email" is not allowed
+2022-08-22 17:09:24 - error:  nom: format invalide
+2022-08-22 17:19:31 - error: controller is not a function
