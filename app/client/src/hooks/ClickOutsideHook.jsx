@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { useDispatch } from 'react-redux';
-import { activePanel, handleHideList, handleHideSidebar, handleShowList } from '../features/global/globalSlice';
+import { activePanel, handleHideList, handleHideSidebar} from '../features/global/globalSlice';
 
 /**
  * Hook that alerts clicks outside of the passed ref

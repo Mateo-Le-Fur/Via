@@ -16,11 +16,8 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem;
-    gap: 2%;
     color: vars.$gray;
     align-items: center;
-    justify-content: space-between;
     transform: translateX(120%);
     transition: transform 1s ease-in-out;
     .leave{
@@ -36,7 +33,26 @@
          padding: .2rem;
         }   
     }
-    &.showPanel{
+    .cover{
+        height: 10%; 
+        width: 100%;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        color: vars.$primary-color;
+        text-transform: uppercase;
+        letter-spacing: 10px;
+        h1{
+            font-size: 1.3rem;
+        }
+     }
+     .container{
+         height:90%;
+         width: 100%;
+     }
+
+     &.showPanel{
         transform: translateX(0);
     }
 }

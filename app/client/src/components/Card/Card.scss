@@ -1,0 +1,98 @@
+@use "../../vars";
+
+.card{
+    @media (max-width: 600px) {
+        min-width: 200px;
+        min-height: 250px;
+    }
+    min-width: 400px;
+
+    box-shadow: vars.$box-shadow;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    overflow: hidden;
+    
+    .top{
+        width: 100%;
+        height: 15%;
+        background: linear-gradient(25deg, vars.$tertiary-color 20%, lighten(vars.$tertiary-color, 20%) 100%); 
+        display: flex;
+        padding: 0 0.8rem;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 900;
+        font-size: 1.2rem;
+        color: white;
+        position: relative;
+        .type{
+            position: absolute;
+            bottom: 0;
+            right: 7%;
+            border-radius: 50%;
+            
+            transform: translateY(50%);
+            .iconCard{
+                font-size: 3rem;
+                border-radius: 50%;
+                background-color: lighten(vars.$primary-color, 20%);
+                transition: 0.3s ease;
+                padding: .6rem 0;
+                fill: vars.$tertiary-color;
+                border: 1px solid vars.$tertiary-color;
+            }
+        }
+    }
+
+    .middle{
+        height: 70%;
+        overflow: auto;
+
+        .row{
+            padding: .1rem;
+            display: flex;
+            gap: 3%;
+            color: #3c3737;
+            > div{
+                height: 100%;
+                display: flex;
+                align-items: flex-start;
+            }
+            &.first{
+                padding-top: .3rem;
+            }
+        }
+        main{
+            padding: 0 .7rem;
+            word-wrap: break-word;
+        }
+    }
+
+    .bottom{
+        height: 15%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 3%;
+    }
+}
+
+.smIcon{
+    fill: vars.$primary-color;
+    padding-right: .2rem;
+}
+
+.actionIcon{
+    height: 100%;
+    font-size: 1.7rem;
+    padding-right: 10%;
+    fill: vars.$secondary-color;
+    cursor: pointer;
+    transition: fill .3s ease-in-out;
+    &:hover{
+        fill: vars.$tertiary-color;
+    }
+    &:active{
+        transform: scale(.6);
+    }
+}

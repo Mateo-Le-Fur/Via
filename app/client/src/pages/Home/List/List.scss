@@ -17,14 +17,32 @@
     background-color: transparent;
     @media (max-width: 600px) {
         height: 100%;
-        transform: translateY(95%)
+        transform: translateY(95%);
     }
     .chevron{
+        @media (max-width: 600px) {
+           height: 5%;
+        }
+        height: 10%;
         .chevronIcon{
             font-size: 2rem;
             fill: vars.$tertiary-color;
             cursor: pointer;
         }
+    }
+
+    .wrapper{
+
+        height: 90%;
+        width: 100%;
+        overflow: auto;
+        padding: 1rem 1.5rem;
+        display: flex;
+        @media (max-width: 600px){
+            flex-direction: column;
+        }
+        gap: 2%;
+        
     }
     &.showList{
         transform: translateY(0%);

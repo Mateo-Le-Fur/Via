@@ -7,6 +7,7 @@ import {FaStar} from "react-icons/fa"
 import {FaFilter} from "react-icons/fa"
 import {FaGuitar} from "react-icons/fa"
 import {FaGamepad} from "react-icons/fa"
+import {BsGrid3X3GapFill} from "react-icons/bs"
 import {RiLogoutBoxRFill} from "react-icons/ri"
 import { activePanel, activeFilter, handleShowFilter, handleShowSidebar } from '../../../features/global/globalSlice';
 import {MdAdminPanelSettings} from "react-icons/md"
@@ -46,6 +47,9 @@ const Sidebar = () => {
         </div>
         {showFilter && (
                 <ul className='filter'>
+                <li  className="filterLi" onClick={() => handleFIlter("")}>
+                        <BsGrid3X3GapFill className={filter === "" ? "icon filterIcon active": "icon filterIcon"}/>
+                    </li>
                     <li  className="filterLi" onClick={() => handleFIlter("music")}>
                         <FaGuitar className={filter === "music" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>

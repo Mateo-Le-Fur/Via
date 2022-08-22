@@ -2,6 +2,8 @@ import "./List.scss";
 import {FaChevronUp, FaChevronDown } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { handleHideList, handleShowList } from '../../../features/global/globalSlice';
+import Card from '../../../components/Card/Card';
+
 
 const List = () => {
     const dispatch = useDispatch()
@@ -18,7 +20,22 @@ const List = () => {
             <FaChevronUp className="chevronIcon"/>
         </div>
         )}
-    
+        
+        <div className="wrapper">
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </div>
     </div>
   )
 }
