@@ -1,12 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import "./Sidebar.scss";
 import { logout } from '../../../features/auth/authSlice';
-import {FaUser} from "react-icons/fa"
-import {FaPlus} from "react-icons/fa"
-import {FaStar} from "react-icons/fa"
-import {FaFilter} from "react-icons/fa"
-import {FaGuitar} from "react-icons/fa"
-import {FaGamepad} from "react-icons/fa"
+import {FaUser, FaPlus, FaStar, FaFilter, FaLeaf, FaFootballBall, FaHandsHelping, FaTools} from "react-icons/fa"
+import {GiCook, GiPalette, } from "react-icons/gi"
 import {BsGrid3X3GapFill} from "react-icons/bs"
 import {RiLogoutBoxRFill} from "react-icons/ri"
 import { activePanel, activeFilter, handleShowFilter, handleShowSidebar } from '../../../features/global/globalSlice';
@@ -50,12 +46,25 @@ const Sidebar = () => {
                 <li  className="filterLi" onClick={() => handleFIlter("")}>
                         <BsGrid3X3GapFill className={filter === "" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("music")}>
-                        <FaGuitar className={filter === "music" ? "icon filterIcon active": "icon filterIcon"}/>
+                    <li  className="filterLi" onClick={() => handleFIlter("charity")}>
+                        <FaHandsHelping className={filter === "charity" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("game")}>
-                        <FaGamepad className={filter === "game" ? "icon active filterIcon": "icon filterIcon"}/>
+                    <li  className="filterLi" onClick={() => handleFIlter("art")}>
+                        <GiPalette className={filter === "art" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
+                    <li  className="filterLi" onClick={() => handleFIlter("cook")}>
+                        <GiCook className={filter === "cook" ? "icon active filterIcon": "icon filterIcon"}/>
+                    </li>
+                    <li  className="filterLi" onClick={() => handleFIlter("gardening")}>
+                        <FaLeaf className={filter === "gardening" ? "icon active filterIcon": "icon filterIcon"}/>
+                    </li>
+                    <li  className="filterLi" onClick={() => handleFIlter("diy")}>
+                        <FaTools className={filter === "diy" ? "icon active filterIcon": "icon filterIcon"}/>
+                    </li>
+                    <li  className="filterLi" onClick={() => handleFIlter("sport")}>
+                        <FaFootballBall className={filter === "sprt" ? "icon active filterIcon": "icon filterIcon"}/>
+                    </li>
+           
                 </ul>
             )}
       </ul>
