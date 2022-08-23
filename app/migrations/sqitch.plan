@@ -3,3 +3,4 @@
 
 init 2022-08-12T13:05:50Z Mateo <mateo.le-fur@hotmail.com> # create db
 coordinates 2022-08-19T08:14:06Z Mateo <mateo.le-fur@hotmail.com> # add coordinates to user
+delete-cascade 2022-08-23T11:49:16Z Mateo <mateo.le-fur@hotmail.com> # On delete cascade

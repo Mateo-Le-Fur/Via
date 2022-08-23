@@ -143,7 +143,7 @@ router
     validator('body', userValidator),
     controllerHandler(userController.updateUser),
   ) // Modify user profile
-  .delete(userController.deleteUser); // Delete user account
+  .delete(controllerHandler(userController.deleteUser)); // Delete user account
 
 router
   .route('/:id/activity')
@@ -261,7 +261,8 @@ router
    *        200:
    *          description: User activity deleted
    */
-  .delete(controllerHandler(userController.deleteUserActivity)); // Delete one activity created by user
+  .delete(controllerHandler(userController.deleteUserActivity)); // Delete one activity created by
+// user;
 
 router
   .route('/:id/bookmark')

@@ -9,11 +9,8 @@ const errorHandler = (err, req, res, next) => {
     statusCode = 500;
   }
 
-  if (statusCode === 500) {
-    logger.log('error', `${err.message}`);
-  }
-
-  if (statusCode === 400) {
+  if (statusCode) {
+    console.log(err);
     logger.log('error', `${err.message}`);
   }
 
