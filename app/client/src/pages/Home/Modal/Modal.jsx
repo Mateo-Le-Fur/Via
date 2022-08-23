@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { activePanel } from '../../../features/global/globalSlice';
+import { activePanel, handleHideSidebar } from '../../../features/global/globalSlice';
 import {MdOutlineClose} from "react-icons/md"
 import {FaUser} from "react-icons/fa"
 import {FaPlus} from "react-icons/fa"
@@ -16,7 +16,10 @@ const Modal = () => {
     const dispatch = useDispatch()
   return (
     <div className={panel !== "" ? "modal showModal": "modal"}>
-    <span className="leave" onClick={() => dispatch(activePanel(""))}>
+    <span className="leave" onClick={() => {
+      dispatch(activePanel(""))
+      dispatch(handleHideSidebar())
+    }}>
         <MdOutlineClose className='x' />
     </span>
         <div className="cover">
