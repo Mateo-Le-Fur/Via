@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const userController = require("../controllers/userController");
-const validator = require("../validation/validator");
-const userValidator = require("../validation/schema/profil");
-const activityValidator = require("../validation/schema/activity");
-const controllerHandler = require("../helpers/controllerHandler");
+const router = require('express').Router();
+const userController = require('../controllers/userController');
+const validator = require('../validation/validator');
+const userValidator = require('../validation/schema/profil');
+const activityValidator = require('../validation/schema/activity');
+const controllerHandler = require('../helpers/controllerHandler');
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ const controllerHandler = require("../helpers/controllerHandler");
  */
 
 router
-  .route("/:id")
+  .route('/:id')
   /**
    * @swagger
    * /api/user/{userId}:
@@ -140,13 +140,13 @@ router
    *                  $ref: '#/components/schemas/UserProfile'
    */
   .put(
-    validator("body", userValidator),
-    controllerHandler(userController.updateUser)
+    validator('body', userValidator),
+    controllerHandler(userController.updateUser),
   ) // Modify user profile
   .delete(userController.deleteUser); // Delete user account
 
 router
-  .route("/:id/activity")
+  .route('/:id/activity')
   /**
    * @swagger
    * /api/user/{userId}/activity:
@@ -199,13 +199,12 @@ router
    *                  $ref: '#/components/schemas/UserActivity'
    */
   .post(
-    validator("body", activityValidator),
-    controllerHandler(userController.createActivity)
+    validator('body', activityValidator),
+    controllerHandler(userController.createActivity),
   ); // Creates a user  activity
 
-
 router
-  .route("/:id/activity/:id")
+  .route('/:userId/activity/:activityId')
   /**
    * @swagger
    * /api/user/{userId}/activity/{activityId}:
@@ -235,8 +234,8 @@ router
    *                  $ref: '#/components/schemas/UserActivity'
    */
   .put(
-    validator("body", activityValidator),
-    controllerHandler(userController.updateUserActivity)
+    validator('body', activityValidator),
+    controllerHandler(userController.updateUserActivity),
   ) // Modify one activity created by user
   // eslint-disable-next-line max-len
   /**
@@ -265,7 +264,7 @@ router
   .delete(controllerHandler(userController.deleteUserActivity)); // Delete one activity created by user
 
 router
-  .route("/:id/bookmark")
+  .route('/:id/bookmark')
   /**
    * @swagger
    * /api/user/{userId}/bookmark:
@@ -314,7 +313,7 @@ router
   .post(controllerHandler(userController.addBookmark)); // Creates one bookmark by user
 
 router
-  .route("/:id/bookmark/:id")
+  .route('/:userId/bookmark/:bookmarkId')
   /**
    * @swagger
    * /api/user/{userId}/bookmark/{bookmarkId}:

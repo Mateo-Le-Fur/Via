@@ -1,9 +1,9 @@
-const router = require("express").Router();
-const authController = require("../controllers/authController");
-const controllerHandler = require("../helpers/controllerHandler");
-const validator = require("../validation/validator");
-const registerValidator = require("../validation/schema/register");
-const loginValidator = require("../validation/schema/login");
+const router = require('express').Router();
+const authController = require('../controllers/authController');
+const controllerHandler = require('../helpers/controllerHandler');
+const validator = require('../validation/validator');
+const registerValidator = require('../validation/schema/register');
+const loginValidator = require('../validation/schema/login');
 
 /**
  * @swagger
@@ -78,10 +78,10 @@ const loginValidator = require("../validation/schema/login");
  */
 
 router
-  .route("/register")
+  .route('/register')
   .post(
-    validator("body", registerValidator),
-    controllerHandler(authController.register)
+    validator('body', registerValidator),
+    controllerHandler(authController.register),
   ); // Sends user registration info
 
 /**
@@ -106,10 +106,10 @@ router
  *                  $ref: '#/components/schemas/UserLogin'
  */
 router
-  .route("/login")
+  .route('/login')
   .post(
-    validator("body", loginValidator),
-    controllerHandler(authController.login)
+    validator('body', loginValidator),
+    controllerHandler(authController.login),
   ); // Sends user login info
 
 /**
@@ -122,6 +122,6 @@ router
  *        200:
  *          description: Utilisateur déconnecté
  */
-router.route("/logout").get(controllerHandler(authController.logout)); // Log out user from app
+router.route('/logout').get(controllerHandler(authController.logout)); // Log out user from app
 
 module.exports = router;

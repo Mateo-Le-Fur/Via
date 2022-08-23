@@ -52,7 +52,7 @@ const auth = {
 
     createdUser = createdUser.get();
 
-    delete createdUser.password;
+    createdUser = { userId: createdUser.id, lat: createdUser.lat, long: createdUser.long };
 
     const token = auth.generateToken(createdUser);
 
@@ -75,7 +75,6 @@ const auth = {
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
-
     user = user.get();
 
     const isGoodPassword = await argon2.verify(user.password, password);
@@ -83,6 +82,9 @@ const auth = {
     if (!isGoodPassword) {
       throw new ApiError('Email ou mot de passe incorrect', 400);
     }
+
+    user = { id: user.id, lat: user.lat, long: user.long };
+
     const token = auth.generateToken(user);
 
     // const userUUID = generateRedisKey(user, token);

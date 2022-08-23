@@ -1,5 +1,5 @@
-const router = require("express").Router();
-const activityController = require("../controllers/activityController");
+const router = require('express').Router();
+const activityController = require('../controllers/activityController');
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ const activityController = require("../controllers/activityController");
  *                  $ref: '#/components/schemas/Activity'
  */
 
-router.route("/").get(activityController.getActivities); // Gets all activities
+router.route('/').get(activityController.getActivities); // Gets all activities
 
 /**
  * @swagger
@@ -89,6 +89,6 @@ router.route("/").get(activityController.getActivities); // Gets all activities
  *                  $ref: '#/components/schemas/Activity'
  */
 
-router.route("/:id").get(activityController.getActivity); // Gets one activity
+router.route('/:id').get(activityController.getActivity); // Gets one activity
 
 module.exports = router;
