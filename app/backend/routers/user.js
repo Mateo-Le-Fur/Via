@@ -1,9 +1,9 @@
-const router = require('express').Router();
-const userController = require('../controllers/userController');
-const validator = require('../validation/validator');
-const userValidator = require('../validation/schema/profil');
-const activityValidator = require('../validation/schema/activity');
-const controllerHandler = require('../helpers/controllerHandler');
+const router = require("express").Router();
+const userController = require("../controllers/userController");
+const validator = require("../validation/validator");
+const userValidator = require("../validation/schema/profil");
+const activityValidator = require("../validation/schema/activity");
+const controllerHandler = require("../helpers/controllerHandler");
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ const controllerHandler = require('../helpers/controllerHandler');
  */
 
 router
-  .route('/:id')
+  .route("/:id")
   /**
    * @swagger
    * /api/user/{userId}:
@@ -146,13 +146,40 @@ router
    *          description: Internal server error.
    */
   .put(
-    validator('body', userValidator),
-    controllerHandler(userController.updateUser),
+    validator("body", userValidator),
+    controllerHandler(userController.updateUser)
   ) // Modify user profile
+  /**
+   * @swagger
+   * /api/user/{userId}:
+   *    delete:
+   *      summary: Modifies a single user details
+   *      tags: [/user]
+   *      parameters:
+   *        - in: path
+   *          name: userId
+   *          schema:
+   *            type: integer
+   *          required: true
+   *          description: ID of the user to get
+   *      requestBody:
+   *        required: true
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/UserProfile'
+   *      responses:
+   *        '204':
+   *          description: User deleted
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
+   */
   .delete(controllerHandler(userController.deleteUser)); // Delete user account
 
 router
-  .route('/:id/activity')
+  .route("/:id/activity")
   /**
    * @swagger
    * /api/user/{userId}/activity:
@@ -211,12 +238,12 @@ router
    *          description: Internal server error.
    */
   .post(
-    validator('body', activityValidator),
-    controllerHandler(userController.createActivity),
+    validator("body", activityValidator),
+    controllerHandler(userController.createActivity)
   ); // Creates a user  activity
 
 router
-  .route('/:userId/activity/:activityId')
+  .route("/:userId/activity/:activityId")
   /**
    * @swagger
    * /api/user/{userId}/activity/{activityId}:
@@ -249,8 +276,8 @@ router
    *          description: Internal server error.
    */
   .put(
-    validator('body', activityValidator),
-    controllerHandler(userController.updateUserActivity),
+    validator("body", activityValidator),
+    controllerHandler(userController.updateUserActivity)
   ) // Modify one activity created by user
   // eslint-disable-next-line max-len
   /**
@@ -273,12 +300,8 @@ router
    *          required: true
    *          description: ID of the activity
    *      responses:
-   *        '200':
+   *        '204':
    *          description: Activity deleted
-   *          content:
-   *            application/json:
-   *              schema:
-   *                $ref: '#/components/schemas/UserActivity'
    *        '403':
    *          description: Forbidden
    *        '500':
@@ -288,7 +311,7 @@ router
 // user;
 
 router
-  .route('/:id/bookmark')
+  .route("/:id/bookmark")
   /**
    * @swagger
    * /api/user/{userId}/bookmark:
@@ -343,7 +366,7 @@ router
   .post(controllerHandler(userController.addBookmark)); // Creates one bookmark by user
 
 router
-  .route('/:userId/bookmark/:bookmarkId')
+  .route("/:userId/bookmark/:bookmarkId")
   /**
    * @swagger
    * /api/user/{userId}/bookmark/{bookmarkId}:
@@ -364,7 +387,7 @@ router
    *          required: true
    *          description: ID of the user bookmark
    *      responses:
-   *        '200':
+   *        '204':
    *          description: Bookmark deleted
    *        '403':
    *          description: Forbidden
