@@ -1,6 +1,10 @@
+const path = require('path');
+const fs = require('fs');
 const { User, Activity } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
+const multerUpload = require('../helpers/multer');
+const compressImage = require('../services/compress');
 
 const userController = {
 
@@ -9,20 +13,22 @@ const userController = {
 
     const user = await User.findByPk(id);
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const {
       // eslint-disable-next-line camelcase
       password, is_admin, created_at, updated_at, ...newUser
     } = user.dataValues;
-
-    if (!newUser) {
-      throw new ApiError('Cet utilisateur n\'existe pas', 400);
-    }
 
     res.json(newUser);
   },
 
   async updateUser(req, res, next) {
     const { id } = req.params;
+
+    console.log(req.user, id);
 
     if (req.user.id !== parseInt(id, 10)) {
       throw new ApiError('Forbidden', 403);
@@ -243,6 +249,82 @@ const userController = {
     });
 
     res.json({ msg: 'favori supprimer' });
+  },
+
+  async getUserAvatar(req, res) {
+    const { id } = req.params;
+    // On recupere un utilisateur
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    // On va chercher le chemin de son image
+    const pathAvatar = path.join(__dirname, `../${user.avatar}`);
+    // On vérifie si elle existe
+    const isAvatarExist = fs.existsSync(pathAvatar);
+
+    // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
+    // alors on renvoie l'image par defaut
+    if (!isAvatarExist || !user.avatar) {
+      res.sendFile(path.join(__dirname, '../images/default.jpeg'));
+      return;
+    }
+
+    res.sendFile(pathAvatar);
+  },
+
+  async uploadUserAvatar(req, res) {
+    const { id } = req.params;
+
+    multerUpload(req, res, async (uploadError) => {
+      // Gestion des erreurs possible lors de l'upload d'une image
+
+      if (uploadError) {
+        if (uploadError.code === 'LIMIT_FILE_SIZE') {
+          throw new ApiError('Image trop volumineuse', 400);
+        }
+        throw new ApiError(uploadError.message, 400);
+      }
+      // Si pas de fichier dans la requete cela veut dire que l'utilisateur
+      // n'a pas sélectionner d'image
+      if (!req.file) {
+        throw new ApiError('Aucune Image sélectionnée', 400);
+      }
+
+      // On récupére le chemin de l'utilisateur en BDD
+      const user = await User.findByPk(id);
+      // l'image prendra comme nouveau nom ce que renvoie Date.now()
+      const newImageName = Date.now();
+
+      const isAvatarExist = fs.existsSync(path.join(__dirname, '../', user.avatar));
+
+      // Supression de l'ancienne image de l'utilisateur si elle existe
+      if (isAvatarExist) {
+        fs.unlink(path.join(__dirname, '../', user.avatar), (unlinkError) => {
+          if (unlinkError) throw unlinkError;
+        });
+      }
+
+      // Compression de la nouvelle image si son poids est supérieur a 100kB
+
+      compressImage(req, newImageName);
+
+      // upload de la nouvelle image
+      await User.update(
+        {
+          avatar: `/images/${newImageName}.jpeg`,
+        },
+        {
+          where: {
+            id,
+          },
+        },
+      );
+
+      res.json({ message: 'Image envoyée', id });
+    });
   },
 
 };

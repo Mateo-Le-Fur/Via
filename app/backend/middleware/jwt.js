@@ -18,9 +18,6 @@ const authJWT = {
         throw new ApiError('Token invalide', 403);
       }
 
-      // eslint-disable-next-line no-param-reassign
-      delete user.password;
-
       req.user = { ...user, token };
       next();
     });

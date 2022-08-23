@@ -12,6 +12,7 @@ router.use("/user", authJWT.protect, user);
 router.use("/activity", authJWT.protect, activity);
 router.use("/dashboard", authJWT.protect, adminCheck.protect, dashboard);
 router.use("/current", authJWT.protect, (req, res) => {
+
   res.json(req.user);
 });
 router.use("/docs", authJWT.protect, adminCheck.protect, apiDoc);
