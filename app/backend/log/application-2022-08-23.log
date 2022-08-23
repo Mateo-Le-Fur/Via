@@ -23,3 +23,16 @@
 2022-08-23 10:40:30 - error: "firstname" is not allowed
 2022-08-23 10:40:40 - error: "firstname" is not allowed
 2022-08-23 10:44:32 - error: Unexpected token } in JSON at position 69
+2022-08-23 10:52:58 - error: ee is not defined
+2022-08-23 11:04:05 - error: Token inexistant
+2022-08-23 11:04:25 - error: Token inexistant
+2022-08-23 14:10:13 - error: Token inexistant
+2022-08-23 14:10:23 - error: Cannot read properties of undefined (reading 'split')
+2022-08-23 14:10:59 - error: Token inexistant
+2022-08-23 14:11:03 - error: Cannot read properties of undefined (reading 'split')
+2022-08-23 14:11:18 - error: Cannot read properties of undefined (reading 'split')
+2022-08-23 14:11:46 - error: Cannot read properties of undefined (reading 'split')
+2022-08-23 14:13:17 - error: "address" is required
+2022-08-23 14:14:32 - error: Forbidden
+2022-08-23 14:21:48 - error: Forbidden
+2022-08-23 14:21:58 - error: Utilisateur introuvable

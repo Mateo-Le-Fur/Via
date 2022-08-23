@@ -98,8 +98,6 @@ const userController = {
   async updateUserActivity(req, res) {
     const { activityId, userId } = req.params;
 
-    console.log(userId, req.user.id);
-
     if (req.user.id !== parseInt(userId, 10)) {
       throw new ApiError('Forbidden', 403);
     }

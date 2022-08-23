@@ -4,6 +4,7 @@ module.exports = Joi.object({
 
   name: Joi.string()
     .max(50)
+    .required()
     .messages({
       'string.empty': 'name: Chaine vide !',
       'string.max': 'Le nom de l\'activité ne peut dépasser 50 caractères',
@@ -11,16 +12,18 @@ module.exports = Joi.object({
 
   description: Joi.string()
     .max(260)
+    .required()
     .messages({
       'string.max': 'La description ne doit pas faire plus de 260 caractères',
     }),
 
-  date: Joi.string(),
+  date: Joi.string().required(),
 
-  address: Joi.string(),
+  address: Joi.string().required(),
 
   city: Joi.string()
     .max(80)
+    .required()
     .messages({
       'string.max': 'La ville ne peut dépasser plus de 80 caractères',
     }),

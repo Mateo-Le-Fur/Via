@@ -6,23 +6,17 @@ const {
 
 const dashboard = {
   async getAllData(req, res) {
-    const users = User.findAll();
-    const activities = Activity.findAll();
-    const types = Type.findAll();
-    const messages = Message.findAll();
-    const comments = Comment.findAll();
+    const users = await User.findAll();
+    const activities = await Activity.findAll();
+    const types = await Type.findAll();
+    const messages = await Message.findAll();
+    const comments = await Comment.findAll();
 
-    const allData = [
-      users,
-      activities,
-      types,
-      messages,
-      comments,
-    ];
+    // const data = await Promise.all(allData);
 
-    const data = await Promise.all(allData);
-
-    res.json({ data });
+    res.json({
+      users, activities, types, messages, comments,
+    });
   },
 
   async updateUser(req, res) {
