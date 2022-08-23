@@ -52,7 +52,12 @@ const auth = {
 
     createdUser = createdUser.get();
 
-    createdUser = { userId: createdUser.id, lat: createdUser.lat, long: createdUser.long };
+    createdUser = {
+      userId: createdUser.id,
+      lat: createdUser.lat,
+      long: createdUser.long,
+      is_admin: createdUser.is_admin,
+    };
 
     const token = auth.generateToken(createdUser);
 
@@ -83,7 +88,12 @@ const auth = {
       throw new ApiError('Email ou mot de passe incorrect', 400);
     }
 
-    user = { id: user.id, lat: user.lat, long: user.long };
+    user = {
+      id: user.id,
+      lat: user.lat,
+      long: user.long,
+      is_admin: user.is_admin,
+    };
 
     const token = auth.generateToken(user);
 

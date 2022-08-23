@@ -1,18 +1,18 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
   swaggerDefinition: {
-    openapi: "3.0.0",
+    openapi: '3.0.0',
     info: {
-      title: "Express API for Via application",
-      version: "1.0.0",
+      title: 'Express API for Via application',
+      version: '1.0.0',
     },
     servers: [
       {
-        url: "http://localhost:8080",
-        description: "Development server",
+        url: 'http://localhost:8080',
+        description: 'Development server',
       },
     ],
   },
-  apis: [`${path.join(__dirname, "../routers/*.js")}`],
+  apis: [`${path.join(__dirname, '../routers/*.js')}`],
 };
