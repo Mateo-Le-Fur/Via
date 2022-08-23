@@ -5,6 +5,7 @@ export const activities = [
         48.886747418432854,
         2.331297504051392
       ],
+      user: "John Doe",
       name: "Activité 1",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -17,6 +18,7 @@ export const activities = [
         48.885763051704245,
         2.3697140978164204
       ],
+      user: "John Doe",
       name: "Activité 3",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -29,6 +31,7 @@ export const activities = [
         48.88982450927934,
         2.3246687584605636
       ],
+      user: "John Doe",
       name: "Activité 4",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -37,6 +40,7 @@ export const activities = [
     },
     {
       id: 5,
+      user: "John Doe",
       location: [
         48.893786588999916,
         2.3697140984356824
@@ -53,6 +57,7 @@ export const activities = [
         48.85048384425953,
         2.3385288634970123
       ],
+      user: "John Doe",
       name: "Activité 6",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -65,6 +70,7 @@ export const activities = [
         48.82048384425953,
         2.368528863497012
       ],
+      user: "John Doe",
       name: "Activité 9",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -77,6 +83,7 @@ export const activities = [
         48.82048384425953,
         2.3385288634970123
       ],
+      user: "John Doe",
       name: "Activité 12",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -89,6 +96,7 @@ export const activities = [
         48.84048384425953,
         2.3385288634970123
       ],
+      user: "John Doe",
       name: "Activité 13",
       address: "12 rue de l'example",
       date: "22-09-2022",
@@ -104,6 +112,7 @@ export const activities = [
       name: "Activité 14",
       address: "12 rue de l'example",
       date: "22-09-2022",
+      user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
      type: "cook"
     },
@@ -116,6 +125,7 @@ export const activities = [
       name: "Activité 15",
       address: "12 rue de l'example",
       date: "22-09-2022",
+      user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
      type: "art"
     },
@@ -128,6 +138,7 @@ export const activities = [
       name: "Activité 16",
       address: "12 rue de l'example",
       date: "22-09-2022",
+      user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
       type: "gardening"
     },

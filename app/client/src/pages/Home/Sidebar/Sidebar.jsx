@@ -23,7 +23,7 @@ const Sidebar = () => {
     }
 
   return (
-    <div className={showSidebar ? "sidebar show": "sidebar"}>
+    <div className={showSidebar ? "sidebar show" : showFilter ? "sidebar sideFilter": "sidebar"}>
       <ul className='main'>
         <div>
         <li onClick={() => handlePanel('profile')}>
@@ -36,7 +36,7 @@ const Sidebar = () => {
         </div>
         <div>
         <li onClick={() => {
-            dispatch(handleShowSidebar())
+            
             dispatch(handleShowFilter())
         }}><FaFilter className={ "icon"} />
         </li>

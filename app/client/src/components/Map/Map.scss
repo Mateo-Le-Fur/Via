@@ -3,72 +3,237 @@
 .leaflet-container {
     width: 100%;
     height: 100%;
+
+    .iconMap {
+        background-color: white;
+        border: 2px solid vars.$tertiary-color
+    }
+
 }
 
 
 
+
 .leaflet-popup-content-wrapper {
-    font-size:16px;
-    line-height:24px;
+    font-size: 16px;
+    line-height: 24px;
     height: 400px;
     width: 400px;
     display: flex;
-        div{
-            width: 100% !important;
+
+    div {
+        width: 100% !important;
+        display: flex;
+        overflow: hidden;
+        .popupContainer {
             display: flex;
-            .popupContainer{
+            justify-content: space-between;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+
+            .editContainer {
                 display: flex;
-                justify-content: space-between;
                 flex-direction: column;
-                width: 100%;
-                height: 100%;
-                .editContainer{
-                    
-                }
-                .activityContainer{
-
-                }
-                .userContainer{
-
-                }
-                .actions{
+                
+                .activityHeader {
                     display: flex;
-                    flex-direction: row;
                     justify-content: space-between;
+                    align-items: center;
+                    padding: .5rem 0;
+
+                    input {
+                        border: none;
+                        font-size: 1.5rem;
+                        color: vars.$primary-color;
+                        outline: none;
+                    }
+                }
+
+                .dateContainer {
+                    display: flex;
+                    input{
+                        border: none;
+                        font-size: 1.3rem;
+                        outline: none;
+                    }
+                    .smIcon {
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .locationContainer {
+                    display: flex;
+
+                    .smIcon {
+                        font-size: 1.3rem;
+                    }
+
+                    input {
+                        border: none;
+                        outline: none;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .descriptionContainer {
+                    margin-top: 1rem;
+                    padding: .3rem;
+                    overflow: auto;
+                    textarea{
+                        width: 100%;
+                        height: 150px;
+                        resize: none;
+                        padding: .7em;
+                        font-size: 1.1rem;
+                        outline: none;
+                        border-radius: 1rem;
+                    }
+                }
+
+                .buttonContainer{
+                    margin-top: .8rem;
                     width: 100%;
-                    .left{
-                        .actionIcon{
-                            font-size: 2.7rem;
+                    display: flex;
+                  justify-content: center;
+                }
+            }
+
+            .activityContainer {
+                display: flex;
+                flex-direction: column;
+
+                .activityHeader {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: .5rem 0;
+
+                    h1 {
+                        font-size: 1.5rem;
+                        color: vars.$primary-color;
+                    }
+
+                    span {
+                        color: vars.$secondary-color;
+
+                        em {
+                            font-weight: bold;
+                            font-size: 1.1rem;
+                            cursor: pointer;
+                            text-decoration: underline;
                         }
                     }
-                    .right{
-                        display: flex;
-                        justify-content: flex-end;
-                        width: 10%;
-                        .starIcon{
-                            font-size: 1.7rem;
-                            cursor: pointer;
-                            fill: vars.$tertiary-color;
-                            transition: fill .3s ease-in-out;
-                            &:hover{
-                                fill: vars.$secondary-color;
-                            }
-                            &:active{
-                                transform: scale(.6);
-                            }
+                }
+
+                .dateContainer {
+                    display: flex;
+
+                    .smIcon {
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .locationContainer {
+                    display: flex;
+
+                    .smIcon {
+                        font-size: 1.3rem;
+                    }
+                }
+
+                .descriptionContainer {
+                    margin-top: 1rem;
+                    padding: .3rem;
+                    overflow: auto;
+                }
+            }
+
+            .userContainer {
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                .back{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+                .avatarContainer{
+                    display: flex;
+                    width: 100%;
+                    height: 90px;
+                    justify-content: center;
+                    img{
+                        border-radius: 50%;
+                        border: 1px solid vars.$primary-color;
+                    }
+                }
+                .nicknameContainer{
+                    display: flex;
+                    width: 100%;
+                    padding-bottom: .5rem;
+                    justify-content: center;
+                    color: vars.$primary-color;
+                }
+                .addressContainer{
+
+                }
+                .namesContainer{
+                    span{
+                        padding-left: .3rem;
+                    }
+                }
+                .phonContainer{
+
+                }
+                .descriptionContainer{
+                    padding: .3rem .6rem;
+                }
+            }
+
+            .actions {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                width: 100%;
+
+                .left {
+                    .actionIcon {
+                        font-size: 2.7rem;
+                    }
+                }
+
+                .right {
+                    display: flex;
+                    justify-content: flex-end;
+                    width: 10%;
+
+                    .starIcon {
+                        font-size: 1.7rem;
+                        cursor: pointer;
+                        fill: vars.$tertiary-color;
+                        transition: fill .3s ease-in-out;
+
+                        &:hover {
+                            fill: vars.$secondary-color;
+                        }
+
+                        &:active {
+                            transform: scale(.6);
                         }
                     }
                 }
             }
-         }
+        }
     }
+}
 
 
 .leaflet-popup-tip-container {
-    width:30px;
-    height:15px; 
+    width: 30px;
+    height: 15px;
     transform: translate(20px, -4px)
-    }
+}
 
 // .leaflet-popup-tip{
 //     background: green
@@ -77,17 +242,16 @@
 .leaflet-div-icon {
     background: transparent;
     border: none;
-}  
-
-
-.leaflet-popup-close-button{
-    span{
-
- color: vars.$secondary-color;
- &:hover{
-    color: vars.$tertiary-color;
- }
-    }
 }
 
-  
+
+.leaflet-popup-close-button {
+    span {
+
+        color: vars.$secondary-color;
+
+        &:hover {
+            color: vars.$tertiary-color;
+        }
+    }
+}
