@@ -1,3 +1,5 @@
+const ApiError = require('../errors/apiError');
+
 const {
   User, Activity, Type, Message, Comment,
 } = require('../models');
@@ -5,10 +7,10 @@ const {
 const dashboard = {
   async getAllData(req, res) {
     const users = User.findAll();
-    const activities = User.findAll();
-    const types = User.findAll();
-    const messages = User.findAll();
-    const comments = User.findAll();
+    const activities = Activity.findAll();
+    const types = Type.findAll();
+    const messages = Message.findAll();
+    const comments = Comment.findAll();
 
     const allData = [
       users,
@@ -28,8 +30,7 @@ const dashboard = {
     const user = await User.findByPk(Number(id));
 
     if (!user) {
-      res.json('Cet utilisateur n\'existe pas');
-      return;
+      throw new ApiError('Cet utilisateur n\'existe pas', 400);
     }
 
     await user.update(req.body);
@@ -41,8 +42,7 @@ const dashboard = {
     const user = await User.findByPk(Number(id));
 
     if (!user) {
-      res.json('Cet utilisateur n\'existe pas');
-      return;
+      throw new ApiError('Cet utilisateur n\'existe pas', 400);
     }
 
     await user.destroy();
@@ -54,8 +54,7 @@ const dashboard = {
     const activity = await Activity.findByPk(Number(id));
 
     if (!activity) {
-      res.json('Cette activité n\'existe pas');
-      return;
+      throw new ApiError('Cette activité n\'existe pas', 400);
     }
 
     await activity.update(req.body);
@@ -67,8 +66,7 @@ const dashboard = {
     const activity = await Activity.findByPk(Number(id));
 
     if (!activity) {
-      res.json('Cette activité n\'existe pas');
-      return;
+      throw new ApiError('Cette activité n\'existe pas', 400);
     }
 
     await activity.destroy();
@@ -79,8 +77,7 @@ const dashboard = {
     const type = await Type.create(req.body);
 
     if (!req.body.label) {
-      res.status(400).json({ msg: 'Le label du type ne peut être vide !' });
-      return;
+      throw new ApiError('Le label du type ne peut être vide !', 400);
     }
 
     res.status(201).json(type);
@@ -91,8 +88,7 @@ const dashboard = {
     const type = await Type.findByPk(Number(id));
 
     if (!type) {
-      res.json('Ce type n\'existe pas');
-      return;
+      throw new ApiError('Ce type n\'existe pas', 400);
     }
 
     await type.update(req.body);
@@ -104,8 +100,7 @@ const dashboard = {
     const type = await Type.findByPk(Number(id));
 
     if (!type) {
-      res.json('Ce type n\'existe pas');
-      return;
+      throw new ApiError('Ce type n\'existe pas', 400);
     }
 
     await type.destroy();
@@ -117,8 +112,7 @@ const dashboard = {
     const message = await Message.findByPk(Number(id));
 
     if (!message) {
-      res.json('Ce message n\'existe pas');
-      return;
+      throw new ApiError('Ce message n\'existe pas', 400);
     }
 
     await message.update(req.body);
@@ -130,8 +124,7 @@ const dashboard = {
     const message = await Message.findByPk(Number(id));
 
     if (!message) {
-      res.json('Ce message n\'existe pas');
-      return;
+      throw new ApiError('Ce message n\'existe pas', 400);
     }
 
     await message.destroy();
@@ -143,8 +136,7 @@ const dashboard = {
     const comment = await Comment.findByPk(Number(id));
 
     if (!comment) {
-      res.json('Ce commentaire n\'existe pas');
-      return;
+      throw new ApiError('Ce commentaire n\'existe pas', 400);
     }
 
     await comment.update(req.body);
@@ -156,8 +148,7 @@ const dashboard = {
     const comment = await Comment.findByPk(Number(id));
 
     if (!comment) {
-      res.json('Ce commentaire n\'existe pas');
-      return;
+      throw new ApiError('Ce commentaire n\'existe pas', 400);
     }
 
     await comment.destroy();

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const ApiError = require('../errors/apiError');
 // const redis = require('../config/redis');
 
 const authJWT = {
@@ -7,16 +8,14 @@ const authJWT = {
     const { token } = req.signedCookies;
 
     if (!token) {
-      res.status(401).json({ msg: 'Le token n\'existe pas' });
-      return;
+      throw new ApiError('Token inexistant', 403);
     }
 
     // const token = await redis.get(token);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
-        res.status(403).json({ msg: 'Token invalide' });
-        return;
+        throw new ApiError('Token invalide', 403);
       }
 
       // eslint-disable-next-line no-param-reassign

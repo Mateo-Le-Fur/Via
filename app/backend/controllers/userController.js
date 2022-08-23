@@ -1,6 +1,6 @@
 const { User, Activity } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
-const ApiError = require('../errors/apiError')
+const ApiError = require('../errors/apiError');
 
 const userController = {
 
@@ -9,22 +9,30 @@ const userController = {
 
     const user = await User.findByPk(id);
 
-    if (!user) {
-      throw new ApiError('Cet utilisateur n\'existe pas', 400)
+    const {
+      // eslint-disable-next-line camelcase
+      password, is_admin, created_at, updated_at, ...newUser
+    } = user.dataValues;
+
+    if (!newUser) {
+      throw new ApiError('Cet utilisateur n\'existe pas', 400);
     }
 
-    res.json(user);
+    res.json(newUser);
   },
 
   async updateUser(req, res, next) {
     const { id } = req.params;
+
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
     const {
       firstname, lastname, description, address, phone, avatar,
     } = req.body;
 
     const coordinates = await getCoordinates(address, 'housenumber', next);
 
-    
     const user = await User.update({
       firstname,
       lastname,
@@ -46,11 +54,19 @@ const userController = {
   async deleteUser(req, res) {
     const { id } = req.params;
 
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const user = await User.destroy({
       where: {
         id,
       },
     });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
 
     res.json(user);
   },
@@ -61,6 +77,9 @@ const userController = {
       include: ['activities'],
     });
 
+    if (!result) {
+      throw new ApiError('Activité introuvable', 400);
+    }
     const user = result.get();
 
     const activities = user.activities.map((el) => el.get());
@@ -72,6 +91,11 @@ const userController = {
 
   async updateUserActivity(req, res) {
     const { activityId, userId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const {
       name,
       description,
@@ -103,7 +127,11 @@ const userController = {
   async createActivity(req, res) {
     const { id } = req.params;
 
-    const coordinates = await getCoordinates(res, `${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
+    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
     const lat = coordinates[0];
     const long = coordinates[1];
@@ -120,12 +148,20 @@ const userController = {
   deleteUserActivity(req, res) {
     const { userId, activityId } = req.params;
 
-    Activity.destroy({
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
+    const activity = Activity.destroy({
       where: {
         id: activityId,
         user_id: userId,
       },
     });
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     res.status(201).json({ msg: 'Activité supprimer' });
   },
@@ -134,11 +170,23 @@ const userController = {
     const { userId } = req.params;
     const { activityId } = req.body;
 
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const activity = await Activity.findByPk(activityId);
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     await activity.addUser(user);
 
@@ -146,15 +194,23 @@ const userController = {
       include: ['bookmarks'],
     });
 
-    res.json({ msg: 'activité ajouter au favori' });
+    res.status(201).json({ msg: 'Activité ajouter au favori' });
   },
 
   async getUserBookmarks(req, res) {
     const { id } = req.params;
 
+    if (req.user.id !== parseInt(id, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     const user = await User.findByPk(id, {
       include: ['bookmarks'],
     });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
 
     res.json(user.get().bookmarks);
   },
@@ -162,11 +218,23 @@ const userController = {
   async deleteUserBookmark(req, res) {
     const { userId, activityId } = req.params;
 
+    if (req.user.id !== parseInt(userId, 10)) {
+      throw new ApiError('Forbidden', 403);
+    }
+
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const activity = await Activity.findByPk(activityId);
+
+    if (!activity) {
+      throw new ApiError('Activité introuvable', 400);
+    }
 
     await activity.removeUser(user);
 

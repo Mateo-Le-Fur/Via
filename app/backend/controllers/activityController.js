@@ -1,12 +1,12 @@
 const { Activity } = require('../models');
+const ApiError = require('../errors/apiError');
 
 const activity = {
   async getActivities(req, res) {
     const activities = await Activity.findAll();
 
     if (!activities) {
-      res.json('Aucune activité n\'a été trouvée');
-      return;
+      throw new ApiError('Aucune activité n\'a été trouvée', 400);
     }
 
     res.json(activities);
@@ -18,8 +18,7 @@ const activity = {
     const activity = await Activity.findByPk(id);
 
     if (!activity) {
-      res.json(`L'activité portant l'id ${id} n'existe pas`);
-      return;
+      throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
     res.json(activity);

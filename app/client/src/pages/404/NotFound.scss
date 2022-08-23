@@ -2,7 +2,24 @@
 
 
 .notFound{
-    background-color: vars.$primary-color;
     width: 100%;
     height: 100%;
+    text-align: center;
+    img {
+      max-width: 600px;
+      display: block;
+      margin-bottom: 2rem;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h3 {
+      margin-bottom: 0.5rem;
+      color: vars.$gray;
+    }
+    a {
+      color: vars.$primary-color;
+      text-decoration: underline;
+    }
 }
+
