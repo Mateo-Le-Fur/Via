@@ -11,23 +11,23 @@ import { GiCook, GiPalette } from 'react-icons/gi';
 
 export default function getIcon(type) {
   const sportIcon = renderToStaticMarkup(
-    <FaFootballBall size={42} className='icon' />
+    <FaFootballBall size={42} className='icon iconMap' />
   );
 
   const artIcon = renderToStaticMarkup(
-    <GiPalette size={42} className='icon' />
+    <GiPalette size={42} className='icon iconMap' />
   );
 
-  const diyIcon = renderToStaticMarkup(<FaTools size={42} className='icon' />);
+  const diyIcon = renderToStaticMarkup(<FaTools size={42} className='icon iconMap' />);
 
   const charityIcon = renderToStaticMarkup(
-    <FaHandsHelping size={42} className='icon' />
+    <FaHandsHelping size={42} className='icon iconMap' />
   );
 
-  const cookIcon = renderToStaticMarkup(<GiCook size={42} className='icon' />);
+  const cookIcon = renderToStaticMarkup(<GiCook size={42} className='icon iconMap' />);
 
   const gardeningIcon = renderToStaticMarkup(
-    <FaLeaf size={42} className='icon' />
+    <FaLeaf size={42} className='icon iconMap' />
   );
 
   let html;

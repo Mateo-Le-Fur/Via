@@ -20,6 +20,9 @@
     align-items: center;
     justify-content: space-between;
     transition: background-color 0.8s ease-in-out;
+    &.sideFilter{
+        background-color: white;
+    }
     &.show{
         background-color: white;
         @media (max-width: 600px){
