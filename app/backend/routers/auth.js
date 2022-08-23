@@ -68,13 +68,23 @@ const loginValidator = require("../validation/schema/login");
  *            schema:
  *              $ref: '#/components/schemas/UserRegistration'
  *      responses:
- *        200:
- *          description: User details
+ *        '200':
+ *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                items:
- *                  $ref: '#/components/schemas/UserRegistration'
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: integer
+ *                  lat:
+ *                    type: string
+ *                  long:
+ *                    type: string
+ *        '403':
+ *          description: Forbidden
+ *        '500':
+ *          description: Internal server error.
  */
 
 router
@@ -97,13 +107,23 @@ router
  *            schema:
  *              $ref: '#/components/schemas/UserLogin'
  *      responses:
- *        200:
- *          description: User details
+ *        '200':
+ *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                items:
- *                  $ref: '#/components/schemas/UserLogin'
+ *                type: object
+ *                properties:
+ *                  id:
+ *                    type: integer
+ *                  lat:
+ *                    type: string
+ *                  long:
+ *                    type: string
+ *        '403':
+ *          description: Forbidden
+ *        '500':
+ *          description: Internal server error.
  */
 router
   .route("/login")
@@ -120,7 +140,7 @@ router
  *      tags: [/auth]
  *      responses:
  *        200:
- *          description: Utilisateur déconnecté
+ *          description: OK
  */
 router.route("/logout").get(controllerHandler(authController.logout)); // Log out user from app
 

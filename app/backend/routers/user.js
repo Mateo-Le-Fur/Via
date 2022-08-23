@@ -102,13 +102,16 @@ router
    *          required: true
    *          description: ID of the user to get
    *      responses:
-   *        200:
-   *          description: User details
+   *        '200':
+   *          description: OK
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserProfile'
+   *                $ref: '#/components/schemas/UserProfile'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .get(controllerHandler(userController.getUser)) // Gets user profile
   /**
@@ -131,13 +134,16 @@ router
    *            schema:
    *              $ref: '#/components/schemas/UserProfile'
    *      responses:
-   *        200:
-   *          description: User details
+   *        '200':
+   *          description: User modified
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserProfile'
+   *                $ref: '#/components/schemas/UserProfile'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .put(
     validator("body", userValidator),
@@ -161,13 +167,16 @@ router
    *          required: true
    *          description: ID of the user to get activities from
    *      responses:
-   *        200:
-   *          description: User activities
+   *        '200':
+   *          description: OK
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserActivity'
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .get(controllerHandler(userController.getUserActivities)) // Gets all activities created by user
   /**
@@ -190,13 +199,16 @@ router
    *            schema:
    *              $ref: '#/components/schemas/UserActivity'
    *      responses:
-   *        200:
-   *          description: User activities
+   *        '200':
+   *          description: Activity created
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserActivity'
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .post(
     validator("body", activityValidator),
@@ -225,13 +237,16 @@ router
    *          required: true
    *          description: ID of the activity
    *      responses:
-   *        200:
-   *          description: User activities
+   *        '200':
+   *          description: Activity modified
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserActivity'
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .put(
     validator("body", activityValidator),
@@ -258,8 +273,16 @@ router
    *          required: true
    *          description: ID of the activity
    *      responses:
-   *        200:
-   *          description: User activity deleted
+   *        '200':
+   *          description: Activity deleted
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .delete(controllerHandler(userController.deleteUserActivity)); // Delete one activity created by user
 
@@ -279,19 +302,22 @@ router
    *          required: true
    *          description: ID of the user
    *      responses:
-   *        200:
-   *          description: User bookmarks
+   *        '200':
+   *          description: OK
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserActivity'
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .get(controllerHandler(userController.getUserBookmarks)) // Gets all bookmarks created by user
   /**
    * @swagger
    * /api/user/{userId}/bookmark:
-   *    put:
+   *    post:
    *      summary: Creates one bookmark
    *      tags: [/user]
    *      parameters:
@@ -302,13 +328,16 @@ router
    *          required: true
    *          description: ID of the user
    *      responses:
-   *        200:
-   *          description: User bookmarks
+   *        '200':
+   *          description: Bookmark created
    *          content:
    *            application/json:
    *              schema:
-   *                items:
-   *                  $ref: '#/components/schemas/UserActivity'
+   *                $ref: '#/components/schemas/UserActivity'
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   .post(controllerHandler(userController.addBookmark)); // Creates one bookmark by user
 
@@ -334,8 +363,12 @@ router
    *          required: true
    *          description: ID of the user bookmark
    *      responses:
-   *        200:
-   *          description: Bookmark dekete
+   *        '200':
+   *          description: Bookmark deleted
+   *        '403':
+   *          description: Forbidden
+   *        '500':
+   *          description: Internal server error.
    */
   // eslint-disable-next-line max-len
   .delete(controllerHandler(userController.deleteUserBookmark)); // Delete one bookmark created by user

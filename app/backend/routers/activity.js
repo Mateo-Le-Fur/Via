@@ -16,10 +16,12 @@ const activityController = require("../controllers/activityController");
  *          - city
  *          - lat
  *          - long
+ *          - user_id
  *        properties:
  *          id:
  *            type: integer
  *            description: The id of the activity
+ *            required: true
  *          name:
  *            type: string
  *            description: The name of the activity
@@ -38,6 +40,9 @@ const activityController = require("../controllers/activityController");
  *          long:
  *            type: string
  *            description: The longitude of the activity address
+ *          user_id:
+ *            type: integer
+ *            description: ID of the user who created the activity
  */
 
 /**
@@ -51,17 +56,21 @@ const activityController = require("../controllers/activityController");
  * @swagger
  * /api/activity:
  *    get:
- *      summary: Retrieves one activity
+ *      summary: Retrieves all activities
  *      tags: [/activity]
  *      responses:
- *        200:
- *          description: Activity details
+ *        '200':
+ *          description: OK
  *          content:
  *            application/json:
  *              schema:
  *                type: array
  *                items:
  *                  $ref: '#/components/schemas/Activity'
+ *        '403':
+ *          description: Forbidden
+ *        '500':
+ *          description: Internal server error.
  */
 
 router.route("/").get(activityController.getActivities); // Gets all activities
@@ -80,13 +89,16 @@ router.route("/").get(activityController.getActivities); // Gets all activities
  *          required: true
  *          description: ID of the activity to get
  *      responses:
- *        200:
- *          description: Activity details
+ *        '200':
+ *          description: OK
  *          content:
  *            application/json:
  *              schema:
- *                items:
- *                  $ref: '#/components/schemas/Activity'
+ *                $ref: '#/components/schemas/Activity'
+ *        '403':
+ *          description: Forbidden
+ *        '500':
+ *          description: Internal server error.
  */
 
 router.route("/:id").get(activityController.getActivity); // Gets one activity
