@@ -25,7 +25,7 @@ const Modal = () => {
         <div className="cover">
             <h1>
             {panel === "profile" && "Profil"}
-            {panel === "add" && "Ajouter une activité"}
+            {panel === "add" && "Ajouter"}
             {panel === "bookmark" && "Favoris"}
             {panel === "dashboard" && "Tableau de bord"}
             </h1>

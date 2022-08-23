@@ -1,1 +1,10 @@
 @use "../../vars";
+
+.bookmark{
+    height: 100%;
+    overflow: auto;
+
+    .activityList{
+        width: 97%;
+    }
+}
