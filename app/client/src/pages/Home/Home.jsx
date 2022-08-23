@@ -7,18 +7,37 @@ import Panel from './Panel/Panel'
 import Sidebar from './Sidebar/Sidebar'
 import Modal from "./Modal/Modal"
 import List from './List/List'
+import CustomLayer from '../../components/Map/CustomLayer'
+import { useEffect, useMemo, useState } from 'react'
+import {activities} from "./data"
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
+
+  const [markerGroups, setMarkerGroups] = useState([])
+
+  const groupMarkers = useMemo(() => {
+    if(activities.length > 0 ){
+    const object = activities.reduce((acc, cur) => {
+       acc[cur["type"]] = [...acc[cur["type"]] || [], cur];
+       return acc;
+     }, {})
+     return  Object.keys(object).map((key) => [(key), object[key]]);
+   }
+   }, [activities])
+
+   useEffect(() => {
+    setMarkerGroups(groupMarkers)
+  }, [groupMarkers])
+
+
   return (
     <div className='home'>
       {user && (
         <Map center={[user.lat, user.long]} zoom={13} zoomControl={true}>
-          <Marker position={[user.lat, user.long]}>
-            <Popup>
-              Hello {user.nickname} you are in {user.city}
-            </Popup>
-          </Marker>
+        {markerGroups && markerGroups.map((group) => (
+        <CustomLayer key={group[0]} group={group}/>
+      ))}
         </Map>
       )}
       <OutsideWrapper component="sidebar">
