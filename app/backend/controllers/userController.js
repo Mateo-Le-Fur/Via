@@ -28,10 +28,10 @@ const userController = {
   async updateUser(req, res, next) {
     const { id } = req.params;
 
-    console.log(req.user, id);
-
     if (req.user.id !== parseInt(id, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
     const {
       firstname, lastname, description, address, phone, avatar,
@@ -61,7 +61,9 @@ const userController = {
     const { id } = req.params;
 
     if (req.user.id !== parseInt(id, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     const user = await User.destroy({
@@ -99,7 +101,9 @@ const userController = {
     const { activityId, userId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     const {
@@ -134,7 +138,9 @@ const userController = {
     const { id } = req.params;
 
     if (req.user.id !== parseInt(id, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
@@ -155,7 +161,9 @@ const userController = {
     const { userId, activityId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     const activity = Activity.destroy({
@@ -177,7 +185,9 @@ const userController = {
     const { activityId } = req.body;
 
     if (req.user.id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     let user = await User.findByPk(userId, {
@@ -207,7 +217,9 @@ const userController = {
     const { id } = req.params;
 
     if (req.user.id !== parseInt(id, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     const user = await User.findByPk(id, {
@@ -225,7 +237,9 @@ const userController = {
     const { userId, activityId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 403);
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
     }
 
     let user = await User.findByPk(userId, {
@@ -277,6 +291,12 @@ const userController = {
 
   async uploadUserAvatar(req, res) {
     const { id } = req.params;
+
+    if (req.user.id !== parseInt(id, 10)) {
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
+    }
 
     multerUpload(req, res, async (uploadError) => {
       // Gestion des erreurs possible lors de l'upload d'une image

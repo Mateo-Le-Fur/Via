@@ -47,3 +47,12 @@
 2022-08-23 14:41:59 - error: Forbidden
 2022-08-23 14:43:01 - error: is_admin is not defined
 2022-08-23 14:44:02 - error: Token inexistant
+2022-08-23 14:53:09 - error: Le format du numéro de téléphone n'est pas valide
+2022-08-23 14:53:10 - error: Le format du numéro de téléphone n'est pas valide
+2022-08-23 14:53:23 - error: "id" is not allowed
+2022-08-23 14:53:32 - error: "lat" is not allowed
+2022-08-23 14:53:38 - error: Unexpected token } in JSON at position 152
+2022-08-23 14:53:44 - error: Forbidden
+2022-08-23 15:02:38 - error: Token inexistant
+2022-08-23 15:06:24 - error: Utilisateur introuvable
+2022-08-23 15:06:57 - error: Forbidden
