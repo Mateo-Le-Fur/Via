@@ -52,7 +52,11 @@ const activity = {
 
     let result = activity.get();
 
-    result = { ...result, nickname: result.user.nickname, type: result.types[0].label };
+    const date = dateFormat.convertActivityDate(result);
+
+    result = {
+      ...result, nickname: result.user.nickname, type: result.types[0].label, date,
+    };
 
     const { types, user, ...rest } = result;
 
