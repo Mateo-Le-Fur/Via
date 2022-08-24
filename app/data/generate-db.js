@@ -1,10 +1,10 @@
 // require('dotenv').config();
-const { faker } = require('@faker-js/faker');
-const client = require('../backend/config/sequelize');
-const addressData = require('./address-data.json');
+const { faker } = require("@faker-js/faker");
+const client = require("../backend/config/sequelize");
+const addressData = require("./address-data.json");
 
 // Sets the addresses in french format
-faker.locale = 'fr';
+faker.locale = "fr";
 
 // Initializes entities variables
 // Sets the number of rows per entity
@@ -22,16 +22,16 @@ const activities = [];
 const messages = [];
 const comments = [];
 const baseTypes = [
-  'Arts',
-  'Activités créatives',
-  'Apéro',
-  'Bénévolat',
-  'Cinéma',
-  'Cuisine',
-  'Danse',
-  'Jardinage',
-  'Jeux',
-  'Bricolage',
+  "Arts",
+  "Activités créatives",
+  "Apéro",
+  "Bénévolat",
+  "Cinéma",
+  "Cuisine",
+  "Danse",
+  "Jardinage",
+  "Jeux",
+  "Bricolage",
 ];
 const types = [];
 const bookmarks = [];
@@ -83,7 +83,9 @@ const newAddress = addressData.map((address) => {
 // Create a random address
 function randomAddress() {
   const rand = Math.floor(Math.random() * newAddress.length + 1);
-  const randStreetNumber = Math.floor(Math.random() * newAddress[rand].streetNumbers.length + 1);
+  const randStreetNumber = Math.floor(
+    Math.random() * newAddress[rand].streetNumbers.length + 1
+  );
   let number = 1;
   let { lat } = newAddress[rand];
   let { lon } = newAddress[rand];
@@ -91,7 +93,8 @@ function randomAddress() {
   if (newAddress[rand].streetNumbers[randStreetNumber]) {
     const numberRegex = /[0-9]{1,}/;
 
-    number = newAddress[rand].streetNumbers[randStreetNumber].match(numberRegex);
+    number =
+      newAddress[rand].streetNumbers[randStreetNumber].match(numberRegex);
   }
 
   newAddress[rand].latitudes.forEach((latitude) => {
@@ -121,7 +124,7 @@ function randomAddress() {
 function pgQuoteEscape(row) {
   const newRow = {};
   Object.entries(row).forEach(([prop, value]) => {
-    if (typeof value !== 'string') {
+    if (typeof value !== "string") {
       newRow[prop] = value;
       return;
     }
@@ -141,10 +144,10 @@ function generateUsers(userNb) {
       nickname: faker.name.middleName(),
       firstname: faker.name.firstName(),
       lastname: faker.name.lastName(),
-      description: faker.lorem.paragraph(number = 2, string = ' '),
+      description: faker.lorem.paragraph((number = 2), (string = " ")),
       address: `${address.number} ${address.street} ${address.postalCode}`,
       city: address.city,
-      phone: faker.phone.number('06 ## ## ## ##', string),
+      phone: faker.phone.number("06 ## ## ## ##", string),
       avatar: faker.image.people(400, 400),
       is_admin: false,
     };
@@ -204,13 +207,14 @@ function generateActivities(activityNb) {
 
     const activity = {
       name: faker.lorem.sentence(),
-      description: faker.lorem.paragraph(number = 2, string = ' '),
+      description: faker.lorem.paragraph((number = 2), (string = " ")),
       date: faker.date.future(0.5),
       address: `${address.number} ${address.street} ${address.postalCode}`,
       city: address.city,
       lat: address.lat,
       long: address.lon,
-      user_id: users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
+      user_id:
+        users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
     };
 
     activities.push(activity);
@@ -394,24 +398,65 @@ async function insertTypes(types) {
 //   return participations;
 // }
 
-// // TODO Affiner l'assignation des types aux activités (éviter de se retrouver avec une activité ayant des types contradictoires ou incohérents)
-// // Generate types belongin to activity and add them to the database table "activity_has_type"
-// function generateUserActivityTypes(activityTypeNb) {
-//   for (let i = 0 ; i < activityTypeNb ; i++ ) {
-//     const activityType = {
-//       type_id: types.indexOf(types[Math.floor(Math.random() * types.length)])+1,
-//       activity_id: activities.indexOf(activities[Math.floor(Math.random() * activities.length)])+1
-//     };
+// Generate types belongin to activity and add them to the database table "activity_has_type"
+function generateUserActivityTypes(activityNb) {
+  let activityArr = [];
 
-//     activityTypes.push(activityType);
-//   }
-//   return activityTypes;
-// }
+  for (let activity of activities) {
+    activityArr.push(activities.indexOf(activity) + 1);
+  }
+
+  for (let i = 0; i < activityNb; i++) {
+    const activityRand =
+      activityArr[Math.floor(Math.random() * activityArr.length)];
+
+    const activityType = {
+      type_id:
+        types.indexOf(types[Math.floor(Math.random() * types.length)]) + 1,
+      activity_id: activityRand,
+    };
+
+    activityArr = activityArr.filter((value) => value !== activityRand);
+
+    activityTypes.push(activityType);
+  }
+
+  return activityTypes;
+}
+
+async function insertActivityTypes(activityTypes) {
+  await client.query(
+    'TRUNCATE TABLE "activity_has_type" RESTART IDENTITY CASCADE'
+  );
+
+  const typeValues = activityTypes.map((type) => {
+    const newType = pgQuoteEscape(type);
+    return `(
+          '${newType.type_id}',
+          '${newType.activity_id}'
+      )`;
+  });
+  const queryStr = `
+           INSERT INTO "activity_has_type"
+           (
+            "type_id",
+            "activity_id"
+           )
+           VALUES
+           ${typeValues}
+           RETURNING id
+   `;
+  const result = await client.query(queryStr);
+  return result.rows;
+}
 
 (async () => {
   const generatedUsers = generateUsers(userNb);
   const generatedActivities = generateActivities(activityNb);
   const generatedTypes = generateTypes();
+  const generatedActivityTypes = generateUserActivityTypes(
+    generatedActivities.length
+  );
 
   // generateMessages(messageNb);
   // generateComments(commentNb);
@@ -422,6 +467,7 @@ async function insertTypes(types) {
   const usersData = await insertUsers(users);
   const activitiesData = await insertActivities(activities);
   const typesData = await insertTypes(types);
+  const activityTypesData = await insertActivityTypes(generatedActivityTypes);
 
   // client.end();
 })();
