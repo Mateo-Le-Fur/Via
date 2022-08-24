@@ -10,7 +10,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      type: "sport"
+      type: "Danse"
     },
     {
       id: 3,
@@ -23,7 +23,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      type: "diy"
+      type: "Danse"
     },
     {
       id: 4,
@@ -36,7 +36,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      type: "cook"
+      type: "Cuisine"
     },
     {
       id: 5,
@@ -49,7 +49,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      type: "gardening"
+      type: "Jardinage"
     },
     {
       id: 6,
@@ -62,7 +62,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-     type: "charity"
+     type: "Bénévolat"
     },
     {
       id: 9,
@@ -75,7 +75,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-     type: "charity"
+     type: "Bénévolat"
     },
     {
      id: 12,
@@ -88,7 +88,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-    type: "diy"
+    type: "Bricolage"
     },
     {
      id: 13,
@@ -101,7 +101,7 @@ export const activities = [
       address: "12 rue de l'example",
       date: "22-09-2022",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      yype: "charity"
+      yype: "Bénévolat"
     },
     {
       id: 14,
@@ -114,7 +114,7 @@ export const activities = [
       date: "22-09-2022",
       user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-     type: "cook"
+     type: "Cuisine"
     },
     {
      id: 15,
@@ -127,7 +127,7 @@ export const activities = [
       date: "22-09-2022",
       user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-     type: "art"
+     type: "Arts"
     },
     {
       id: 16,
@@ -140,6 +140,6 @@ export const activities = [
       date: "22-09-2022",
       user: "John Doe",
       description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Alias voluptas quasi iusto aliquid, earum voluptates fugit facere sed magnam veniam molestias. Sequi ipsa neque praesentium quam atque quod saepe unde.",
-      type: "gardening"
+      type: "Jardinage"
     },
   ]

@@ -33,22 +33,22 @@ export default function getIcon(type) {
   let html;
 
   switch (type) {
-    case 'art':
+    case 'Arts':
       html = artIcon;
       break;
-    case 'sport':
+    case 'Danse':
       html = sportIcon;
       break;
-    case 'diy':
+    case 'Bricolage':
       html = diyIcon;
       break;
-    case 'charity':
+    case 'Bénévolat':
       html = charityIcon;
       break;
-    case 'cook':
+    case 'Cuisine':
       html = cookIcon;
       break;
-    case 'gardening':
+    case 'Jardinage':
       html = gardeningIcon;
       break;
     default:
