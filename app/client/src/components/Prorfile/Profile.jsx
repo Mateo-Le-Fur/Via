@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Profile.scss';
 import img from "../../assets/images/no-user.png"
 import Card from "../Card/Card";
@@ -7,6 +7,14 @@ import {useSelector} from "react-redux"
 const Profile = () => {
 
 const {isError, message} = useSelector(state => state.user)
+const {activities} = useSelector(state => state.activity)
+const [filtered, setFiltered] = useState([])
+const {user} = useSelector(state => state.auth)
+
+useEffect(() => {
+   setFiltered(activities.filter(activity => activity.user_id === user.id))
+}, [activities, user.id])
+
 
 const [form, setForm] = useState({
     firstname: "",
@@ -22,7 +30,6 @@ const handleChange = (e) => {
 
 const [avatar, setAvatar] = useState("")
 
-console.log(avatar)
 
 const handleSubmit = (e) => {
   e.preventDefault()
@@ -70,14 +77,9 @@ const handleSubmit = (e) => {
       </form>
         <h2>Mes activités</h2>
       <div className="activityList">
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
-        <Card type="profile" />
+      {filtered.length > 0 && filtered.map(activity => (
+        <Card type="profile" activity={activity} key={activity.id}/>
+      ))}
       </div>
     </div>
   );

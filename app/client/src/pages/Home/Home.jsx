@@ -16,6 +16,7 @@ const Home = () => {
   const { user } = useSelector(state => state.auth)
   const [markerGroups, setMarkerGroups] = useState([])
   const dispatch = useDispatch()
+  const {activities} = useSelector(state => state.activity)
 
   const groupMarkers = useMemo(() => {
     if(activitiesData.length > 0 ){
@@ -54,7 +55,7 @@ const Home = () => {
         </OutsideWrapper>
         <Modal />
         <OutsideWrapper component="list">
-          <List />  
+          <List activities={activities} />  
         </OutsideWrapper>
     </div>
   )
