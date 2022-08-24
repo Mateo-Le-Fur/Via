@@ -1,5 +1,5 @@
 import { Marker, Popup } from 'react-leaflet'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Map from '../../components/Map/Map'
 import OutsideWrapper from '../../hooks/ClickOutsideHook'
 import "./Home.scss"
@@ -9,22 +9,28 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import {activities} from "./data"
+import {activitiesData} from "./data"
+import { getActivities } from '../../features/activity/activitySlice'
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
-
   const [markerGroups, setMarkerGroups] = useState([])
+  const dispatch = useDispatch()
+  const {activities} = useSelector(state => state.activity)
 
   const groupMarkers = useMemo(() => {
-    if(activities.length > 0 ){
-    const object = activities.reduce((acc, cur) => {
+    if(activitiesData.length > 0 ){
+    const object = activitiesData.reduce((acc, cur) => {
        acc[cur["type"]] = [...acc[cur["type"]] || [], cur];
        return acc;
      }, {})
      return  Object.keys(object).map((key) => [(key), object[key]]);
    }
-   }, [activities])
+   }, [activitiesData])
+
+   useEffect(() => {
+      dispatch(getActivities())
+   }, [dispatch])
 
    useEffect(() => {
     setMarkerGroups(groupMarkers)
@@ -38,6 +44,7 @@ const Home = () => {
         {markerGroups && markerGroups.map((group) => (
         <CustomLayer key={group[0]} group={group}/>
       ))}
+ 
         </Map>
       )}
       <OutsideWrapper component="sidebar">
@@ -48,7 +55,7 @@ const Home = () => {
         </OutsideWrapper>
         <Modal />
         <OutsideWrapper component="list">
-          <List />  
+          <List activities={activities} />  
         </OutsideWrapper>
     </div>
   )

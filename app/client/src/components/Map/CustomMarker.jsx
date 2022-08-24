@@ -28,8 +28,8 @@ const icon = getIcons(type)
       <Marker
       ref={markerRef}
       eventHandlers={eventHandlers}
-      position={[marker.location[0], marker.location[1]]}
-      icon={icon}
+      position={[marker.lat, marker.long]}
+      // icon={icon}
     >
       <CustomPopup type={type} id={marker.id}/>
   
