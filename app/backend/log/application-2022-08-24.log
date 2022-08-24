@@ -72,3 +72,8 @@
 2022-08-24 16:07:17 - error: activity.get is not a function
 2022-08-24 16:07:34 - error: Cannot set headers after they are sent to the client
 2022-08-24 16:07:35 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:14:32 - error: Token invalide
+2022-08-24 16:16:51 - error: Unexpected token } in JSON at position 22
+2022-08-24 16:17:00 - error: Unexpected token } in JSON at position 24
+2022-08-24 16:21:00 - error: Vous devez être connecté
+2022-08-24 16:33:09 - error: dateFormat is not a function
