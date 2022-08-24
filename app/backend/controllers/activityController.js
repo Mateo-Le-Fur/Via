@@ -77,34 +77,35 @@ const activity = {
     res.status(200).json({ msg: 'Participe' });
   },
 
-  getParticipationsInRealTime(req, res) {
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
+  async getParticipationsInRealTime(req, res) {
+    // res.writeHead(200, {
+    //   'Content-Type': 'text/event-stream',
+    //   'Cache-Control': 'no-cache',
+    //   Connection: 'keep-alive',
+    // });
+
+    const activity = await Activity.findAll({
+      include: ['userParticip'],
     });
 
-    const intervalId = setInterval(async (res) => {
-      let activity = await Activity.findAll({
-        include: ['userParticip'],
-      });
-      activity = activity.get();
+    res.json(activity);
+    // let count = 0;
+    // activity.userParticip.forEach((elem) => {
+    //   if (elem) {
+    //     count += 1;
+    //   }
+    // });
 
-      let count = 0;
-      activity.userParticip.forEach((elem) => {
-        if (elem) {
-          count += 1;
-        }
-      });
+    // count = count.toString();
+    //   const intervalId = setInterval(async (res) => {
 
-      count = count.toString();
+    //     res.write(`data: ${'test'} \n\n`);
+    //   }, 50, res);
 
-      res.write(`data: ${'test'} \n\n`);
-    }, 50, res);
-
-    res.on('close', () => {
-      clearInterval(intervalId);
-    });
+    //   res.on('close', () => {
+    //     clearInterval(intervalId);
+    //   });
+    // },
   },
 };
 
