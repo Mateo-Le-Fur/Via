@@ -1,7 +1,12 @@
+/* eslint-disable consistent-return */
 const axios = require('axios').default;
 const ApiError = require('../errors/apiError');
 
-async function getCoordinates(query, type = 'municipality', update = false) {
+async function getCoordinates(query, type = 'municipality') {
+  if (!query) {
+    return;
+  }
+
   const result = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${query}&type=${type}&limit=1`);
   const geometry = result.data;
 
@@ -9,14 +14,8 @@ async function getCoordinates(query, type = 'municipality', update = false) {
     throw new ApiError('Api Error', 500);
   }
 
-  if (!update) {
-    if (geometry.features.length === 0) {
-      throw new ApiError('La ville n\'a pas était trouvé', 400);
-    }
-  }
-
   if (geometry.features.length === 0) {
-    return;
+    throw new ApiError('La ville n\'a pas était trouvé', 400);
   }
 
   let { coordinates } = geometry.features[0].geometry;

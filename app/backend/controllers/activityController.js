@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable camelcase */
 const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 
@@ -9,6 +11,7 @@ const activity = {
     user = user.get();
 
     const activities = await Activity.findAll({
+      include: ['types'],
       where: {
         city: user.city,
       },
@@ -24,7 +27,9 @@ const activity = {
   async getActivity(req, res) {
     const { id } = req.params;
 
-    const activity = await Activity.findByPk(id);
+    const activity = await Activity.findByPk(id, {
+      include: ['types'],
+    });
 
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
@@ -60,6 +65,8 @@ const activity = {
   },
 
   getParticipationsInRealTime(req, res) {
+    const { activityId } = req.params;
+    console.log(activityId);
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -67,9 +74,22 @@ const activity = {
     });
 
     const intervalId = setInterval(async (res) => {
-      const participations = await User.findByPk();
-      res.write(`data: ${user.like} \n\n`);
-    }, 10, res);
+      let activity = await Activity.findByPk(activityId, {
+        include: ['userParticip'],
+      });
+      activity = activity.get();
+
+      let count = 0;
+      activity.userParticip.forEach((elem) => {
+        if (elem) {
+          count += 1;
+        }
+      });
+
+      count = count.toString();
+
+      res.write(`data: ${count} \n\n`);
+    }, 50, res);
 
     res.on('close', () => {
       clearInterval(intervalId);
