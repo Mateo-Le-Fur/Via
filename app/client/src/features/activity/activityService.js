@@ -3,7 +3,7 @@ import { publicReq, privateReq } from '../../utils/axiosMethod'
 // Create new activity
 const createActivity = async (activityData) => {
 
-  const response = await privateReq.post('/activities', activityData)
+  const response = await privateReq.post('/activity/', activityData)
 
   return response.data
 }
@@ -11,13 +11,13 @@ const createActivity = async (activityData) => {
 // Get activities 
 const getActivities = async () => {
 
-  const response = await publicReq.get('/activities')
+  const response = await publicReq.get('/activity')
   return response.data
 }
 
 // Get activity by Id
 const getActivity = async (activityId) => {
-  const response = await publicReq.get(`/activities/${activityId}`)
+  const response = await publicReq.get(`/activity/${activityId}`)
 
   return response.data
 }
@@ -25,7 +25,7 @@ const getActivity = async (activityId) => {
 //Update Activity 
 const updateActivity = async (activityId, activityData) => {
   console.log(activityId)
-  const response = await privateReq.put("/activities/"+ activityId, activityData)
+  const response = await privateReq.put("/activity/"+ activityId, activityData)
 
   return response.data
 }
@@ -33,7 +33,7 @@ const updateActivity = async (activityId, activityData) => {
 // Delete Actvity 
 const deleteActivity = async (activityId) => {
 
-  const response = await privateReq.delete("/activities/" + activityId)
+  const response = await privateReq.delete("/activity/" + activityId)
 
   if (response.status === 200 ){
     return activityId

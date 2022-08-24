@@ -17,13 +17,13 @@ import {
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 
-import { activities } from '../../pages/Home/data';
+import { activitiesData } from '../../pages/Home/data';
 import { Calendar } from 'react-date-range';
 
 const CustomPopup = ({ id, type }) => {
   //   const { activity } = useSelector((state) => state.activity);
 
-  const activity = activities.find((activity) => activity.id === id);
+  const activity = activitiesData.find((activity) => activity.id === id);
 
   const user = {
     nickname: 'Johnny92',

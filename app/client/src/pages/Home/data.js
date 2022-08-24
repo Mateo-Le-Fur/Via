@@ -1,4 +1,4 @@
-export const activities = [
+export const activitiesData = [
     {
       id: 2,
       location: [

@@ -2,9 +2,11 @@ import { useState } from 'react';
 import './Profile.scss';
 import img from "../../assets/images/no-user.png"
 import Card from "../Card/Card";
-
+import {useSelector} from "react-redux"
 
 const Profile = () => {
+
+const {isError, message} = useSelector(state => state.user)
 
 const [form, setForm] = useState({
     firstname: "",
@@ -18,23 +20,25 @@ const handleChange = (e) => {
     setForm((prev) => ({...prev, [e.target.name]: e.target.value}))
 }
 
-const [file, setFile] = useState("")
+const [avatar, setAvatar] = useState("")
+
+console.log(avatar)
 
 const handleSubmit = (e) => {
   e.preventDefault()
 }
   return (
     <div className='profile'>
-      {/* <p className='server-error'>server error</p> */}
+      {isError && message && <p className='server-error'>server error</p>}
       <form className='editForm' onSubmit={handleSubmit}>
       <div className='avatar'>
-        <input type="file" id="avatar"                   onChange={(e) => setFile(e.target.files[0])}
+        <input type="file" id="avatar"                   onChange={(e) => setAvatar(e.target.files[0])}
  name="avatar" />
         <label htmlFor="avatar">
         <img
               src={
-                file
-                  ? URL.createObjectURL(file)
+                avatar
+                  ? URL.createObjectURL(avatar)
                   : img
               }
               alt="avatar"

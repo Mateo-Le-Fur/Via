@@ -8,7 +8,6 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
-  showLocation: [],
 }
 
 export const createActivity = createAsyncThunk(
