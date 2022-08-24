@@ -149,7 +149,7 @@ const CustomPopup = ({ id, type }) => {
                   <span>{user.lastname}</span> 
                 </div>
                 <div className='phoneContainer'>
-                  <FaPhone className='smIcon' /> <span>{user.firstname}</span> 
+                  <FaPhone className='smIcon' /> 
                   <span>{user.phone}</span> 
                 </div>
                 <div className='descriptionContainer'>
