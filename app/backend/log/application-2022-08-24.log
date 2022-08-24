@@ -77,3 +77,11 @@
 2022-08-24 16:17:00 - error: Unexpected token } in JSON at position 24
 2022-08-24 16:21:00 - error: Vous devez être connecté
 2022-08-24 16:33:09 - error: dateFormat is not a function
+2022-08-24 16:39:48 - error: elem.userParticip.get is not a function
+2022-08-24 16:42:19 - error: elem.map is not a function
+2022-08-24 16:47:37 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:49:43 - error: elem.get is not a function
+2022-08-24 16:54:23 - error: Token invalide
+2022-08-24 17:18:53 - error: Aucune activité trouvé
+2022-08-24 17:18:57 - error: Aucune activité trouvé
+2022-08-24 17:43:41 - error: Vous devez être connecté
