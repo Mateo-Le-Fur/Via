@@ -8,10 +8,11 @@ const activity = {
     const { id } = req.user;
 
     let user = await User.findByPk(id);
+
     user = user.get();
 
     const activities = await Activity.findAll({
-      include: ['types'],
+      include: ['types', 'user'],
       where: {
         city: user.city,
       },
@@ -21,21 +22,33 @@ const activity = {
       throw new ApiError('Aucune activité n\'a été trouvée', 400);
     }
 
-    res.json(activities);
+    const result = activities.map((elem) => {
+      const data = elem.get();
+
+      return { ...data, nickname: data.user.nickname, type: data.types[0].label };
+    });
+
+    res.json(result);
   },
 
   async getActivity(req, res) {
     const { id } = req.params;
 
     const activity = await Activity.findByPk(id, {
-      include: ['types'],
+      include: ['types', 'user'],
     });
 
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
-    res.json(activity);
+    let result = activity.get();
+
+    result = { ...result, nickname: result.user.nickname, type: result.types[0].label };
+
+    const { types, user, ...rest } = result;
+
+    res.json(rest);
   },
 
   async participateToActivity(req, res) {
@@ -65,8 +78,6 @@ const activity = {
   },
 
   getParticipationsInRealTime(req, res) {
-    const { activityId } = req.params;
-    console.log(activityId);
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
@@ -74,7 +85,7 @@ const activity = {
     });
 
     const intervalId = setInterval(async (res) => {
-      let activity = await Activity.findByPk(activityId, {
+      let activity = await Activity.findAll({
         include: ['userParticip'],
       });
       activity = activity.get();
@@ -88,7 +99,7 @@ const activity = {
 
       count = count.toString();
 
-      res.write(`data: ${count} \n\n`);
+      res.write(`data: ${'test'} \n\n`);
     }, 50, res);
 
     res.on('close', () => {

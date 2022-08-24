@@ -52,7 +52,7 @@ const auth = {
     createdUser = createdUser.get();
 
     createdUser = {
-      userId: createdUser.id,
+      id: createdUser.id,
       lat: createdUser.lat,
       long: createdUser.long,
       is_admin: createdUser.is_admin,
