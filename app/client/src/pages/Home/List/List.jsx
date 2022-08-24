@@ -8,6 +8,7 @@ import Card from '../../../components/Card/Card';
 const List = () => {
     const dispatch = useDispatch()
     const {showList} = useSelector(state => state.global)
+   
   return (
     <div className={showList ? "list showList" : "list"}>
 
