@@ -66,3 +66,9 @@
 2022-08-24 15:39:35 - error: Cannot read properties of undefined (reading 'nickname')
 2022-08-24 15:41:33 - error: result.map is not a function
 2022-08-24 15:47:24 - error: Token invalide
+2022-08-24 16:02:19 - error: invalid input syntax for type integer: "participate"
+2022-08-24 16:05:09 - error: invalid input syntax for type integer: "participate"
+2022-08-24 16:07:16 - error: activity.get is not a function
+2022-08-24 16:07:17 - error: activity.get is not a function
+2022-08-24 16:07:34 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:07:35 - error: Cannot set headers after they are sent to the client
