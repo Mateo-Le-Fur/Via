@@ -19,14 +19,17 @@ const Home = () => {
   const {activities} = useSelector(state => state.activity)
 
   const groupMarkers = useMemo(() => {
-    if(activitiesData.length > 0 ){
-    const object = activitiesData.reduce((acc, cur) => {
-       acc[cur["type"]] = [...acc[cur["type"]] || [], cur];
-       return acc;
-     }, {})
-     return  Object.keys(object).map((key) => [(key), object[key]]);
+    if(activities.length > 0 ){
+    const array = activities.map(activity => (
+     {...activity, lat : parseFloat(activity.lat), long: parseFloat(activity.long)}
+    ))
+   const object = array.reduce((acc, cur) => {
+    acc[cur["type"]] = [...acc[cur["type"]] || [], cur];
+    return acc;
+  }, {})
+  return  Object.keys(object).map((key) => [(key), object[key]]);
    }
-   }, [activitiesData])
+   }, [activities])
 
    useEffect(() => {
       dispatch(getActivities())
@@ -36,6 +39,7 @@ const Home = () => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
 
+  console.log(markerGroups)
 
   return (
     <div className='home'>

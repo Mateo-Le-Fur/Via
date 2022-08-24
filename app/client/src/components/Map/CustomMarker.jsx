@@ -8,6 +8,7 @@ import getIcons from "./getIcons"
 
 const CustomMarker = ({marker, type} ) => {
 
+console.log(marker.lat, marker.long)
 const icon = getIcons(type)
 
   const dispatch = useDispatch()
@@ -31,9 +32,10 @@ const icon = getIcons(type)
       position={[marker.lat, marker.long]}
       // icon={icon}
     >
-      <CustomPopup type={type} id={marker.id}/>
+      {/* <CustomPopup type={type} id={marker.id}/> */}
   
     </Marker>
+
     )
   }
 

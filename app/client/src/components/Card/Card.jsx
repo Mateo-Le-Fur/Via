@@ -16,8 +16,6 @@ import {
 
 
 const Card = ({kind, activity}) => {
-  // console.log(activity)
-  // console.log(format(activity.date, "dd-MM-yyyy"))
   return (
     <div className='card'>
       <div className='top'>
@@ -30,11 +28,11 @@ const Card = ({kind, activity}) => {
         <div className='row first'>
           <div>
             {' '}
-            <HiUser className='smIcon' /> Créé par <span>John Doe</span>
+            <HiUser className='smIcon' /> Créé par <span>{activity.nickname}</span>
           </div>
           <div>
             {' '}
-            <HiCalendar className='smIcon' /> 20/19/2022
+            <HiCalendar className='smIcon' /> {activity.date}
           </div>
         </div>
         <div className='row'>
