@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 const { Activity, User } = require('../models');
@@ -90,37 +91,28 @@ const activity = {
   },
 
   async getParticipationsInRealTime(req, res) {
-    // res.writeHead(200, {
-    //   'Content-Type': 'text/event-stream',
-    //   'Cache-Control': 'no-cache',
-    //   Connection: 'keep-alive',
-    // });
-
-    const activity = await Activity.findAll({
-      include: ['userParticip'],
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
     });
 
-    activity.forEach((elem) => {
-      const data = elem.get();
-      console.log(data);
+    const intervalId = setInterval(async (res) => {
+      const activity = await Activity.findAll({
+        include: ['userParticip'],
+      });
+
+      const result = activity.map((elem) => {
+        const count = elem.userParticip.length;
+        return { activityId: elem.id, count };
+      });
+
+      res.write(`data: ${JSON.stringify(result)} \n\n`);
+    }, 5000, res);
+
+    res.on('close', () => {
+      clearInterval(intervalId);
     });
-    // let count = 0;
-    // activity.userParticip.forEach((elem) => {
-    //   if (elem) {
-    //     count += 1;
-    //   }
-    // });
-
-    // count = count.toString();
-    //   const intervalId = setInterval(async (res) => {
-
-    //     res.write(`data: ${'test'} \n\n`);
-    //   }, 50, res);
-
-    //   res.on('close', () => {
-    //     clearInterval(intervalId);
-    //   });
-    // },
   },
 };
 
