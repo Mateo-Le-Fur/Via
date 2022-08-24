@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 const path = require('path');
 const fs = require('fs');
 const { User, Activity } = require('../models');
@@ -25,7 +26,7 @@ const userController = {
     res.json(newUser);
   },
 
-  async updateUser(req, res, next) {
+  async updateUser(req, res) {
     const { id } = req.params;
 
     if (req.user.id !== parseInt(id, 10)) {
@@ -33,22 +34,25 @@ const userController = {
         throw new ApiError('Forbidden', 403);
       }
     }
-    const {
-      firstname, lastname, description, address, phone, avatar,
-    } = req.body;
 
-    const coordinates = await getCoordinates(address, 'housenumber', next);
+    const getUserCoordinates = await User.findByPk(id);
 
-    const user = await User.update({
-      firstname,
-      lastname,
-      description,
-      address,
-      phone,
-      avatar,
-      lat: coordinates[0],
-      long: coordinates[1],
-    }, {
+    const coordinates = await getCoordinates(req.body.address, 'housenumber', true);
+
+    let lat;
+    let long;
+
+    if (!coordinates) {
+      lat = getUserCoordinates.dataValues.lat;
+      long = getUserCoordinates.dataValues.long;
+    } else {
+      lat = coordinates[0];
+      long = coordinates[1];
+    }
+
+    const newBody = { ...req.body, lat, long };
+
+    const user = await User.update(newBody, {
       where: {
         id,
       },
@@ -190,7 +194,7 @@ const userController = {
       }
     }
 
-    let user = await User.findByPk(userId, {
+    const user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
@@ -205,10 +209,6 @@ const userController = {
     }
 
     await activity.addUser(user);
-
-    user = await User.findByPk(userId, {
-      include: ['bookmarks'],
-    });
 
     res.status(201).json({ msg: 'Activité ajouter au favori' });
   },
