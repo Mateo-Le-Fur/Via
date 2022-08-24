@@ -1,16 +1,14 @@
-const { v4: uuidv4 } = require('uuid');
-const redis = require('../config/redis');
+// const redis = require('../config/redis');
 
-function generateRedisKey(user, token) {
-  const userUUID = uuidv4();
-  const newUser = user;
+// function generateRedisKey(user, token) {
+//   const newUser = user;
 
-  redis.set(userUUID, token);
-  redis.expire(userUUID, process.env.JWT_EXPIRE);
+//   redis.set(token, token);
+//   // redis.expire(userUUID, process.env.JWT_EXPIRE);
 
-  delete newUser.password;
+//   delete newUser.password;
 
-  return userUUID;
-}
+//   return userUUID;
+// }
 
-module.exports = generateRedisKey;
+// module.exports = generateRedisKey;

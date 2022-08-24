@@ -3,8 +3,7 @@ const argon2 = require('argon2');
 const { User } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
-// const generateRedisKey = require('../services/generateUserToken');
-// const redis = require('../config/redis');
+const redis = require('../config/redis');
 
 const auth = {
 
@@ -61,8 +60,6 @@ const auth = {
 
     const token = auth.generateToken(createdUser);
 
-    // const userUUID = generateRedisKey(createdUser, token);
-
     auth.generateCookie(res, 'token', token);
 
     res.json(createdUser);
@@ -97,7 +94,7 @@ const auth = {
 
     const token = auth.generateToken(user);
 
-    // const userUUID = generateRedisKey(user, token);
+    console.log(token);
 
     auth.generateCookie(res, 'token', token);
 
@@ -106,18 +103,19 @@ const auth = {
     res.json(user);
   },
 
-  logout(req, res) {
+  async logout(req, res) {
     const { token } = req.signedCookies;
 
     if (!token) {
       throw new ApiError('Aucun token existant', 500);
     }
 
-    // redis.del(token);
+    await redis.set(token, token);
+    redis.expire(token, process.env.JWT_EXPIRE);
 
     res.clearCookie('token');
 
-    res.json({ msg: 'déconnecter' });
+    res.json({ msg: 'déconnecté' });
   },
 };
 
