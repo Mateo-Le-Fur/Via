@@ -3,7 +3,7 @@ require('dayjs/locale/fr');
 
 module.exports = {
   convertActivityDate(activity) {
-    const date = dayjs(activity.date).locale('fr').format('dd/MM/YYYY');
+    const date = dayjs(activity.date).locale('fr').format('DD/MM/YYYY');
     return date;
   },
 };

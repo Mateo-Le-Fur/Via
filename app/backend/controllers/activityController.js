@@ -2,6 +2,7 @@
 /* eslint-disable camelcase */
 const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
+const dateFormat = require('../services/dateFormat');
 
 const activity = {
   async getActivities(req, res) {
@@ -10,6 +11,9 @@ const activity = {
     let user = await User.findByPk(id);
 
     user = user.get();
+    if (!user) {
+      throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
+    }
 
     const activities = await Activity.findAll({
       include: ['types', 'user'],
@@ -25,7 +29,11 @@ const activity = {
     const result = activities.map((elem) => {
       const data = elem.get();
 
-      return { ...data, nickname: data.user.nickname, type: data.types[0].label };
+      const date = dateFormat.convertActivityDate(data);
+
+      return {
+        ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+      };
     });
 
     res.json(result);
@@ -88,7 +96,10 @@ const activity = {
       include: ['userParticip'],
     });
 
-    res.json(activity);
+    activity.forEach((elem) => {
+      const data = elem.get();
+      console.log(data);
+    });
     // let count = 0;
     // activity.userParticip.forEach((elem) => {
     //   if (elem) {
