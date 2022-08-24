@@ -2,3 +2,40 @@
 2022-08-24 08:59:31 - error: Vous devez être connecté
 2022-08-24 09:00:22 - error: Vous devez être connecté
 2022-08-24 09:02:35 - error: Token invalide
+2022-08-24 10:01:22 - error: Cet utilisateur existe déjà
+2022-08-24 10:01:25 - error: La ville n'a pas était trouvé
+2022-08-24 10:53:09 - error: Token invalide
+2022-08-24 11:06:05 - error: Forbidden
+2022-08-24 11:07:00 - error: Forbidden
+2022-08-24 11:07:18 - error: Forbidden
+2022-08-24 11:07:41 - error: Association with alias "bookmarks" does not exist on User
+2022-08-24 11:20:22 - error: Association with alias "bookmarks" does not exist on User
+2022-08-24 11:20:40 - error: column bookmarks.UserId does not exist
+2022-08-24 11:40:53 - error: Token invalide
+2022-08-24 12:14:40 - error: Token invalide
+2022-08-24 12:37:08 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:09 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 12:37:10 - error: Token invalide
+2022-08-24 13:08:22 - error: Token invalide
+2022-08-24 13:36:07 - error:  nom: format invalide
+2022-08-24 13:36:14 - error: La ville n'a pas était trouvé
+2022-08-24 13:38:49 - error: Cannot read properties of undefined (reading 'geometry')
+2022-08-24 13:39:37 - error: Cannot read properties of undefined (reading 'geometry')
+2022-08-24 13:40:08 - error: Cannot read properties of undefined (reading 'geometry')
+2022-08-24 13:41:26 - error: Cannot read properties of undefined (reading 'geometry')
+2022-08-24 13:43:20 - error: Cannot read properties of undefined (reading '0')
+2022-08-24 13:46:06 - error: address is not defined
+2022-08-24 13:46:57 - error: Cannot read properties of undefined (reading '0')
+2022-08-24 13:50:01 - error: Cannot set properties of undefined (setting '0')

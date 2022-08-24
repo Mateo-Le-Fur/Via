@@ -103,4 +103,6 @@ router.route('/').get(activityController.getActivities); // Gets all activities
 
 router.route('/:id').get(activityController.getActivity); // Gets one activity
 
+router.route('/:userId/participate').post(activityController.participateToActivity);
+
 module.exports = router;

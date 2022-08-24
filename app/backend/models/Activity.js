@@ -32,6 +32,7 @@ Activity.init({
     type: DataTypes.TEXT,
     allowNull: false,
   },
+
   user_id: DataTypes.INTEGER,
 }, {
   sequelize,
