@@ -37,7 +37,7 @@ const userController = {
 
     const getUserCoordinates = await User.findByPk(id);
 
-    const coordinates = await getCoordinates(req.body.address, 'housenumber', true);
+    const coordinates = await getCoordinates(req.body.address, 'housenumber');
 
     let lat;
     let long;

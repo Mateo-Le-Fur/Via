@@ -94,8 +94,6 @@ const auth = {
 
     const token = auth.generateToken(user);
 
-    console.log(token);
-
     auth.generateCookie(res, 'token', token);
 
     delete user.password;
