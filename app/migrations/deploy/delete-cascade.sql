@@ -53,7 +53,7 @@ CREATE TABLE "user_to_activity" (
 CREATE TABLE "activity_has_type" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "type_id" int NOT NULL REFERENCES type(id),
-    "activity_id" int NOT NULL REFERENCES activity(id),
+    "activity_id" int NOT NULL REFERENCES activity(id) ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
