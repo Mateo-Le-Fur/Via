@@ -140,6 +140,8 @@ const userController = {
       ...result, nickname: result.user.nickname, type: result.types[0].label, date,
     };
 
+    console.log('git');
+
     const { types, user, ...rest } = result;
 
     res.json(rest);
