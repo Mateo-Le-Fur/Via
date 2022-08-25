@@ -37,7 +37,9 @@ const {user} = useSelector(state => state.user)
         markerRef.current.openPopup()
       }
 
-      dispatch(getUser(activity.user_id))
+      if(activity.user_id){
+        dispatch(getUser(activity.user_id))
+      }
 
     }, [activity, dispatch, map, marker]);
   
