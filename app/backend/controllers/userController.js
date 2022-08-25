@@ -141,6 +141,8 @@ const userController = {
   async createActivity(req, res) {
     const { id } = req.params;
 
+    console.log(req.body.address);
+
     if (req.user.id !== parseInt(id, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);

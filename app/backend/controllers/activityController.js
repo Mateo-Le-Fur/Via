@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
@@ -14,10 +15,11 @@ const activity = {
 
     let getUser = await User.findByPk(id);
 
-    getUser = getUser.get();
     if (!getUser) {
       throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
     }
+
+    getUser = getUser.get();
 
     const activities = await Activity.findAll({
       include: ['types', 'user'],
@@ -76,7 +78,7 @@ const activity = {
     const { activityId } = req.body;
     const { id } = req.user;
 
-    if (id != userId) {
+    if (id !== parseInt(userId, 10)) {
       throw new ApiError('Forbidden', 400);
     }
 
@@ -106,43 +108,46 @@ const activity = {
 
   async getParticipationsInRealTime(req, res) {
     let localVersion = 0;
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    });
 
     const { id } = req.user;
-    const clients = [];
-    clients.push(id);
 
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      raw: true,
+    });
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
+    const activity = await Activity.findAll({
+
+      include: ['userParticip'],
+      attributes: ['id', 'city'],
+
+      order: [
+        ['id', 'asc'],
+      ],
+
+      where: {
+        city: user.city,
+      },
+
+    });
+
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
+    });
+
     const intervalId = setInterval(async (res) => {
       if (localVersion < globalVersion) {
-        const activity = await Activity.findAll({
-
-          include: ['userParticip'],
-          attributes: ['id', 'city'],
-
-          order: [
-            ['id', 'asc'],
-          ],
-
-          where: {
-            city: user.city,
-          },
-
-        });
-
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
-          return { activityId: elem.id, count };
+          return { activityId: elem.id, count, userId: id };
         });
+
+        console.log(result);
 
         localVersion = globalVersion;
 
