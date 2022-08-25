@@ -161,7 +161,7 @@ export const activitySlice = createSlice({
         console.log(action.payload)
         state.isLoading = false 
         state.isError = false
-        state.activities = state.activities.filter(activity => activity.id !== action.payload.id)
+        state.activities = state.activities.filter(activity => activity.id !== action.payload)
       })
 
   }
