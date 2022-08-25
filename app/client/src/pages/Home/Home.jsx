@@ -39,7 +39,6 @@ const Home = () => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
 
-  console.log(markerGroups)
 
   return (
     <div className='home'>

@@ -21,8 +21,8 @@ export const createActivity = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.msg) ||
-        error.msg ||
+          error.response.data.message) ||
+        error.message ||
         error.toString()
 
       return thunkAPI.rejectWithValue(message)
@@ -39,8 +39,8 @@ export const getActivity = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.msg) ||
-        error.msg ||
+          error.response.data.message) ||
+        error.message ||
         error.toString()
 
       return thunkAPI.rejectWithValue(message)
@@ -57,8 +57,8 @@ export const getActivities = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.msg) ||
-        error.msg ||
+          error.response.data.message) ||
+        error.message ||
         error.toString()
 
       return thunkAPI.rejectWithValue(message)
