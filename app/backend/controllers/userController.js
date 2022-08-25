@@ -1,7 +1,7 @@
 /* eslint-disable prefer-destructuring */
 const path = require('path');
 const fs = require('fs');
-const { User, Activity } = require('../models');
+const { User, Activity, Type } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
 const multerUpload = require('../helpers/multer');
@@ -147,16 +147,30 @@ const userController = {
       }
     }
 
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      throw new ApiError('Uitlisateur introuvable', 400);
+    }
+
     const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
     const lat = coordinates[0];
     const long = coordinates[1];
 
+    const type = await Type.findOne({
+      where: {
+        label: req.body.label,
+      },
+    });
+
     const newBody = {
-      ...req.body, user_id: id, lat, long,
+      ...req.body, user_id: id, lat, long, city: user.city,
     };
 
     const activity = await Activity.create(newBody);
+
+    activity.addTypes(type);
 
     res.json(activity);
   },

@@ -1,24 +1,28 @@
+/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
 const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 
+let globalVersion = 0;
+
 const activity = {
+
   async getActivities(req, res) {
     const { id } = req.user;
 
-    let user = await User.findByPk(id);
+    let getUser = await User.findByPk(id);
 
-    user = user.get();
-    if (!user) {
+    getUser = getUser.get();
+    if (!getUser) {
       throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
     }
 
     const activities = await Activity.findAll({
       include: ['types', 'user'],
       where: {
-        city: user.city,
+        city: getUser.city,
       },
     });
 
@@ -27,13 +31,17 @@ const activity = {
     }
 
     const result = activities.map((elem) => {
-      const data = elem.get();
+      let data = elem.get();
 
       const date = dateFormat.convertActivityDate(data);
 
-      return {
+      data = {
         ...data, nickname: data.user.nickname, type: data.types[0].label, date,
       };
+
+      const { types, user, ...rest } = data;
+
+      return rest;
     });
 
     res.json(result);
@@ -66,11 +74,16 @@ const activity = {
   async participateToActivity(req, res) {
     const { userId } = req.params;
     const { activityId } = req.body;
+    const { id } = req.user;
+
+    if (id != userId) {
+      throw new ApiError('Forbidden', 400);
+    }
 
     const activity = await Activity.findByPk(activityId);
 
     if (!activity) {
-      throw new ApiError('Aucune utilisateur trouvé', 400);
+      throw new ApiError('Aucune activité trouvé', 400);
     }
 
     const user = await User.findByPk(userId, {
@@ -81,46 +94,65 @@ const activity = {
     });
 
     if (!user) {
-      throw new ApiError('Aucune activité trouvé', 400);
+      throw new ApiError('Aucune utilisateur trouvé', 400);
     }
 
     await user.addParticipations(activity);
+
+    globalVersion += 1;
 
     res.status(200).json({ msg: 'Participe' });
   },
 
   async getParticipationsInRealTime(req, res) {
-    // res.writeHead(200, {
-    //   'Content-Type': 'text/event-stream',
-    //   'Cache-Control': 'no-cache',
-    //   Connection: 'keep-alive',
-    // });
-
-    const activity = await Activity.findAll({
-      include: ['userParticip'],
+    let localVersion = 0;
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
     });
 
-    activity.forEach((elem) => {
-      const data = elem.get();
-      console.log(data);
+    const { id } = req.user;
+    const clients = [];
+    clients.push(id);
+
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    const intervalId = setInterval(async (res) => {
+      if (localVersion < globalVersion) {
+        const activity = await Activity.findAll({
+
+          include: ['userParticip'],
+          attributes: ['id', 'city'],
+
+          order: [
+            ['id', 'asc'],
+          ],
+
+          where: {
+            city: user.city,
+          },
+
+        });
+
+        const result = activity.map((elem) => {
+          const count = elem.userParticip.length;
+          return { activityId: elem.id, count };
+        });
+
+        localVersion = globalVersion;
+
+        res.write(`data: ${JSON.stringify(result)} \n\n`);
+      }
+    }, 100, res);
+
+    res.on('close', () => {
+      clearInterval(intervalId);
     });
-    // let count = 0;
-    // activity.userParticip.forEach((elem) => {
-    //   if (elem) {
-    //     count += 1;
-    //   }
-    // });
-
-    // count = count.toString();
-    //   const intervalId = setInterval(async (res) => {
-
-    //     res.write(`data: ${'test'} \n\n`);
-    //   }, 50, res);
-
-    //   res.on('close', () => {
-    //     clearInterval(intervalId);
-    //   });
-    // },
   },
 };
 
