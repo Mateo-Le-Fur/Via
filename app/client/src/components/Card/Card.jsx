@@ -1,4 +1,6 @@
 import './Card.scss';
+import { format } from "date-fns";
+
 import { FaGuitar, FaStar} from 'react-icons/fa';
 import {
   HiLocationMarker,
@@ -10,11 +12,16 @@ import {
   HiThumbUp
 } from 'react-icons/hi';
 
-const Card = ({kind}) => {
+
+
+
+const Card = ({kind, activity}) => {
+  // console.log(activity)
+  // console.log(format(activity.date, "dd-MM-yyyy"))
   return (
     <div className='card'>
       <div className='top'>
-        <div className='name'>Nom de l'activité</div>
+        <div className='name'>{activity.name}</div>
         <div className='type'>
           <FaGuitar className='iconCard' />
         </div>
@@ -33,21 +40,11 @@ const Card = ({kind}) => {
         <div className='row'>
           <div>
             <HiLocationMarker className='smIcon' />
-            12 rue Jeanne D'Arc
+            {activity.address}
           </div>
         </div>
         <main>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque,
-          ratione cum nobis necessitatibus asperiores voluptatibus dolor
-          suscipit hic. Tempora eos dolores, natus officia facere architecto
-          ipsam. Dolorem totam perferendis architecto eum, repellat minus
-          delectus saepe deserunt exercitationem tempora ad laboriosam
-          cupiditate dolores. Omnis, hic libero vitae cum ipsum provident
-          laboriosam perspiciatis error maiores soluta at? Voluptas eius
-          distinctio nulla tempore repellat iste porro harum quam libero, hic
-          impedit iure quaerat, veritatis, adipisci pariatur saepe! Iusto, a
-          beatae qui eius minima sequi id doloribus ut voluptas eveniet
-          repellendus atque debitis. Enim!
+          {activity.description}
         </main>
       </div>
       <div className='bottom'>

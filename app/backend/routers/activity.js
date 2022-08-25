@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const activityController = require('../controllers/activityController');
+const controllerHandler = require('../helpers/controllerHandler');
 
 /**
  * @swagger
@@ -73,7 +74,7 @@ const activityController = require('../controllers/activityController');
  *          description: Internal server error.
  */
 
-router.route('/').get(activityController.getActivities); // Gets all activities
+router.route('/').get(controllerHandler(activityController.getActivities)); // Gets all activities
 
 /**
  * @swagger
@@ -101,8 +102,9 @@ router.route('/').get(activityController.getActivities); // Gets all activities
  *          description: Internal server error.
  */
 
-router.route('/:id').get(activityController.getActivity); // Gets one activity
+router.route('/:id').get(controllerHandler(activityController.getActivity)); // Gets one activity
 
-router.route('/:userId/participate').post(activityController.participateToActivity);
+router.route('/:userId/participate').post(controllerHandler(activityController.participateToActivity));
 
+router.route('/sse/participate').get(controllerHandler(activityController.getParticipationsInRealTime));
 module.exports = router;

@@ -5,7 +5,7 @@ import { handleHideList, handleShowList } from '../../../features/global/globalS
 import Card from '../../../components/Card/Card';
 
 
-const List = () => {
+const List = ({activities}) => {
     const dispatch = useDispatch()
     const {showList} = useSelector(state => state.global)
   return (
@@ -22,6 +22,10 @@ const List = () => {
         )}
         
         <div className="wrapper">
+        {activities.map(activity => (
+          <Card kind='list' key={activity.id} activity={activity} />
+        ))}
+          {/* <Card  kind="list"/>       
           <Card  kind="list"/>       
           <Card  kind="list"/>       
           <Card  kind="list"/>       
@@ -30,8 +34,7 @@ const List = () => {
           <Card  kind="list"/>       
           <Card  kind="list"/>       
           <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
+          <Card  kind="list"/>        */}
         </div>
     </div>
   )

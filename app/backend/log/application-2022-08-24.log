@@ -39,3 +39,49 @@
 2022-08-24 13:46:06 - error: address is not defined
 2022-08-24 13:46:57 - error: Cannot read properties of undefined (reading '0')
 2022-08-24 13:50:01 - error: Cannot set properties of undefined (setting '0')
+2022-08-24 14:30:24 - error: Aucune activité trouvé
+2022-08-24 15:12:32 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:13:18 - error: Utilisateur introuvable
+2022-08-24 15:13:49 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:13:59 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:14:15 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:14:31 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:21:51 - error: Cannot read properties of null (reading 'get')
+2022-08-24 15:23:50 - error: Utilisateur introuvable
+2022-08-24 15:24:09 - error: Utilisateur introuvable
+2022-08-24 15:27:48 - error: Converting circular structure to JSON
+    --> starting at object with constructor 'Sequelize'
+    |     property 'dialect' -> object with constructor 'PostgresDialect'
+    --- property 'sequelize' closes the circle
+2022-08-24 15:28:40 - error: Converting circular structure to JSON
+    --> starting at object with constructor 'Sequelize'
+    |     property 'dialect' -> object with constructor 'PostgresDialect'
+    --- property 'sequelize' closes the circle
+2022-08-24 15:29:52 - error: result.get is not a function
+2022-08-24 15:31:05 - error: result.get is not a function
+2022-08-24 15:35:32 - error: Cannot read properties of undefined (reading 'nickname')
+2022-08-24 15:37:51 - error: data is not defined
+2022-08-24 15:38:01 - error: result.map is not a function
+2022-08-24 15:39:18 - error: Cannot read properties of undefined (reading 'nickname')
+2022-08-24 15:39:35 - error: Cannot read properties of undefined (reading 'nickname')
+2022-08-24 15:41:33 - error: result.map is not a function
+2022-08-24 15:47:24 - error: Token invalide
+2022-08-24 16:02:19 - error: invalid input syntax for type integer: "participate"
+2022-08-24 16:05:09 - error: invalid input syntax for type integer: "participate"
+2022-08-24 16:07:16 - error: activity.get is not a function
+2022-08-24 16:07:17 - error: activity.get is not a function
+2022-08-24 16:07:34 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:07:35 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:14:32 - error: Token invalide
+2022-08-24 16:16:51 - error: Unexpected token } in JSON at position 22
+2022-08-24 16:17:00 - error: Unexpected token } in JSON at position 24
+2022-08-24 16:21:00 - error: Vous devez être connecté
+2022-08-24 16:33:09 - error: dateFormat is not a function
+2022-08-24 16:39:48 - error: elem.userParticip.get is not a function
+2022-08-24 16:42:19 - error: elem.map is not a function
+2022-08-24 16:47:37 - error: Cannot set headers after they are sent to the client
+2022-08-24 16:49:43 - error: elem.get is not a function
+2022-08-24 16:54:23 - error: Token invalide
+2022-08-24 17:18:53 - error: Aucune activité trouvé
+2022-08-24 17:18:57 - error: Aucune activité trouvé
+2022-08-24 17:43:41 - error: Vous devez être connecté
