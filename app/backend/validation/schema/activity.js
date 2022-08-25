@@ -28,4 +28,6 @@ module.exports = Joi.object({
       'string.max': 'La ville ne peut dépasser plus de 80 caractères',
     }),
 
+  label: Joi.string()
+    .required(),
 });
