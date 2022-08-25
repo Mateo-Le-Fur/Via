@@ -23,11 +23,11 @@ const messages = [];
 const comments = [];
 const baseTypes = [
   "Arts",
-  "Jardinage",
-  "Cinéma",
-  "Cuisine",
   "Danse",
   "Bricolage",
+  "Bénévolat",
+  "Cuisine",
+  "Jardinage",
 ];
 const types = [];
 const bookmarks = [];
