@@ -4,6 +4,9 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const router = require('./routers');
 const { errorHandler } = require('./helpers/errorHandler');
+const SSEHandler = require('./controllers/SSEHandler');
+
+const sseHandler = new SSEHandler();
 
 const app = express();
 
@@ -15,6 +18,8 @@ app.use(express.static(path.join(__dirname, '../client/build/')));
 app.use(cors('*'));
 
 app.use(cookieParser('secret'));
+
+app.set('sseHandler', sseHandler);
 
 app.use('/api', router);
 

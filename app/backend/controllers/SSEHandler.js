@@ -2,27 +2,28 @@ const SSE = require('./SSEConnection');
 
 class SSEHandler {
   constructor() {
-    this.clients = [];
+    this.clients = new Map();
   }
 
   newConnection(id, res) {
+    console.log(`${id} connecté`);
     const client = new SSE(res);
     client.init();
-    this.clients.push(id, client);
+    this.clients.set(id, client);
   }
 
   sendDataToClient(id, data) {
-    const client = this.clients.find(id);
+    const client = this.clients.get(id);
     if (client) {
+      console.log(data);
       client.send(data);
     }
   }
 
   closeConnection(id) {
-    const index = this.clients.indexOf(id);
-    if (index > -1) {
-      this.clients.splice(index, 1);
-    }
+    console.log(`${id} déconnecté`);
+
+    this.clients.delete(id);
   }
 }
 
