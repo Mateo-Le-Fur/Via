@@ -150,15 +150,15 @@ const userController = {
   async createActivity(req, res) {
     const { id } = req.params;
 
-    console.log(req.body.address);
-
     if (req.user.id !== parseInt(id, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);
       }
     }
 
-    const user = await User.findByPk(req.user.id);
+    const user = await User.findByPk(req.user.id, {
+      raw: true,
+    });
 
     if (!user) {
       throw new ApiError('Uitlisateur introuvable', 400);
@@ -185,7 +185,7 @@ const userController = {
 
     let result = activity.get();
 
-    result = { ...activity, type: req.body.type };
+    result = { ...result, type: req.body.type, nickname: user.nickname };
 
     res.json(result);
   },
