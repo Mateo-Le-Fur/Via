@@ -129,6 +129,7 @@ const userController = {
 
     const getUpdatedActivity = await Activity.findByPk(activityId, {
       include: ['types', 'user'],
+
     });
 
     let result = getUpdatedActivity.get();
