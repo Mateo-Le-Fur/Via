@@ -5,8 +5,6 @@
 const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
-const SSE = require('./SSEConnection');
-const SSEHandler = require('./SSEHandler');
 
 let globalVersion = 0;
 
@@ -109,11 +107,12 @@ const activity = {
   },
 
   async getParticipationsInRealTime(req, res) {
+    const { id } = req.user;
     let localVersion = 0;
 
-    const sseHandler = new SSEHandler();
+    const sseHandler = req.app.get('sseHandler');
 
-    const { id } = req.user;
+    sseHandler.newConnection(id, res);
 
     const user = await User.findByPk(id, {
       raw: true,
@@ -138,7 +137,6 @@ const activity = {
         },
 
       });
-
       if (localVersion < globalVersion) {
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
@@ -146,9 +144,11 @@ const activity = {
           return { activityId: elem.id, count, userId: id };
         });
 
+        sseHandler.sendDataToClient(id, result);
+
         localVersion = globalVersion;
       }
-    }, 100, res);
+    }, 1000);
 
     res.on('close', () => {
       sseHandler.closeConnection(id);
