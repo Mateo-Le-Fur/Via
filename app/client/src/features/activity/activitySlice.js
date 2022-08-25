@@ -14,9 +14,9 @@ export const createActivity = createAsyncThunk(
   'activity/create',
  
   async (activityData, thunkAPI) => {
-    console.log(activityData)
+    const userId = thunkAPI.getState().auth.user.id
     try {
-      return await activityService.createActivity(activityData)
+      return await activityService.createActivity(activityData, userId)
     } catch (error) {
       const message =
         (error.response &&
@@ -71,9 +71,9 @@ export const updateActivity = createAsyncThunk(
   'activity/update',
   async (data, thunkAPI) => {
     const {activityId, activityData} = data
-    console.log(data)
+    const userId = thunkAPI.getState().auth.user.id
     try {
-      return await activityService.updateActivity(activityId,activityData)
+      return await activityService.updateActivity(activityId,activityData,userId)
     } catch (error) {
       const message =
         (error.response &&
@@ -90,8 +90,9 @@ export const updateActivity = createAsyncThunk(
 export const deleteActivity = createAsyncThunk(
   'activity/delete',
   async (activityId, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
     try {
-      return await activityService.deleteActivity(activityId)
+      return await activityService.deleteActivity(activityId, userId)
     } catch (error) {
       const message =
         (error.response &&

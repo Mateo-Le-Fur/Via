@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import "./Add.scss";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -7,7 +7,7 @@ import { Calendar } from 'react-date-range';
 import { FaLeaf, FaFootballBall, FaHandsHelping, FaTools} from "react-icons/fa"
 import {GiCook, GiPalette, } from "react-icons/gi"
 import { useDispatch, useSelector } from 'react-redux';
-import { createActivity } from '../../features/activity/activitySlice';
+import { createActivity, reset } from '../../features/activity/activitySlice';
 
 
 const Add = () => {
@@ -41,7 +41,14 @@ const handleSubmit = (e) => {
     return;
   }
 }
-
+  useEffect(() => {
+    if(message){
+      setTimeout(() => {
+        dispatch(reset())
+      }, 3000)
+    }
+    
+  }, [message, dispatch])
   return (
     <div className='add'>
     {isError && message &&   <p className='server-error'>{message}</p> }
