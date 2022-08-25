@@ -6,6 +6,7 @@ const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSE = require('./SSEConnection');
+const SSEHandler = require('./SSEHandler');
 
 let globalVersion = 0;
 
@@ -110,9 +111,7 @@ const activity = {
   async getParticipationsInRealTime(req, res) {
     let localVersion = 0;
 
-    const client = new SSE(res);
-
-    client.init();
+    const sseHandler = new SSEHandler();
 
     const { id } = req.user;
 
@@ -124,38 +123,35 @@ const activity = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const activity = await Activity.findAll({
+    setInterval(async () => {
+      const activity = await Activity.findAll({
 
-      include: ['userParticip'],
-      attributes: ['id', 'city'],
+        include: ['userParticip'],
+        attributes: ['id', 'city'],
 
-      order: [
-        ['id', 'asc'],
-      ],
+        order: [
+          ['id', 'asc'],
+        ],
 
-      where: {
-        city: user.city,
-      },
+        where: {
+          city: user.city,
+        },
 
-    });
+      });
 
-    const intervalId = setInterval(async () => {
       if (localVersion < globalVersion) {
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
+
           return { activityId: elem.id, count, userId: id };
         });
-
-        console.log(result);
-
-        client.send(result);
 
         localVersion = globalVersion;
       }
     }, 100, res);
 
     res.on('close', () => {
-      clearInterval(intervalId);
+      sseHandler.closeConnection(id);
     });
   },
 };
