@@ -1,39 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
-import { Popup, useMap } from 'react-leaflet';
+import { Popup } from 'react-leaflet';
 import { useDispatch, useSelector } from 'react-redux';
-// import { deleteActivity, updateActivity } from '../../store/activity/activitySlice';"
-import { fr } from 'react-date-range/src/locale';
 import {
   HiLocationMarker,
   HiCalendar,
-  HiSearch,
   HiTrash,
-  HiUser,
   HiPencil,
-  HiThumbUp,
 } from 'react-icons/hi';
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
-import { Calendar } from 'react-date-range';
+import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity, user }) => {
 
-
+  const {user:current} = useSelector(state => state.auth);
   const [edit, setEdit] = useState(false);
-  const [text, setText] = useState('');
   const [mode, setMode] = useState('activity');
-
+  const dispatch = useDispatch()
   const [form, setForm] = useState(
 {
       name: activity.name,
-      descriptiom: activity.description,
-      address: activity.address,
-      date: activity.date,
+      description: activity.description,
+      address: activity.address
     }
   );
-
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -42,6 +34,21 @@ const CustomPopup = ({ id, type, activity, user }) => {
   var day = ('0' + now.getDate()).slice(-2);
   var month = ('0' + (now.getMonth() + 1)).slice(-2);
   var today = now.getFullYear() + '-' + month + '-' + day;
+
+  const handleUpdate = () => {
+      if(form.name && form.description &&  form.address && date ){
+        console.log({...form, date, type})
+        dispatch(updateActivity({activityId: activity.id, activityData: {...form, date, type}}))
+      }
+  }
+
+  const [date, setDate] = useState(today)
+
+  const handleDate = (e) => {
+    // const parsedDate = Date.parse(e.target.value)
+
+    setDate(e.target.value)
+  }
 
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
     return (
@@ -59,7 +66,7 @@ const CustomPopup = ({ id, type, activity, user }) => {
                 </div>
                 <div className='dateContainer'>
                   <HiCalendar className='smIcon' />
-                  <input type='date' defaultValue={today} />
+                  <input type='date' onChange={handleDate} />
                 </div>
                 <div className='locationContainer'>
                   <HiLocationMarker className='smIcon' />
@@ -74,12 +81,12 @@ const CustomPopup = ({ id, type, activity, user }) => {
                     name='description'
                     id='description'
                     onChange={handleChange}
+                    value={form.description}
                   >
-                    {form.descriptiom}
                   </textarea>
                 </div>
                 <div className='buttonContainer'>
-                  <button type='submit' className='btn'>
+                  <button type='submit' className='btn' onClick={handleUpdate}>
                     Enregistrer
                   </button>
                 </div>
@@ -132,13 +139,15 @@ const CustomPopup = ({ id, type, activity, user }) => {
                 </div>
             </div>}
             <div className='actions'>
-              <div className='left'>
-                <HiPencil
-                  className='actionIcon'
-                  onClick={() => setEdit(!edit)}
-                />
-                <HiTrash className='actionIcon' />
-              </div>
+              {current.id === activity.user_id && (
+                    <div className='left'>
+                    <HiPencil
+                      className='actionIcon'
+                      onClick={() => setEdit(!edit)}
+                    />
+                    <HiTrash onClick={() => dispatch(deleteActivity(activity.id))} className='actionIcon' />
+                  </div>
+              )}
               <div className='right'>
                 <FaStar className='starIcon' />
               </div>
