@@ -9,11 +9,10 @@ import {
   HiSearch,
   HiTrash,
   HiUser,
-  HiPencil,
   HiThumbUp
 } from 'react-icons/hi';
-import { useDispatch } from 'react-redux';
-import { getActivity } from '../../features/activity/activitySlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { getActivity, deleteActivity } from '../../features/activity/activitySlice';
 import { handleHideList } from '../../features/global/globalSlice';
 
 
@@ -22,7 +21,7 @@ import { handleHideList } from '../../features/global/globalSlice';
 const Card = ({kind, activity}) => {
 
   const dispatch = useDispatch()
-
+const {user} = useSelector(state => state.auth)
 
   return (
     <div className='card'>
@@ -61,10 +60,12 @@ const Card = ({kind, activity}) => {
           <FaStar className='actionIcon' />
         </div>
 
-        <div className='right'>
-          <HiPencil className='actionIcon' />
-          <HiTrash className='actionIcon' />
-        </div>
+          {user.id === activity.user_id && (
+              <div className='right'>
+              <HiTrash className='actionIcon' onClick={() => dispatch(deleteActivity(activity.id))} />
+            </div>
+          )}
+      
       </div>
     </div>
   );
