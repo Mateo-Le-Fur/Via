@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect } from "react";
 import { useDispatch } from 'react-redux';
-import { activePanel, handleHideList, handleHideSidebar} from '../features/global/globalSlice';
+import { activePanel, handleHideList, handleHideSidebar, handleHideSuggestionBox} from '../features/global/globalSlice';
 
 /**
  * Hook that alerts clicks outside of the passed ref
@@ -22,6 +22,10 @@ function useClickOuside(ref, component) {
 
         if(component === "list" && window.innerWidth > 600){
           dispatch(handleHideList())
+        }
+
+        if(component === "suggestion"){
+          dispatch(handleHideSuggestionBox())
         }
       }
     }

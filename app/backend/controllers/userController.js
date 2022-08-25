@@ -6,6 +6,7 @@ const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
 const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
+const dateFormat = require('../services/dateFormat');
 
 const userController = {
 
@@ -110,32 +111,40 @@ const userController = {
       }
     }
 
-    const {
-      name,
-      description,
-      date,
-      address,
-      city,
-      lat,
-      long,
-    } = req.body;
+    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
-    const userActivity = await Activity.update({
-      name,
-      description,
-      date,
-      address,
-      city,
-      lat,
-      long,
-    }, {
+    const lat = coordinates[0];
+    const long = coordinates[1];
+
+    const newBody = {
+      ...req.body, user_id: userId, lat, long,
+    };
+
+    await Activity.update(newBody, {
       where: {
         id: activityId,
         user_id: userId,
       },
     });
 
-    res.json(userActivity);
+    const getUpdatedActivity = await Activity.findByPk(activityId, {
+      include: ['types', 'user'],
+
+    });
+
+    let result = getUpdatedActivity.get();
+
+    const date = dateFormat.convertActivityDate(result);
+
+    result = {
+      ...result, nickname: result.user.nickname, type: result.types[0].label, date,
+    };
+
+    console.log('git');
+
+    const { types, user, ...rest } = result;
+
+    res.json(rest);
   },
 
   async createActivity(req, res) {
@@ -162,7 +171,7 @@ const userController = {
 
     const type = await Type.findOne({
       where: {
-        label: req.body.label,
+        label: req.body.type,
       },
     });
 
@@ -174,7 +183,11 @@ const userController = {
 
     activity.addTypes(type);
 
-    res.json(activity);
+    let result = activity.get();
+
+    result = { ...activity, type: req.body.type };
+
+    res.json(result);
   },
 
   deleteUserActivity(req, res) {

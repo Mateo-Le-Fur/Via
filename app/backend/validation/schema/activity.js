@@ -21,6 +21,6 @@ module.exports = Joi.object({
 
   address: Joi.string().required(),
 
-  label: Joi.string()
+  type: Joi.string()
     .required(),
 });

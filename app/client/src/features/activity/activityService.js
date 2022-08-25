@@ -1,9 +1,9 @@
 import { publicReq, privateReq } from '../../utils/axiosMethod'
 
 // Create new activity
-const createActivity = async (activityData) => {
+const createActivity = async (activityData, userId) => {
 
-  const response = await privateReq.post('/activity/', activityData)
+  const response = await privateReq.post(`/user/${userId}/activity`, activityData)
 
   return response.data
 }
@@ -23,17 +23,17 @@ const getActivity = async (activityId) => {
 }
 
 //Update Activity 
-const updateActivity = async (activityId, activityData) => {
+const updateActivity = async (activityId, activityData, userId) => {
   console.log(activityId)
-  const response = await privateReq.put("/activity/"+ activityId, activityData)
+  const response = await privateReq.put(`user/${userId}/activity/${activityId}`, activityData)
 
   return response.data
 }
 
 // Delete Actvity 
-const deleteActivity = async (activityId) => {
+const deleteActivity = async (activityId, userId) => {
 
-  const response = await privateReq.delete("/activity/" + activityId)
+  const response = await privateReq.delete(`/user/${userId}/activity/${activityId}`)
 
   if (response.status === 200 ){
     return activityId

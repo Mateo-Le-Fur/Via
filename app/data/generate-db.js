@@ -22,16 +22,12 @@ const activities = [];
 const messages = [];
 const comments = [];
 const baseTypes = [
-  'Arts',
-  'Activités créatives',
-  'Apéro',
-  'Bénévolat',
-  'Cinéma',
-  'Cuisine',
-  'Danse',
-  'Jardinage',
-  'Jeux',
-  'Bricolage',
+  "Arts",
+  "Danse",
+  "Bricolage",
+  "Bénévolat",
+  "Cuisine",
+  "Jardinage",
 ];
 const types = [];
 const bookmarks = [];

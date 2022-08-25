@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import "./Add.scss";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -7,12 +7,15 @@ import { Calendar } from 'react-date-range';
 import { FaLeaf, FaFootballBall, FaHandsHelping, FaTools} from "react-icons/fa"
 import {GiCook, GiPalette, } from "react-icons/gi"
 import { useDispatch, useSelector } from 'react-redux';
-import { createActivity } from '../../features/activity/activitySlice';
-
+import { createActivity, reset } from '../../features/activity/activitySlice';
+import SuggestionBox from './SeuggestionBox';
+import { activePanel, handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
+import OutsideWrapper from '../../hooks/ClickOutsideHook'
 
 const Add = () => {
+  const {showSuggestionBox} = useSelector(state => state.global)
 
-  const {isError, message} = useSelector(state => state.activity)
+  const {isSuccess, isError, message} = useSelector(state => state.activity)
 
   const [form, setForm] = useState({
     name: "",
@@ -30,17 +33,48 @@ const handleChange = (e) => {
     setForm((prev) => ({...prev, [e.target.name]: e.target.value}))
 }
 
+const [address, setAddress] = useState("")
 
 const handleSubmit = (e) => {
   e.preventDefault()
   console.log({...form, type, date})
-  if (form.name && form.address && form.description && type && date){
-    console.log({...form, type, date})
-    dispatch(createActivity({...form, type, date}))
+  if (form.name  && form.description && address && type && date){
+    console.log({...form, type, date, address})
+    dispatch(createActivity({...form, type, date, address}))
+    if(isSuccess){
+      dispatch(activePanel(""))
+    }
   } else {
     return;
   }
 }
+  useEffect(() => {
+    if(message){
+      setTimeout(() => {
+        dispatch(reset())
+      }, 3000)
+    }
+    
+  }, [message, dispatch])
+
+  const  [inputAddress, setInputAddress] = useState("");
+
+
+  const handleChangeAddress = (e) => {
+    setInputAddress(e.target.value)
+    if(e.target.value.length > 0 ){
+      dispatch(handleShowSuggestionBox())
+    } else {
+      dispatch(handleHideSuggestionBox())
+    }
+  }
+
+  const handleAddress = (value) => {
+    setInputAddress(value)
+    setAddress(value)
+  }
+
+
 
   return (
     <div className='add'>
@@ -50,8 +84,9 @@ const handleSubmit = (e) => {
             <input className='field-input' name="name" type="text" id="name" value={form.nickname} placeholder="Nom de l'activité" onChange={handleChange} />
             <label className='field-label' htmlFor="firstname">Nom de l'activité</label>
         </div>
-         <div className={form.address.length > 0 ? "field field--has-content" : "field"}>
-            <input value={form.address} name="address" className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChange} />
+         <div className={form.address.length > 0 ? "field field--has-content field-address" : "field field-address"}>
+            <input value={inputAddress}  className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChangeAddress} />
+            {showSuggestionBox &&    <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress}/>}
             <label htmlFor="lastname" className="field-label">Adresse</label>
         </div>
         <div className='areaContainer'>
@@ -79,7 +114,7 @@ const handleSubmit = (e) => {
                 <div onClick={() => setType("Arts")}>
                   <GiPalette className={type === "Arts" ? "icon active": "icon"}/>
                 </div>
-                <div onClick={() => setType("Cusine")}>
+                <div onClick={() => setType("Cuisine")}>
                   <GiCook className={type === "Cuisine" ? "icon active": "icon"}/>
                 </div>
                 <div onClick={() => setType("Jardinage")}><FaLeaf className={type === "Jardinage" ? "icon active": "icon"}/></div>
