@@ -23,14 +23,10 @@ const messages = [];
 const comments = [];
 const baseTypes = [
   "Arts",
-  "Activités créatives",
-  "Apéro",
-  "Bénévolat",
+  "Jardinage",
   "Cinéma",
   "Cuisine",
   "Danse",
-  "Jardinage",
-  "Jeux",
   "Bricolage",
 ];
 const types = [];
