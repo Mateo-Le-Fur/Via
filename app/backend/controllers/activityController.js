@@ -5,6 +5,7 @@
 const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
+const SSE = require('./SSEConnection');
 
 let globalVersion = 0;
 
@@ -109,6 +110,10 @@ const activity = {
   async getParticipationsInRealTime(req, res) {
     let localVersion = 0;
 
+    const client = new SSE(res);
+
+    client.init();
+
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
@@ -134,13 +139,7 @@ const activity = {
 
     });
 
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
-    });
-
-    const intervalId = setInterval(async (res) => {
+    const intervalId = setInterval(async () => {
       if (localVersion < globalVersion) {
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
@@ -149,9 +148,9 @@ const activity = {
 
         console.log(result);
 
-        localVersion = globalVersion;
+        client.send(result);
 
-        res.write(`data: ${JSON.stringify(result)} \n\n`);
+        localVersion = globalVersion;
       }
     }, 100, res);
 
