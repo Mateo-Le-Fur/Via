@@ -33,11 +33,9 @@ const updateActivity = async (activityId, activityData, userId) => {
 // Delete Actvity 
 const deleteActivity = async (activityId, userId) => {
 
-  const response = await privateReq.delete(`/user/${userId}/activity/${activityId}`)
-
-  if (response.status === 200 ){
+   await privateReq.delete(`/user/${userId}/activity/${activityId}`)
     return activityId
-  }
+
 }
 
 
