@@ -9,13 +9,13 @@ import {GiCook, GiPalette, } from "react-icons/gi"
 import { useDispatch, useSelector } from 'react-redux';
 import { createActivity, reset } from '../../features/activity/activitySlice';
 import SuggestionBox from './SeuggestionBox';
-import { handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
+import { activePanel, handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
 import OutsideWrapper from '../../hooks/ClickOutsideHook'
 
 const Add = () => {
   const {showSuggestionBox} = useSelector(state => state.global)
 
-  const {isError, message} = useSelector(state => state.activity)
+  const {isSuccess, isError, message} = useSelector(state => state.activity)
 
   const [form, setForm] = useState({
     name: "",
@@ -26,7 +26,7 @@ const Add = () => {
 const today = new Date()
 
 const [date, setDate] = useState(today)
-const [type, setType] = useState("Bénévolat")
+const [label, setLabel] = useState("Bénévolat")
 const dispatch = useDispatch()
 
 const handleChange = (e) => {
@@ -37,10 +37,13 @@ const [address, setAddress] = useState("")
 
 const handleSubmit = (e) => {
   e.preventDefault()
-  console.log({...form, type, date})
-  if (form.name  && form.description && address && type && date){
-    console.log({...form, type, date, address})
-    dispatch(createActivity({...form, type, date}))
+  console.log({...form, label, date})
+  if (form.name  && form.description && address && label && date){
+    console.log({...form, label, date, address})
+    dispatch(createActivity({...form, label, date, address}))
+    if(isSuccess){
+      dispatch(activePanel(""))
+    }
   } else {
     return;
   }
@@ -105,21 +108,21 @@ const handleSubmit = (e) => {
         <div className='typeContainer'> 
             <span>Type d'activité</span>
             <div className="activityList">
-                <div onClick={() => setType("Bénévolat")}>
-                <FaHandsHelping  className={type === "Bénévolat" ? "icon active": "icon"}/>
+                <div onClick={() => setLabel("Bénévolat")}>
+                <FaHandsHelping  className={label === "Bénévolat" ? "icon active": "icon"}/>
                 </div>
-                <div onClick={() => setType("Arts")}>
-                  <GiPalette className={type === "Arts" ? "icon active": "icon"}/>
+                <div onClick={() => setLabel("Arts")}>
+                  <GiPalette className={label === "Arts" ? "icon active": "icon"}/>
                 </div>
-                <div onClick={() => setType("Cuisine")}>
-                  <GiCook className={type === "Cuisine" ? "icon active": "icon"}/>
+                <div onClick={() => setLabel("Cuisine")}>
+                  <GiCook className={label === "Cuisine" ? "icon active": "icon"}/>
                 </div>
-                <div onClick={() => setType("Jardinage")}><FaLeaf className={type === "Jardinage" ? "icon active": "icon"}/></div>
-                <div onClick={() => setType("Bricolage")}>
-                  <FaTools className={type === "Bricolage" ? "icon active": "icon"} />
+                <div onClick={() => setLabel("Jardinage")}><FaLeaf className={label === "Jardinage" ? "icon active": "icon"}/></div>
+                <div onClick={() => setLabel("Bricolage")}>
+                  <FaTools className={label === "Bricolage" ? "icon active": "icon"} />
                 </div>
-                <div onClick={() => setType("Danse")}>
-                  <FaFootballBall className={type === "Danse" ? "icon active": "icon"}/>
+                <div onClick={() => setLabel("Danse")}>
+                  <FaFootballBall className={label === "Danse" ? "icon active": "icon"}/>
                 </div>
             </div>
         </div>
