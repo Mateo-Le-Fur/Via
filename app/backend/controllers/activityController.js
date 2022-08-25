@@ -76,8 +76,6 @@ const activity = {
     const { activityId } = req.body;
     const { id } = req.user;
 
-    console.log(userId, id);
-
     if (id != userId) {
       throw new ApiError('Forbidden', 400);
     }
@@ -114,17 +112,18 @@ const activity = {
       Connection: 'keep-alive',
     });
 
+    const { id } = req.user;
+    const clients = [];
+    clients.push(id);
+
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
     const intervalId = setInterval(async (res) => {
       if (localVersion < globalVersion) {
-        const { id } = req.user;
-
-        console.log(id);
-
-        const user = await User.findByPk(id);
-
-        if (!user) {
-          throw new ApiError('Utilisateur introuvable', 400);
-        }
         const activity = await Activity.findAll({
 
           include: ['userParticip'],
@@ -144,8 +143,6 @@ const activity = {
           const count = elem.userParticip.length;
           return { activityId: elem.id, count };
         });
-
-        console.log(result);
 
         localVersion = globalVersion;
 

@@ -21,13 +21,6 @@ module.exports = Joi.object({
 
   address: Joi.string().required(),
 
-  city: Joi.string()
-    .max(80)
-    .required()
-    .messages({
-      'string.max': 'La ville ne peut dépasser plus de 80 caractères',
-    }),
-
   label: Joi.string()
     .required(),
 });

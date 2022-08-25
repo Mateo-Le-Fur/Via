@@ -147,6 +147,12 @@ const userController = {
       }
     }
 
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      throw new ApiError('Uitlisateur introuvable', 400);
+    }
+
     const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
 
     const lat = coordinates[0];
@@ -159,7 +165,7 @@ const userController = {
     });
 
     const newBody = {
-      ...req.body, user_id: id, lat, long,
+      ...req.body, user_id: id, lat, long, city: user.city,
     };
 
     const activity = await Activity.create(newBody);
