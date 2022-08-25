@@ -1,5 +1,6 @@
 import './Card.scss';
 import { format } from "date-fns";
+import {getIcon} from "./getIcon"
 
 import { FaGuitar, FaStar} from 'react-icons/fa';
 import {
@@ -11,30 +12,33 @@ import {
   HiPencil,
   HiThumbUp
 } from 'react-icons/hi';
+import { useDispatch } from 'react-redux';
+import { getActivity } from '../../features/activity/activitySlice';
+import { handleHideList } from '../../features/global/globalSlice';
 
 
 
 
 const Card = ({kind, activity}) => {
-  // console.log(activity)
-  // console.log(format(activity.date, "dd-MM-yyyy"))
+
+  const dispatch = useDispatch()
+
+
   return (
     <div className='card'>
       <div className='top'>
-        <div className='name'>{activity.name}</div>
+        <div className='name'>{activity.name.length > 30 ? activity.name.substring(0,30).concat("...") : activity.name}</div>
         <div className='type'>
-          <FaGuitar className='iconCard' />
+          {getIcon(activity.type)}
         </div>
       </div>
       <div className='middle'>
         <div className='row first'>
           <div>
-            {' '}
-            <HiUser className='smIcon' /> Créé par <span>John Doe</span>
+            <HiUser className='smIcon' /> Créé par <span className='author'>{activity.nickname}</span>
           </div>
           <div>
-            {' '}
-            <HiCalendar className='smIcon' /> 20/19/2022
+            <HiCalendar className='smIcon' /> {activity.date}
           </div>
         </div>
         <div className='row'>
@@ -49,7 +53,10 @@ const Card = ({kind, activity}) => {
       </div>
       <div className='bottom'>
         <div className='left'>
-          <HiSearch className='actionIcon' />
+          <HiSearch onClick={() => {
+            dispatch(handleHideList())
+            dispatch(getActivity(activity.id))
+          }} className='actionIcon' />
           <HiThumbUp className='actionIcon' />
           <FaStar className='actionIcon' />
         </div>

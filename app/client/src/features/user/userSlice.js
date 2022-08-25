@@ -20,8 +20,8 @@ export const getUser = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.msg) ||
-        error.msg ||
+          error.response.data.message) ||
+        error.message ||
         error.toString()
 
       return thunkAPI.rejectWithValue(message)
@@ -38,8 +38,8 @@ export const getUsers = createAsyncThunk(
       const message =
         (error.response &&
           error.response.data &&
-          error.response.data.msg) ||
-        error.msg ||
+          error.response.data.message) ||
+        error.message ||
         error.toString()
 
       return thunkAPI.rejectWithValue(message)

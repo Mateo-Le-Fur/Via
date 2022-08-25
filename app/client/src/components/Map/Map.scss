@@ -139,7 +139,7 @@
                     padding: .5rem 0;
 
                     h1 {
-                        font-size: 1.5rem;
+                        font-size: 1.2rem;
                         color: vars.$primary-color;
                         @media (max-width: 600px) {
                             font-size: 1rem;
@@ -154,11 +154,13 @@
                         em {
                             font-weight: bold;
                             font-size: 1.1rem;
+                            padding-left: .2rem;
                             cursor: pointer;
+                            text-decoration: underline;
                             @media (max-width: 600px) {
                                 font-size: .8rem;
                             }
-                            text-decoration: underline;
+                           
                           
                         }
                     }

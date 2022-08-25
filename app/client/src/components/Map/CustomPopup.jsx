@@ -16,48 +16,23 @@ import {
 } from 'react-icons/hi';
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
-
-import { activitiesData } from '../../pages/Home/data';
 import { Calendar } from 'react-date-range';
 
-const CustomPopup = ({ id, type }) => {
-  //   const { activity } = useSelector((state) => state.activity);
+const CustomPopup = ({ id, type, activity, user }) => {
 
-  const activity = activitiesData.find((activity) => activity.id === id);
-
-  const user = {
-    nickname: 'Johnny92',
-    email: 'john@mail.com',
-    city: 'Paris',
-    firstname: 'John',
-    lastname: 'doe',
-    description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Exercitationem doloribus aperiam possimus nostrum atque natus fugit at sequi quos labore. Optio eligendi illo ipsum voluptatibus perspiciatis expedita suscipit, nihil maxime.",
-    address: "80 rue de l'exemple",
-    phone: '0727737277',
-    avatar: 'https://randomuser.me/api/portraits/men/55.jpg',
-  };
-
-  const map = useMap();
-  const popupRef = useRef(activity);
-  const dispatch = useDispatch();
-  //   useEffect(() => {
-  //     if (activity.id === id) {
-  //       map.flyTo([activity.location[0], activity.location[1]]);
-  //       map.openPopup(popupRef.current);
-  //     }
-
-  //   }, [activity, id, map]);
 
   const [edit, setEdit] = useState(false);
   const [text, setText] = useState('');
   const [mode, setMode] = useState('activity');
 
-  const [form, setForm] = useState({
-    name: activity.name,
-    descriptiom: activity.description,
-    address: activity.address,
-    date: activity.date,
-  });
+  const [form, setForm] = useState(
+{
+      name: activity.name,
+      descriptiom: activity.description,
+      address: activity.address,
+      date: activity.date,
+    }
+  );
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -68,9 +43,9 @@ const CustomPopup = ({ id, type }) => {
   var month = ('0' + (now.getMonth() + 1)).slice(-2);
   var today = now.getFullYear() + '-' + month + '-' + day;
 
-  if (activity)
+  if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
     return (
-      <Popup ref={popupRef}>
+      <Popup>
         <div>
           <div className='popupContainer'>
             {edit && (
@@ -113,10 +88,10 @@ const CustomPopup = ({ id, type }) => {
             {mode === 'activity' && !edit && (
               <div className='activityContainer'>
                 <div className='activityHeader'>
-                  <h1>{activity.name}</h1>{' '}
+                  <h1>{activity?.name.length > 15 ? activity?.name.substring(0,15).concat("...") : activity?.name }</h1>
                   <span>
-                    créé par{' '}
-                    <em onClick={() => setMode('user')}>{activity.user}</em>
+                    créé par 
+                    <em onClick={() => setMode('user')}>{activity.nickname}</em>
                   </span>
                 </div>
                 <div className='dateContainer'>
