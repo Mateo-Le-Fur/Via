@@ -389,3 +389,7 @@
 2022-08-25 11:17:15 - error: syntaxe en entrée invalide pour le type integer : « undefined »
 2022-08-25 11:17:15 - error: syntaxe en entrée invalide pour le type integer : « undefined »
 
+2022-08-25 14:25:23 - error: Vous devez être connecté
+2022-08-25 14:25:31 - error: Email ou mot de passe incorrect
+2022-08-25 14:32:17 - error: "type" is required
+2022-08-25 14:32:22 - error: La ville n'a pas était trouvé

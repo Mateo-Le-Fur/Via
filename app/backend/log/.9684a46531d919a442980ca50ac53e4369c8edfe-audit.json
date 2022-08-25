@@ -21,7 +21,6 @@
             "hash": "537d6eb315a3f5b221aea8c199c2024e38f32762e2c84ccc0d162dabd82ad8d0"
         },
         {
-
             "date": 1661363319242,
             "name": "backend\\log\\application-2022-08-24.log",
             "hash": "1bf470ee9173334c60396aa09f8fa39360bf90a5106c5b48a9831dc19ec14905"
@@ -30,7 +29,11 @@
             "date": 1661411326870,
             "name": "backend\\log\\application-2022-08-25.log",
             "hash": "66399707b95ab19dadcbf89a601c12d7716d3eab2e2bad55e17aacbfcf03b38b"
-
+        },
+        {
+            "date": 1661430311199,
+            "name": "backend/log/application-2022-08-25.log",
+            "hash": "8e8ca2eef69d864e68d29df2fd51b4689724d087a8602f285c467c080484e30f"
         }
     ],
     "hashType": "sha256"

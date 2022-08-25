@@ -160,7 +160,7 @@ const userController = {
 
     const type = await Type.findOne({
       where: {
-        label: req.body.label,
+        label: req.body.type,
       },
     });
 
