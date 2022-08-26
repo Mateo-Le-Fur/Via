@@ -319,9 +319,9 @@ const userController = {
   },
 
   async uploadUserAvatar(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    if (req.user.id !== parseInt(id, 10)) {
+    if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);
       }
@@ -343,15 +343,17 @@ const userController = {
       }
 
       // On récupére le chemin de l'utilisateur en BDD
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(userId);
       // l'image prendra comme nouveau nom ce que renvoie Date.now()
       const newImageName = Date.now();
 
-      const isAvatarExist = fs.existsSync(path.join(__dirname, '../', user.avatar));
+      console.log(__dirname);
+
+      const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
 
       // Supression de l'ancienne image de l'utilisateur si elle existe
       if (isAvatarExist) {
-        fs.unlink(path.join(__dirname, '../', user.avatar), (unlinkError) => {
+        fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
           if (unlinkError) throw unlinkError;
         });
       }
@@ -367,12 +369,12 @@ const userController = {
         },
         {
           where: {
-            id,
+            userId,
           },
         },
       );
 
-      res.json({ message: 'Image envoyée', id });
+      res.json({ message: 'Image envoyée', userId });
     });
   },
 
