@@ -13,6 +13,7 @@ import Bookmark from '../../../components/Bookmark/Bookmark';
 import Dashboard from '../../../components/Dashboard/Dashboard';
 const Modal = () => {
     const {panel} = useSelector(state => state.global);
+    const {user} = useSelector(state => state.user);
     const dispatch = useDispatch()
   return (
     <div className={panel !== "" ? "modal showModal": "modal"}>
@@ -31,7 +32,7 @@ const Modal = () => {
             </h1>
         </div>
         <div className="container">
-        {panel === "profile" && <Profile />}
+        {panel === "profile" && <Profile user={user} />}
           {panel === "add" && <Add />}
           {panel === "bookmark" && <Bookmark />}
           {panel === "dashboard" && <Dashboard />}

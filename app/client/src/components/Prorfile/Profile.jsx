@@ -5,27 +5,29 @@ import Card from "../Card/Card";
 import {useDispatch, useSelector} from "react-redux"
 import { handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
 import SuggestionBox from './SeuggestionBox';
-import { reset, updateUser } from '../../features/user/userSlice';
+import { getUser, reset, updateUser } from '../../features/user/userSlice';
 
-const Profile = () => {
+const Profile = ({user}) => {
 
+  const dispatch = useDispatch()
 const {isError, message} = useSelector(state => state.user)
 const {activities} = useSelector(state => state.activity)
 const [filtered, setFiltered] = useState([])
-const {user} = useSelector(state => state.auth)
+const {user:current} = useSelector(state => state.auth)
 const {showSuggestionBox} = useSelector(state => state.global)
 
 
-useEffect(() => {
-   setFiltered(activities.filter(activity => activity.user_id === user.id))
-}, [activities, user.id])
 
-const dispatch = useDispatch()
+useEffect(() => {
+   setFiltered(activities.filter(activity => activity.user_id === current.id))
+   dispatch(getUser(current.id))
+}, [activities, current.id, dispatch])
+
 const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    phone: "",
-    description: ""
+    firstname: user.firstname,
+    lastname: user.lastname,
+    phone: user.phone,
+    description: user.description
 })
 
 
@@ -46,8 +48,8 @@ const handleChange = (e) => {
 
 // Address
 
-const [address, setAddress] = useState("")
-const  [inputAddress, setInputAddress] = useState("");
+const [address, setAddress] = useState(user.address)
+const  [inputAddress, setInputAddress] = useState(user.address);
   const handleChangeAddress = (e) => {
     setInputAddress(e.target.value)
     if(e.target.value.length > 0 ){
@@ -69,7 +71,7 @@ const [avatar, setAvatar] = useState("")
 const handleAvatar = (e) => {
   const formData = new FormData();
     formData.append('image', e.target.files[0]);
-    uploadImage(user.id, formData);
+    uploadImage(current.id, formData);
 }
 
 
@@ -101,7 +103,7 @@ async function uploadImage(id, formData) {
 
   useEffect(() => {
     const fetchAvatar = async () => {
-      const userAvatar = await fetch(`/api/user/${user.id}/avatar`, {
+      const userAvatar = await fetch(`/api/user/${current.id}/avatar`, {
         method: 'GET',
       });
 
@@ -109,19 +111,22 @@ async function uploadImage(id, formData) {
     }
     
     fetchAvatar()
-  }, [user.id])
+  }, [current.id])
 
 // submit
 const handleSubmit = (e) => {
   e.preventDefault()
   console.log({...form, address})
-  console.log(user.id)
-  dispatch(updateUser({userId: user.id, userData: {...form, address}}))
+  console.log(current.id)
+  dispatch(updateUser({userId: current.id, userData: {...form, address}}))
 }
+
+if(user){
+
 
   return (
     <div className='profile'>
-      {isError && message && <p className='server-error'>{message}</p>}
+      {message && <p className={isError ? 'server-error' : "server-success"} >{message}</p>}
       <form className='editForm' onSubmit={handleSubmit}>
       <div className='avatar'>
         <input type="file" id="avatar"   onChange={handleAvatar}
@@ -133,20 +138,20 @@ const handleSubmit = (e) => {
             />
         </label>
       </div>
-      <div className={form.firstname.length > 0 ? "field field--has-content" : "field"}>
-            <input className='field-input' name="firstname" type="text" id="firstname" value={form.nickname} placeholder="Prénom" onChange={handleChange} />
+      <div className="field">
+            <input className='field-input' name="firstname" type="text" id="firstname" value={form.firstname} placeholder="Prénom" onChange={handleChange} />
             <label className='field-label' htmlFor="firstname">Prénom</label>
         </div>
-         <div className={form.lastname.length > 0 ? "field field--has-content" : "field"}>
+         <div className="field">
             <input value={form.lastname} name="lastname" className='field-input' type="text" id="lastname" placeholder='Nom'  onChange={handleChange} />
             <label htmlFor="lastname" className="field-label">Nom</label>
         </div>
-        <div className={inputAddress.length > 0 ? "field field--has-content field-address" : "field field-address"}>
+        <div className="field field-address">
             <input value={inputAddress}  className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChangeAddress} />
             {showSuggestionBox &&    <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress}/>}
             <label htmlFor="lastname" className="field-label">Adresse</label>
         </div>
-        <div className={form.phone.length > 0 ? "field field--has-content" : "field"}>
+        <div className="field">
             <input value={form.phone} name="phone" className='field-input' type="text" id="phone" placeholder='Téléphone'  onChange={handleChange} />
             <label htmlFor="phone" className="field-label">Téléphone</label>
         </div>
@@ -168,4 +173,5 @@ const handleSubmit = (e) => {
     </div>
   );
 };
+}
 export default Profile;
