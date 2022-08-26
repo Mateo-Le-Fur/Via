@@ -124,27 +124,24 @@ const activity = {
 
     setInterval(async () => {
       const activity = await Activity.findAll({
-
         include: ['userParticip'],
         attributes: ['id', 'city'],
-
         order: [
           ['id', 'asc'],
         ],
-
         where: {
           city: user.city,
         },
-
       });
       if (localVersion < globalVersion) {
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
-
-          return { activityId: elem.id, count, userId: id };
+          return {
+            activityId: elem.id, count, userId: id, city: elem.city,
+          };
         });
 
-        sseHandler.sendDataToClient(id, result);
+        sseHandler.sendDataToClient(id, result, result[0].city);
 
         localVersion = globalVersion;
       }

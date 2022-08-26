@@ -34,6 +34,11 @@
             "date": 1661430311199,
             "name": "backend/log/application-2022-08-25.log",
             "hash": "8e8ca2eef69d864e68d29df2fd51b4689724d087a8602f285c467c080484e30f"
+        },
+        {
+            "date": 1661507334522,
+            "name": "backend/log/application-2022-08-26.log",
+            "hash": "42ff3b030170dae94f15bf77ca8fb07d493f07ad2d8bb7393c8f08bf5c690af3"
         }
     ],
     "hashType": "sha256"
