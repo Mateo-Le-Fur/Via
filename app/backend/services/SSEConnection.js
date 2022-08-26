@@ -12,7 +12,8 @@ class SSE {
     });
   }
 
-  send(data) {
+  send(data, event) {
+    this.res.write(`event: ${event}\n`);
     this.res.write(`data: ${JSON.stringify(data)} \n\n`);
   }
 }
