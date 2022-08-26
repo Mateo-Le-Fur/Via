@@ -351,7 +351,7 @@ const userController = {
       const newImageName = Date.now();
 
       if (user.avatar === null) {
-        user.avatar = '';
+        user.avatar = 'vide';
       }
 
       const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
@@ -374,7 +374,7 @@ const userController = {
         },
         {
           where: {
-            userId,
+            id: userId,
           },
         },
       );
