@@ -35,11 +35,11 @@ const deleteUser = async (userId) => {
 }
 
 
-const recipeService = {
+const userService = {
   getUsers,
   getUser,
   updateUser,
   deleteUser,
 }
 
-export default recipeService
+export default userService

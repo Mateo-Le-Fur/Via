@@ -56,6 +56,7 @@ export const updateUser = createAsyncThunk(
     try {
       return await userService.updateUser(userId,userData)
     } catch (error) {
+      console.log(error)
       const message =
         (error.response &&
           error.response.data &&
@@ -114,6 +115,14 @@ export const userSlice = createSlice({
         state.user = action.payload
       })
       .addCase(getUser.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(updateUser.pending, (state, action) => {
+        state.isLoading = true
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
         state.message = action.payload

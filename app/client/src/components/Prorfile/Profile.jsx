@@ -5,6 +5,7 @@ import Card from "../Card/Card";
 import {useDispatch, useSelector} from "react-redux"
 import { handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
 import SuggestionBox from './SeuggestionBox';
+import { reset, updateUser } from '../../features/user/userSlice';
 
 const Profile = () => {
 
@@ -13,6 +14,7 @@ const {activities} = useSelector(state => state.activity)
 const [filtered, setFiltered] = useState([])
 const {user} = useSelector(state => state.auth)
 const {showSuggestionBox} = useSelector(state => state.global)
+
 
 useEffect(() => {
    setFiltered(activities.filter(activity => activity.user_id === user.id))
@@ -26,10 +28,42 @@ const [form, setForm] = useState({
     description: ""
 })
 
+
+
+useEffect(() => {
+  if(message){
+    setTimeout(() => {
+      dispatch(reset())
+    }, 3000)
+  }
+  
+}, [message, dispatch])
+
 const handleChange = (e) => {
     setForm((prev) => ({...prev, [e.target.name]: e.target.value}))
 }
 
+
+// Address
+
+const [address, setAddress] = useState("")
+const  [inputAddress, setInputAddress] = useState("");
+  const handleChangeAddress = (e) => {
+    setInputAddress(e.target.value)
+    if(e.target.value.length > 0 ){
+      dispatch(handleShowSuggestionBox())
+    } else {
+      dispatch(handleHideSuggestionBox())
+    }
+  }
+
+  const handleAddress = (value) => {
+    setInputAddress(value)
+    setAddress(value)
+  }
+
+
+// Avatar 
 const [avatar, setAvatar] = useState("")
 
 
@@ -76,35 +110,20 @@ useEffect(() => {
 }, [user.id, avatar, uploading])
 
 
-console.log(avatar)
-
-const [address, setAddress] = useState("")
-const  [inputAddress, setInputAddress] = useState("");
-  const handleChangeAddress = (e) => {
-    setInputAddress(e.target.value)
-    if(e.target.value.length > 0 ){
-      dispatch(handleShowSuggestionBox())
-    } else {
-      dispatch(handleHideSuggestionBox())
-    }
-  }
-
-  const handleAddress = (value) => {
-    setInputAddress(value)
-    setAddress(value)
-  }
-
+// submit
 const handleSubmit = (e) => {
   e.preventDefault()
-  console.log({...form})
+  console.log({...form, address})
+  console.log(user.id)
+  dispatch(updateUser({userId: user.id, userData: {...form, address}}))
 }
 
   return (
     <div className='profile'>
-      {isError && message && <p className='server-error'>server error</p>}
+      {isError && message && <p className='server-error'>{message}</p>}
       <form className='editForm' onSubmit={handleSubmit}>
       <div className='avatar'>
-        <input type="file" id="avatar"                   onChange={handleAvatar}
+        <input type="file" id="avatar"   onChange={handleAvatar}
  name="avatar" />
         <label htmlFor="avatar">
         <img
