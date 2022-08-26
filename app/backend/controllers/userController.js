@@ -319,7 +319,7 @@ const userController = {
     res.sendFile(pathAvatar);
   },
 
-  async uploadUserAvatar(req, res) {
+  async uploadUserAvatar(req, res, next) {
     const { userId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
@@ -328,63 +328,59 @@ const userController = {
       }
     }
 
-    multerUpload(req, res, async (uploadError) => {
+    multerUpload(req, res, next, async (uploadError) => {
       // Gestion des erreurs possible lors de l'upload d'une image
 
-      try {
-        if (uploadError) {
-          if (uploadError.code === 'LIMIT_FILE_SIZE') {
-            throw new ApiError('Image trop volumineuse', 400);
-          }
-          throw new ApiError(uploadError.message, 400);
+      if (uploadError) {
+        if (uploadError.code === 'LIMIT_FILE_SIZE') {
+          throw new ApiError('Image trop volumineuse', 400);
         }
-        // Si pas de fichier dans la requete cela veut dire que l'utilisateur
-        // n'a pas sélectionner d'image
-        if (!req.file) {
-          throw new ApiError('Aucune Image sélectionnée', 400);
-        }
-
-        // On récupére le chemin de l'utilisateur en BDD
-        const user = await User.findByPk(userId, {
-          raw: true,
-        });
-
-        // l'image prendra comme nouveau nom ce que renvoie Date.now()
-        const newImageName = Date.now();
-
-        if (user.avatar === null) {
-          user.avatar = 'vide';
-        }
-
-        const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
-
-        // Supression de l'ancienne image de l'utilisateur si elle existe
-        if (isAvatarExist) {
-          fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
-            if (unlinkError) throw unlinkError;
-          });
-        }
-
-        // Compression de la nouvelle image si son poids est supérieur a 100kB
-
-        compressImage(req, newImageName);
-
-        // upload de la nouvelle image
-        await User.update(
-          {
-            avatar: `/images/${newImageName}.jpeg`,
-          },
-          {
-            where: {
-              id: userId,
-            },
-          },
-        );
-
-        res.json({ message: 'Image envoyée', userId });
-      } catch (error) {
-        throw new ApiError(error, 400);
+        throw new ApiError(uploadError.message, 400);
       }
+      // Si pas de fichier dans la requete cela veut dire que l'utilisateur
+      // n'a pas sélectionner d'image
+      if (!req.file) {
+        throw new ApiError('Aucune Image sélectionnée', 400);
+      }
+
+      // On récupére le chemin de l'utilisateur en BDD
+      const user = await User.findByPk(userId, {
+        raw: true,
+      });
+
+      // l'image prendra comme nouveau nom ce que renvoie Date.now()
+      const newImageName = Date.now();
+
+      if (user.avatar === null) {
+        user.avatar = 'vide';
+      }
+
+      const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
+
+      // Supression de l'ancienne image de l'utilisateur si elle existe
+      if (isAvatarExist) {
+        fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
+          if (unlinkError) throw unlinkError;
+        });
+      }
+
+      // Compression de la nouvelle image si son poids est supérieur a 100kB
+
+      compressImage(req, newImageName);
+
+      // upload de la nouvelle image
+      await User.update(
+        {
+          avatar: `/images/${newImageName}.jpeg`,
+        },
+        {
+          where: {
+            id: userId,
+          },
+        },
+      );
+
+      res.json({ message: 'Image envoyée', userId });
     });
   },
 

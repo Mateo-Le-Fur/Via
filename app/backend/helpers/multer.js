@@ -1,4 +1,5 @@
 const multer = require('multer');
+
 const fileFilter = require('./fileFilter');
 
 const storage = multer.diskStorage({
@@ -14,7 +15,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage,
-  limits: { fileSize: 50000 * 1000 },
+  limits: { fileSize: 3000 * 1000 },
   fileFilter,
 }).single('image');
 
