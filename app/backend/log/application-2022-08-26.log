@@ -11,3 +11,16 @@
 2022-08-26 15:45:17 - error: File too large
 2022-08-26 15:45:22 - error: Format non accepté
 2022-08-26 15:51:50 - error: File too large
+2022-08-26 16:01:47 - error: Token invalide
+2022-08-26 16:05:12 - error: invalid input syntax for type integer: "undefined"
+2022-08-26 16:07:50 - error: Vous devez être connecté
+2022-08-26 16:08:57 - error: "lastname" is not allowed to be empty
+2022-08-26 16:09:58 - error: "lastname" is not allowed to be empty
+2022-08-26 16:13:17 - error: "description" is not allowed to be empty
+2022-08-26 16:15:02 - error: "description" must only contain alpha-numeric characters
+2022-08-26 16:15:06 - error: "description" must only contain alpha-numeric characters
+2022-08-26 17:00:52 - error: Veuillez vous reconneter
+2022-08-26 17:07:12 - error: invalid input syntax for type integer: "undefined"
+2022-08-26 17:08:14 - error: invalid input syntax for type integer: "undefined"
+2022-08-26 17:08:36 - error: invalid input syntax for type integer: "undefined"
+2022-08-26 17:08:36 - error: invalid input syntax for type integer: "undefined"

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./Profile.scss";
 import img from "../../assets/images/no-user.png";
 import Card from "../Card/Card";
+
 import { useDispatch, useSelector } from "react-redux";
 import {
   handleHideSuggestionBox,
@@ -29,6 +30,7 @@ const Profile = () => {
     description: "",
   });
 
+
   useEffect(() => {
     if (message) {
       setTimeout(() => {
@@ -45,6 +47,7 @@ const Profile = () => {
 
   const [address, setAddress] = useState("");
   const [inputAddress, setInputAddress] = useState("");
+
   const handleChangeAddress = (e) => {
     setInputAddress(e.target.value);
     if (e.target.value.length > 0) {
@@ -108,7 +111,12 @@ const Profile = () => {
     dispatch(updateUser({ userId: user.id, userData: { ...form, address } }));
   };
 
+
+if(user){
+
+
   return (
+
     <div className="profile">
       {isError && message && <p className="server-error">{message}</p>}
       <form className="editForm" onSubmit={handleSubmit}>
@@ -201,6 +209,7 @@ const Profile = () => {
           <label htmlFor="phone" className="field-label">
             Téléphone
           </label>
+
         </div>
         <div className="areaContainer">
           <textarea

@@ -12,25 +12,29 @@ module.exports = Joi.object({
       'string.min': '3 caractères minimum !',
       'string.max': '30 caractères maximum',
       'any.required': 'champ requis',
-      'string.empty': 'champ vide',
+      'string.empty': 'champ requis',
     }),
 
   city: Joi.string()
     .required()
     .messages({
-      'string.empty': 'champ vide',
+      'string.empty': 'champ requis',
     }),
 
   email: Joi.string()
 
     .pattern(/^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)
-    .error(new Error('Le format de l\'email n\'est pas valide'))
-    .required(),
+    .required()
+    .messages({
+      'string.pattern.base': 'Le format de l\'email n\'est pas valide',
+    }),
 
   password: Joi.string()
     .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
-    .error(new Error('minimum 8 caractères , 1 caractère spécial et 1 chiffre !'))
-    .required(),
+    .required()
+    .messages({
+      'string.pattern.base': 'minimum 8 caractères , 1 caractère spécial et 1 chiffre !',
+    }),
 
   confirmPassword: Joi.string().required().valid(Joi.ref('password'))
     .messages({

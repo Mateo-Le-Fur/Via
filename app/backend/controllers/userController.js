@@ -8,7 +8,23 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
+let globalVersion = 0;
+
 const userController = {
+
+  async getCurrentUser(req, res) {
+    const { id } = req.user;
+
+    const user = await User.findByPk(id, {
+      raw: true,
+    });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    res.json(user);
+  },
 
   async getUser(req, res) {
     const { id } = req.params;
@@ -53,13 +69,13 @@ const userController = {
 
     const newBody = { ...req.body, lat, long };
 
-    const user = await User.update(newBody, {
+    await User.update(newBody, {
       where: {
         id,
       },
     });
 
-    res.json(user);
+    res.json({ message: 'Profil mis à jour' });
   },
 
   async deleteUser(req, res) {
@@ -100,6 +116,47 @@ const userController = {
     const val = { ...user, activities };
 
     res.json(val);
+  },
+
+  async getUserActivitiesInRealTime(req, res) {
+    const { id } = req.user;
+
+    let localVersion = 0;
+
+    const sseHandler = req.app.get('sseHandler');
+
+    sseHandler.newConnection(id, res);
+
+    const user = User.findByPk(id, {
+      raw: true,
+    });
+
+    setInterval(() => {
+      const activities = Activity.findAll({
+        where: {
+          city: user.city,
+        },
+      });
+
+      const result = activities.map((elem) => {
+        let data = elem.get();
+
+        const date = dateFormat.convertActivityDate(data);
+
+        data = {
+          ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+        };
+
+        const { types, ...rest } = data;
+        return rest;
+      });
+
+      if (localVersion < globalVersion) {
+        sseHandler.sendDataToClient(id, result, 'activities');
+
+        localVersion = globalVersion;
+      }
+    }, 100);
   },
 
   async updateUserActivity(req, res) {
@@ -184,6 +241,8 @@ const userController = {
     let result = activity.get();
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
+
+    globalVersion += 1;
 
     res.json(result);
   },
@@ -383,7 +442,7 @@ const userController = {
 
         res.json({ message: 'Image envoyée', userId });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     });
   },
