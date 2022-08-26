@@ -4,5 +4,5 @@ node_modules
 .env
 *.log
 *.log
-upload/.*
-images/.*
+/upload
+/images
