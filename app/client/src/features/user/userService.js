@@ -21,7 +21,7 @@ const updateUser = async (userId, userData) => {
   console.log(userId)
   const response = await privateReq.put("/user/"+ userId, userData)
 
-  return response.data
+  return response.data.message
 }
 
 // Delete Actvity 

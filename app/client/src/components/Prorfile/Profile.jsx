@@ -10,6 +10,7 @@ import {
 } from "../../features/global/globalSlice";
 import SuggestionBox from "./SeuggestionBox";
 import { reset, updateUser } from "../../features/user/userSlice";
+import { checkUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
   const { isError, message } = useSelector((state) => state.user);
@@ -24,10 +25,10 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const [form, setForm] = useState({
-    firstname: "",
-    lastname: "",
-    phone: "",
-    description: "",
+    firstname: user.firstname,
+    lastname: user.lastname,
+    phone: user.phone,
+    description: user.description,
   });
 
 
@@ -45,8 +46,8 @@ const Profile = () => {
 
   // Address
 
-  const [address, setAddress] = useState("");
-  const [inputAddress, setInputAddress] = useState("");
+  const [address, setAddress] = useState(user.address);
+  const [inputAddress, setInputAddress] = useState(user.address);
 
   const handleChangeAddress = (e) => {
     setInputAddress(e.target.value);
@@ -109,16 +110,19 @@ const Profile = () => {
     console.log({ ...form, address });
     console.log(user.id);
     dispatch(updateUser({ userId: user.id, userData: { ...form, address } }));
+    setTimeout(() => {
+
+      dispatch(checkUser())
+    }, 1000)
   };
 
 
   if (user) {
 
-
     return (
 
       <div className="profile">
-        {isError && message && <p className="server-error">{message}</p>}
+        {message && <p className="server-error">{message}</p>}
         <form className="editForm" onSubmit={handleSubmit}>
           <div className="avatar">
             <input
@@ -141,7 +145,7 @@ const Profile = () => {
               name="firstname"
               type="text"
               id="firstname"
-              value={form.nickname}
+              value={form.firstname}
               placeholder="Prénom"
               onChange={handleChange}
             />
@@ -233,7 +237,7 @@ const Profile = () => {
               <Card type="profile" activity={activity} key={activity.id} />
             ))
           ) : (
-            <h2>Vous n'avez pas encore créé d'actvitiés</h2>
+            <p>Vous n'avez pas encore créé d'actvitiés</p>
           )}
         </div>
       </div>

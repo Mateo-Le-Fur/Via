@@ -52,12 +52,18 @@ const {user} = useSelector(state => state.auth)
       </div>
       <div className='bottom'>
         <div className='left'>
-          <HiSearch onClick={() => {
+          <div onClick={() => {
             dispatch(handleHideList())
             dispatch(getActivity(activity.id))
-          }} className='actionIcon' />
+          }} >
+          <HiSearch className='actionIcon' />
+          </div>
+          <div>
           <HiThumbUp className='actionIcon' />
+          </div>
+          <div>
           <FaStar className='actionIcon' />
+          </div>
         </div>
 
           {user.id === activity.user_id && (
