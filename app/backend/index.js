@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const router = require('./routers');
 const { errorHandler } = require('./helpers/errorHandler');
-const SSEHandler = require('./controllers/SSEHandler');
+const SSEHandler = require('./services/SSEHandler');
 
 const sseHandler = new SSEHandler();
 
