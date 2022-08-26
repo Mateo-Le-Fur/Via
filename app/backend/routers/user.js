@@ -397,4 +397,8 @@ router
   // eslint-disable-next-line max-len
   .delete(controllerHandler(userController.deleteUserBookmark)); // Delete one bookmark created by user
 
+router.route('/:userId/avatar')
+  .get(controllerHandler(userController.getUserAvatar))
+  .post(controllerHandler(userController.uploadUserAvatar));
+
 module.exports = router;
