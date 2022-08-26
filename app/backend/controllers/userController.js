@@ -304,14 +304,13 @@ const userController = {
     }
 
     // On va chercher le chemin de son image
-    const pathAvatar = path.join(__dirname, `../${user.avatar}`);
+    const pathAvatar = path.join(__dirname, `../../${user.avatar}`);
     // On vérifie si elle existe
     const isAvatarExist = fs.existsSync(pathAvatar);
 
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, '../images/default.jpeg'));
       return;
     }
 
