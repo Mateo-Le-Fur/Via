@@ -8,6 +8,7 @@ module.exports = Joi.object({
     .max(30)
     .required()
     .messages({
+      'string.alphanum': 'Le pseudo doit contenir que des lettres !',
       'string.base': 'La valeur doit être de type text',
       'string.min': '3 caractères minimum !',
       'string.max': '30 caractères maximum',
