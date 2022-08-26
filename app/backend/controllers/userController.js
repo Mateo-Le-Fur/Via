@@ -297,7 +297,9 @@ const userController = {
   async getUserAvatar(req, res) {
     const { id } = req.params;
     // On recupere un utilisateur
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      raw: true,
+    });
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);

@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize('postgres://spedata:MuvzH6712Hg@@localhost/via', {
+const sequelize = new Sequelize(process.env.PG_URL, {
   define: {
     createdAt: 'created_at',
     updatedAt: 'updated_at',
