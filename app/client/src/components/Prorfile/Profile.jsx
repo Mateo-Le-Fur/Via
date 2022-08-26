@@ -31,6 +31,44 @@ const handleChange = (e) => {
 const [avatar, setAvatar] = useState("")
 
 
+const handleAvatar = (e) => {
+  const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    uploadImage(user.id, formData);
+}
+
+async function uploadImage(id, formData) {
+  const response = await fetch(`/upload/${id}`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (data.id) {
+    console.log('get new image');
+
+    getUserAvatar(data.id, true);
+  }
+}
+
+async function getUserAvatar(id, upload = false) {
+  const userAvatar = await fetch(`user/${id}/avatar`, {
+    method: 'GET',
+  });
+
+  if (userAvatar.ok) {
+    if (upload) {
+      setTimeout(() => {
+        setAvatar(userAvatar.url)
+      }, 1000);
+    } else {
+      setAvatar(userAvatar.url)
+    }
+  }
+}
+
+
 const handleSubmit = (e) => {
   e.preventDefault()
 }
@@ -39,7 +77,7 @@ const handleSubmit = (e) => {
       {isError && message && <p className='server-error'>server error</p>}
       <form className='editForm' onSubmit={handleSubmit}>
       <div className='avatar'>
-        <input type="file" id="avatar"                   onChange={(e) => setAvatar(e.target.files[0])}
+        <input type="file" id="avatar"                   onChange={handleAvatar}
  name="avatar" />
         <label htmlFor="avatar">
         <img
