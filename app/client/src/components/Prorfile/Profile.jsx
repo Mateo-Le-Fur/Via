@@ -77,9 +77,11 @@ const handleSubmit = (e) => {
       </form>
         <h2>Mes activités</h2>
       <div className="activityList">
-      {filtered.length > 0 && filtered.map(activity => (
+      {filtered.length > 0 ? filtered.map(activity => (
         <Card type="profile" activity={activity} key={activity.id}/>
-      ))}
+      )): (
+        <h2>Vous n'avez pas encore créé d'actvitiés</h2>
+      )}
       </div>
     </div>
   );
