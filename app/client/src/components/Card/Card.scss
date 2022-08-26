@@ -91,7 +91,6 @@
     padding-right: 10%;
     fill: vars.$secondary-color;
     cursor: pointer;
-    transition: fill .3s ease-in-out;
     &:hover{
         fill: vars.$tertiary-color;
     }

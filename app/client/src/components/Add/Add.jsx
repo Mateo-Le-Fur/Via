@@ -19,7 +19,6 @@ const Add = () => {
 
   const [form, setForm] = useState({
     name: "",
-    address: "",
     description: ""
 })
 
@@ -41,9 +40,8 @@ const handleSubmit = (e) => {
   if (form.name  && form.description && address && type && date){
     console.log({...form, type, date, address})
     dispatch(createActivity({...form, type, date, address}))
-    if(isSuccess){
-      dispatch(activePanel(""))
-    }
+    dispatch(activePanel(""))
+  
   } else {
     return;
   }
@@ -84,7 +82,7 @@ const handleSubmit = (e) => {
             <input className='field-input' name="name" type="text" id="name" value={form.nickname} placeholder="Nom de l'activité" onChange={handleChange} />
             <label className='field-label' htmlFor="firstname">Nom de l'activité</label>
         </div>
-         <div className={form.address.length > 0 ? "field field--has-content field-address" : "field field-address"}>
+         <div className={inputAddress.length > 0 ? "field field--has-content field-address" : "field field-address"}>
             <input value={inputAddress}  className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChangeAddress} />
             {showSuggestionBox &&    <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress}/>}
             <label htmlFor="lastname" className="field-label">Adresse</label>

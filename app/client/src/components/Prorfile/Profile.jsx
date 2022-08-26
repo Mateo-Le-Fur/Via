@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import './Profile.scss';
 import img from "../../assets/images/no-user.png"
 import Card from "../Card/Card";
-import {useSelector} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
+import { handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
+import SuggestionBox from './SeuggestionBox';
 
 const Profile = () => {
 
@@ -10,16 +12,16 @@ const {isError, message} = useSelector(state => state.user)
 const {activities} = useSelector(state => state.activity)
 const [filtered, setFiltered] = useState([])
 const {user} = useSelector(state => state.auth)
+const {showSuggestionBox} = useSelector(state => state.global)
 
 useEffect(() => {
    setFiltered(activities.filter(activity => activity.user_id === user.id))
 }, [activities, user.id])
 
-
+const dispatch = useDispatch()
 const [form, setForm] = useState({
     firstname: "",
     lastname: "",
-    address: "",
     phone: "",
     description: ""
 })
@@ -31,21 +33,84 @@ const handleChange = (e) => {
 const [avatar, setAvatar] = useState("")
 
 
+
+const handleAvatar = (e) => {
+  const formData = new FormData();
+    formData.append('image', e.target.files[0]);
+    uploadImage(user.id, formData);
+}
+
+const [uploading, setUploading] = useState(false)
+
+async function uploadImage(id, formData) {
+  setUploading(true)
+  try {
+    await fetch(`/api/user/${id}/avatar/`, {
+      method: 'POST',
+      body: formData,
+    });
+    setUploading(false)
+  } catch (error) {
+    
+  }
+}
+
+useEffect(() => {
+  const  getUserAvatar = async (id, uploading ) =>  {
+    const userAvatar = await fetch(`/api/user/${id}/avatar`, {
+      method: 'GET',
+    });
+    if (userAvatar.ok) {
+      if (uploading) {
+        setTimeout(() => {
+          setAvatar(userAvatar.url)
+        }, 1000);
+      } else {
+        setAvatar(userAvatar.url)
+      }
+      console.log(avatar)
+    }
+  }
+
+  getUserAvatar(user.id, uploading)
+}, [user.id, avatar, uploading])
+
+
+console.log(avatar)
+
+const [address, setAddress] = useState("")
+const  [inputAddress, setInputAddress] = useState("");
+  const handleChangeAddress = (e) => {
+    setInputAddress(e.target.value)
+    if(e.target.value.length > 0 ){
+      dispatch(handleShowSuggestionBox())
+    } else {
+      dispatch(handleHideSuggestionBox())
+    }
+  }
+
+  const handleAddress = (value) => {
+    setInputAddress(value)
+    setAddress(value)
+  }
+
 const handleSubmit = (e) => {
   e.preventDefault()
+  console.log({...form})
 }
+
   return (
     <div className='profile'>
       {isError && message && <p className='server-error'>server error</p>}
       <form className='editForm' onSubmit={handleSubmit}>
       <div className='avatar'>
-        <input type="file" id="avatar"                   onChange={(e) => setAvatar(e.target.files[0])}
+        <input type="file" id="avatar"                   onChange={handleAvatar}
  name="avatar" />
         <label htmlFor="avatar">
         <img
               src={
                 avatar
-                  ? URL.createObjectURL(avatar)
+                  ? avatar
                   : img
               }
               alt="avatar"
@@ -60,9 +125,10 @@ const handleSubmit = (e) => {
             <input value={form.lastname} name="lastname" className='field-input' type="text" id="lastname" placeholder='Nom'  onChange={handleChange} />
             <label htmlFor="lastname" className="field-label">Nom</label>
         </div>
-        <div className={form.address.length > 0 ? "field field--has-content" : "field"}>
-            <input value={form.address} name="address" className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChange} />
-            <label htmlFor="address" className="field-label">Addresse</label>
+        <div className={inputAddress.length > 0 ? "field field--has-content field-address" : "field field-address"}>
+            <input value={inputAddress}  className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChangeAddress} />
+            {showSuggestionBox &&    <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress}/>}
+            <label htmlFor="lastname" className="field-label">Adresse</label>
         </div>
         <div className={form.phone.length > 0 ? "field field--has-content" : "field"}>
             <input value={form.phone} name="phone" className='field-input' type="text" id="phone" placeholder='Téléphone'  onChange={handleChange} />
@@ -77,9 +143,11 @@ const handleSubmit = (e) => {
       </form>
         <h2>Mes activités</h2>
       <div className="activityList">
-      {filtered.length > 0 && filtered.map(activity => (
+      {filtered.length > 0 ? filtered.map(activity => (
         <Card type="profile" activity={activity} key={activity.id}/>
-      ))}
+      )): (
+        <h2>Vous n'avez pas encore créé d'actvitiés</h2>
+      )}
       </div>
     </div>
   );

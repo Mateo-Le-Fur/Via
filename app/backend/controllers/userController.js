@@ -295,23 +295,26 @@ const userController = {
   },
 
   async getUserAvatar(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
     // On recupere un utilisateur
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(userId, {
+      raw: true,
+    });
+
+    console.log(user);
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
     // On va chercher le chemin de son image
-    const pathAvatar = path.join(__dirname, `../${user.avatar}`);
+    const pathAvatar = path.join(__dirname, `../../${user.avatar}`);
     // On vérifie si elle existe
     const isAvatarExist = fs.existsSync(pathAvatar);
 
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, '../images/default.jpeg'));
       return;
     }
 
@@ -319,9 +322,9 @@ const userController = {
   },
 
   async uploadUserAvatar(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    if (req.user.id !== parseInt(id, 10)) {
+    if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);
       }
@@ -343,15 +346,22 @@ const userController = {
       }
 
       // On récupére le chemin de l'utilisateur en BDD
-      const user = await User.findByPk(id);
+      const user = await User.findByPk(userId, {
+        raw: true,
+      });
+
       // l'image prendra comme nouveau nom ce que renvoie Date.now()
       const newImageName = Date.now();
 
-      const isAvatarExist = fs.existsSync(path.join(__dirname, '../', user.avatar));
+      if (user.avatar === null) {
+        user.avatar = 'vide';
+      }
+
+      const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
 
       // Supression de l'ancienne image de l'utilisateur si elle existe
       if (isAvatarExist) {
-        fs.unlink(path.join(__dirname, '../', user.avatar), (unlinkError) => {
+        fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
           if (unlinkError) throw unlinkError;
         });
       }
@@ -367,12 +377,12 @@ const userController = {
         },
         {
           where: {
-            id,
+            id: userId,
           },
         },
       );
 
-      res.json({ message: 'Image envoyée', id });
+      res.json({ message: 'Image envoyée', userId });
     });
   },
 

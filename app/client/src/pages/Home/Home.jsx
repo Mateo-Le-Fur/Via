@@ -1,4 +1,3 @@
-import { Marker, Popup } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux'
 import Map from '../../components/Map/Map'
 import OutsideWrapper from '../../hooks/ClickOutsideHook'
@@ -9,11 +8,11 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import {activitiesData} from "./data"
 import { getActivities } from '../../features/activity/activitySlice'
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
+  const {filter} = useSelector(state => state.global)
   const [markerGroups, setMarkerGroups] = useState([])
   const dispatch = useDispatch()
   const {activities} = useSelector(state => state.activity)
@@ -27,9 +26,13 @@ const Home = () => {
     acc[cur["type"]] = [...acc[cur["type"]] || [], cur];
     return acc;
   }, {})
-  return  Object.keys(object).map((key) => [(key), object[key]]);
+  let layers =   Object.keys(object).map((key) => [(key), object[key]]);
+  if(filter !== ""){
+    layers = layers.filter(layer => layer[0] === filter )
+  }
+  return layers
    }
-   }, [activities])
+   }, [activities, filter])
 
    useEffect(() => {
       dispatch(getActivities())
