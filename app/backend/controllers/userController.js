@@ -343,11 +343,12 @@ const userController = {
       }
 
       // On récupére le chemin de l'utilisateur en BDD
-      const user = await User.findByPk(userId);
+      const user = await User.findByPk(userId, {
+        raw: true,
+      });
+
       // l'image prendra comme nouveau nom ce que renvoie Date.now()
       const newImageName = Date.now();
-
-      console.log(__dirname);
 
       const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
 
