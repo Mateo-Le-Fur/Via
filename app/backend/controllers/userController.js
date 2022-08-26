@@ -12,6 +12,20 @@ let globalVersion = 0;
 
 const userController = {
 
+  async getCurrentUser(req, res) {
+    const { id } = req.user;
+
+    const user = await User.findByPk(id, {
+      raw: true,
+    });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    res.json(user);
+  },
+
   async getUser(req, res) {
     const { id } = req.params;
 
