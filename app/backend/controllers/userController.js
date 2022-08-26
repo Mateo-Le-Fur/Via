@@ -383,7 +383,7 @@ const userController = {
 
         res.json({ message: 'Image envoyée', userId });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     });
   },
