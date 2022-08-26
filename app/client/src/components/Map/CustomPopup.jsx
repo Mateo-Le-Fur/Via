@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import img from "../../assets/images/no-user.png"
@@ -15,7 +15,18 @@ import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity, user }) => {
+  const [avatar, setAvatar] = useState("")
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      const userAvatar = await fetch(`/api/user/${user.id}/avatar`, {
+        method: 'GET',
+      });
 
+      setAvatar(userAvatar.url)
+    }
+    
+    fetchAvatar()
+  }, [user.id])
   const {user:current} = useSelector(state => state.auth);
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
@@ -119,7 +130,7 @@ const CustomPopup = ({ id, type, activity, user }) => {
                 <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon'/>
             </span>
               <div className="avatarContainer">
-                <img src={user.avatar ? user.avatar : img} alt="" />
+                <img src={avatar} alt="" />
               </div>
               <div className="nicknameContainer">
                 <span>{user.nickname}</span>
