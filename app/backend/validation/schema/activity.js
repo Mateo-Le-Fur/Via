@@ -6,7 +6,7 @@ module.exports = Joi.object({
     .max(50)
     .required()
     .messages({
-      'string.empty': 'name: Chaine vide !',
+      'string.empty': 'Champ requis !',
       'string.max': 'Le nom de l\'activité ne peut dépasser 50 caractères',
     }),
 
@@ -19,7 +19,10 @@ module.exports = Joi.object({
 
   date: Joi.string().required(),
 
-  address: Joi.string().required(),
+  address: Joi.string().required()
+    .messages({
+      'string.empty': 'Champ requis !',
+    }),
 
   type: Joi.string()
     .required(),

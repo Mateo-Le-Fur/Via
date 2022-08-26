@@ -59,7 +59,7 @@ const userController = {
       },
     });
 
-    res.json(user);
+    res.json({ message: 'Profil mis à jour' });
   },
 
   async deleteUser(req, res) {
@@ -383,7 +383,7 @@ const userController = {
 
         res.json({ message: 'Image envoyée', userId });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     });
   },

@@ -20,7 +20,7 @@ const authJWT = {
 
       jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {
-          throw new ApiError('Token invalide', 403);
+          throw new ApiError('Veuillez vous reconneter', 403);
         }
 
         req.user = { ...user, token };
