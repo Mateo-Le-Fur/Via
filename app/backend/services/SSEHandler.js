@@ -12,11 +12,12 @@ class SSEHandler {
     this.clients.set(id, client);
   }
 
-  sendDataToClient(id, data) {
+  sendDataToClient(id, data, event) {
     const client = this.clients.get(id);
     if (client) {
       console.log(data);
-      client.send(data);
+      console.log(event);
+      client.send(data, event);
     }
   }
 
