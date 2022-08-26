@@ -8,6 +8,8 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
+let globalVersion = 0;
+
 const userController = {
 
   async getUser(req, res) {
@@ -53,7 +55,7 @@ const userController = {
 
     const newBody = { ...req.body, lat, long };
 
-    const user = await User.update(newBody, {
+    await User.update(newBody, {
       where: {
         id,
       },
@@ -100,6 +102,47 @@ const userController = {
     const val = { ...user, activities };
 
     res.json(val);
+  },
+
+  async getUserActivitiesInRealTime(req, res) {
+    const { id } = req.user;
+
+    let localVersion = 0;
+
+    const sseHandler = req.app.get('sseHandler');
+
+    sseHandler.newConnection(id, res);
+
+    const user = User.findByPk(id, {
+      raw: true,
+    });
+
+    setInterval(() => {
+      const activities = Activity.findAll({
+        where: {
+          city: user.city,
+        },
+      });
+
+      const result = activities.map((elem) => {
+        let data = elem.get();
+
+        const date = dateFormat.convertActivityDate(data);
+
+        data = {
+          ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+        };
+
+        const { types, ...rest } = data;
+        return rest;
+      });
+
+      if (localVersion < globalVersion) {
+        sseHandler.sendDataToClient(id, result, 'activities');
+
+        localVersion = globalVersion;
+      }
+    }, 100);
   },
 
   async updateUserActivity(req, res) {
@@ -184,6 +227,8 @@ const userController = {
     let result = activity.get();
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
+
+    globalVersion += 1;
 
     res.json(result);
   },
