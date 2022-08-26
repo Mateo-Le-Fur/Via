@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import img from "../../assets/images/no-user.png"
 import { Popup } from 'react-leaflet';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -118,7 +119,7 @@ const CustomPopup = ({ id, type, activity, user }) => {
                 <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon'/>
             </span>
               <div className="avatarContainer">
-                <img src={user.avatar} alt="" />
+                <img src={user.avatar ? user.avatar : img} alt="" />
               </div>
               <div className="nicknameContainer">
                 <span>{user.nickname}</span>
