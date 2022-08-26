@@ -32,43 +32,51 @@ const handleChange = (e) => {
 
 const [avatar, setAvatar] = useState("")
 
+
+
 const handleAvatar = (e) => {
   const formData = new FormData();
     formData.append('image', e.target.files[0]);
-    console.log(formData, user.id)
     uploadImage(user.id, formData);
 }
 
+const [uploading, setUploading] = useState(false)
+
 async function uploadImage(id, formData) {
-  const response = await fetch(`/api/user/${id}/avatar/`, {
-    method: 'POST',
-    body: formData,
-  });
-
-  const data = await response.json();
-
-  if (data.id) {
-    console.log('get new image');
-
-    getUserAvatar(data.id, true);
+  setUploading(true)
+  try {
+    await fetch(`/api/user/${id}/avatar/`, {
+      method: 'POST',
+      body: formData,
+    });
+    setUploading(false)
+  } catch (error) {
+    
   }
 }
 
-async function getUserAvatar(id, upload = false) {
-  const userAvatar = await fetch(`/api/user/${id}/avatar`, {
-    method: 'GET',
-  });
-
-  if (userAvatar.ok) {
-    if (upload) {
-      setTimeout(() => {
+useEffect(() => {
+  const  getUserAvatar = async (id, uploading ) =>  {
+    const userAvatar = await fetch(`/api/user/${id}/avatar`, {
+      method: 'GET',
+    });
+    if (userAvatar.ok) {
+      if (uploading) {
+        setTimeout(() => {
+          setAvatar(userAvatar.url)
+        }, 1000);
+      } else {
         setAvatar(userAvatar.url)
-      }, 1000);
-    } else {
-      setAvatar(userAvatar.url)
+      }
+      console.log(avatar)
     }
   }
-}
+
+  getUserAvatar(user.id, uploading)
+}, [user.id, avatar, uploading])
+
+
+console.log(avatar)
 
 const [address, setAddress] = useState("")
 const  [inputAddress, setInputAddress] = useState("");
@@ -102,7 +110,7 @@ const handleSubmit = (e) => {
         <img
               src={
                 avatar
-                  ? URL.createObjectURL(avatar)
+                  ? avatar
                   : img
               }
               alt="avatar"
