@@ -59,7 +59,7 @@ const userController = {
       },
     });
 
-    res.json(user);
+    res.json({ message: 'Profil mis à jour' });
   },
 
   async deleteUser(req, res) {
