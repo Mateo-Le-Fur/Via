@@ -5,17 +5,7 @@ const Bookmark = () => {
   return (
     <div className="bookmark">
       <div className="activityList">
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
-        <Card type="bookmark"/>
+        <h2>Vous n'avez aucun favoris</h2>
       </div>
     </div>
   )
