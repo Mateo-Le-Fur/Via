@@ -66,31 +66,25 @@ const  [inputAddress, setInputAddress] = useState("");
 // Avatar 
 const [avatar, setAvatar] = useState("")
 
-
-
 const handleAvatar = (e) => {
   const formData = new FormData();
     formData.append('image', e.target.files[0]);
     uploadImage(user.id, formData);
 }
 
-const [uploading, setUploading] = useState(false)
 
 async function uploadImage(id, formData) {
-  setUploading(true)
   try {
     await fetch(`/api/user/${id}/avatar/`, {
       method: 'POST',
       body: formData,
     });
-    setUploading(false)
+    getUserAvatar(id, true)
   } catch (error) {
-    
   }
 }
 
-useEffect(() => {
-  const  getUserAvatar = async (id, uploading ) =>  {
+  const  getUserAvatar = async (id, uploading) =>  {
     const userAvatar = await fetch(`/api/user/${id}/avatar`, {
       method: 'GET',
     });
@@ -102,13 +96,20 @@ useEffect(() => {
       } else {
         setAvatar(userAvatar.url)
       }
-      console.log(avatar)
     }
   }
 
-  getUserAvatar(user.id, uploading)
-}, [user.id, avatar, uploading])
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      const userAvatar = await fetch(`/api/user/${user.id}/avatar`, {
+        method: 'GET',
+      });
 
+      setAvatar(userAvatar.url)
+    }
+    
+    fetchAvatar()
+  }, [user.id])
 
 // submit
 const handleSubmit = (e) => {
@@ -127,11 +128,7 @@ const handleSubmit = (e) => {
  name="avatar" />
         <label htmlFor="avatar">
         <img
-              src={
-                avatar
-                  ? avatar
-                  : img
-              }
+              src={avatar}
               alt="avatar"
             />
         </label>
