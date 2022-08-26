@@ -350,6 +350,10 @@ const userController = {
       // l'image prendra comme nouveau nom ce que renvoie Date.now()
       const newImageName = Date.now();
 
+      if (user.avatar === null) {
+        user.avatar = '';
+      }
+
       const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
 
       // Supression de l'ancienne image de l'utilisateur si elle existe
