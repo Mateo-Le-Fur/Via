@@ -140,8 +140,6 @@ const userController = {
       ...result, nickname: result.user.nickname, type: result.types[0].label, date,
     };
 
-    console.log('git');
-
     const { types, user, ...rest } = result;
 
     res.json(rest);
@@ -295,13 +293,12 @@ const userController = {
   },
 
   async getUserAvatar(req, res) {
+    console.log('ok');
     const { userId } = req.params;
     // On recupere un utilisateur
     const user = await User.findByPk(userId, {
       raw: true,
     });
-
-    console.log(user);
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
@@ -315,6 +312,7 @@ const userController = {
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
+      res.sendFile(path.join(__dirname, '../../images/default.jpeg'));
       return;
     }
 
@@ -333,56 +331,60 @@ const userController = {
     multerUpload(req, res, async (uploadError) => {
       // Gestion des erreurs possible lors de l'upload d'une image
 
-      if (uploadError) {
-        if (uploadError.code === 'LIMIT_FILE_SIZE') {
-          throw new ApiError('Image trop volumineuse', 400);
+      try {
+        if (uploadError) {
+          if (uploadError.code === 'LIMIT_FILE_SIZE') {
+            throw new ApiError('Image trop volumineuse', 400);
+          }
+          throw new ApiError(uploadError.message, 400);
         }
-        throw new ApiError(uploadError.message, 400);
-      }
-      // Si pas de fichier dans la requete cela veut dire que l'utilisateur
-      // n'a pas sélectionner d'image
-      if (!req.file) {
-        throw new ApiError('Aucune Image sélectionnée', 400);
-      }
+        // Si pas de fichier dans la requete cela veut dire que l'utilisateur
+        // n'a pas sélectionner d'image
+        if (!req.file) {
+          throw new ApiError('Aucune Image sélectionnée', 400);
+        }
 
-      // On récupére le chemin de l'utilisateur en BDD
-      const user = await User.findByPk(userId, {
-        raw: true,
-      });
-
-      // l'image prendra comme nouveau nom ce que renvoie Date.now()
-      const newImageName = Date.now();
-
-      if (user.avatar === null) {
-        user.avatar = 'vide';
-      }
-
-      const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
-
-      // Supression de l'ancienne image de l'utilisateur si elle existe
-      if (isAvatarExist) {
-        fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
-          if (unlinkError) throw unlinkError;
+        // On récupére le chemin de l'utilisateur en BDD
+        const user = await User.findByPk(userId, {
+          raw: true,
         });
-      }
 
-      // Compression de la nouvelle image si son poids est supérieur a 100kB
+        // l'image prendra comme nouveau nom ce que renvoie Date.now()
+        const newImageName = Date.now();
 
-      compressImage(req, newImageName);
+        if (user.avatar === null) {
+          user.avatar = 'vide';
+        }
 
-      // upload de la nouvelle image
-      await User.update(
-        {
-          avatar: `/images/${newImageName}.jpeg`,
-        },
-        {
-          where: {
-            id: userId,
+        const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
+
+        // Supression de l'ancienne image de l'utilisateur si elle existe
+        if (isAvatarExist) {
+          fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
+            if (unlinkError) throw unlinkError;
+          });
+        }
+
+        // Compression de la nouvelle image si son poids est supérieur a 100kB
+
+        compressImage(req, newImageName);
+
+        // upload de la nouvelle image
+        await User.update(
+          {
+            avatar: `/images/${newImageName}.jpeg`,
           },
-        },
-      );
+          {
+            where: {
+              id: userId,
+            },
+          },
+        );
 
-      res.json({ message: 'Image envoyée', userId });
+        res.json({ message: 'Image envoyée', userId });
+      } catch (error) {
+        throw new ApiError(error, 400);
+      }
     });
   },
 
