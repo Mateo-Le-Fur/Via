@@ -153,11 +153,16 @@ const CustomPopup = ({ id, type, activity, user }) => {
             <div className='actions'>
               {current.id === activity.user_id && (
                     <div className='left'>
-                    <HiPencil
+                      <div onClick={() => setEdit(!edit)}>
+                      <HiPencil
                       className='actionIcon'
-                      onClick={() => setEdit(!edit)}
+                   
                     />
-                    <HiTrash onClick={() => dispatch(deleteActivity(activity.id))} className='actionIcon' />
+                      </div>
+                    <div  onClick={() => dispatch(deleteActivity(activity.id))} >
+                    <HiTrash className='actionIcon' />
+                    </div>
+                 
                   </div>
               )}
               <div className='right'>

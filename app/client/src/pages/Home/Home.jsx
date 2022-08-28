@@ -9,6 +9,7 @@ import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
 import { getActivities } from '../../features/activity/activitySlice'
+import { checkUser } from '../../features/auth/authSlice'
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)

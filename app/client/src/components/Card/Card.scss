@@ -75,8 +75,14 @@
         height: 15%;
         display: flex;
         justify-content: space-between;
+        flex-direction: row;
         align-items: center;
         padding: 0 3%;
+        .left{
+            display: flex;
+        }
+        .right{
+        }
     }
 }
 

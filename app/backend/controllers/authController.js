@@ -40,27 +40,32 @@ const auth = {
 
     const coordinates = await getCoordinates(city);
 
-    let createdUser = await User.create({
-      email,
-      password: hashPassword,
-      nickname,
-      city,
-      lat: coordinates[0],
-      long: coordinates[1],
-    });
+    let createdUser = await User.create(
+      {
+        email,
+        password: hashPassword,
+        nickname,
+        city,
+        lat: coordinates[0],
+        long: coordinates[1],
+      },
+
+    );
 
     createdUser = createdUser.get();
 
-    createdUser = {
+    const userToken = {
       id: createdUser.id,
       lat: createdUser.lat,
       long: createdUser.long,
       is_admin: createdUser.is_admin,
     };
 
-    const token = auth.generateToken(createdUser);
+    const token = auth.generateToken(userToken);
 
     auth.generateCookie(res, 'token', token);
+
+    delete createdUser.password;
 
     res.json(createdUser);
   },
@@ -68,16 +73,17 @@ const auth = {
   async login(req, res) {
     const { email, password } = req.body;
 
-    let user = await User.findOne({
+    const user = await User.findOne({
       where: {
         email,
       },
+
+      raw: true,
     });
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
-    user = user.get();
 
     const isGoodPassword = await argon2.verify(user.password, password);
 
@@ -85,14 +91,14 @@ const auth = {
       throw new ApiError('Email ou mot de passe incorrect', 400);
     }
 
-    user = {
+    const userToken = {
       id: user.id,
       lat: user.lat,
       long: user.long,
       is_admin: user.is_admin,
     };
 
-    const token = auth.generateToken(user);
+    const token = auth.generateToken(userToken);
 
     auth.generateCookie(res, 'token', token);
 

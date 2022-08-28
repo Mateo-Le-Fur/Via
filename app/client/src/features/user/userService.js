@@ -5,8 +5,8 @@ import { publicReq, privateReq } from '../../utils/axiosMethod'
 // Get users 
 const getUsers = async () => {
 
-  const response = await publicReq.get('/user')
-  return response.data
+  const response = await publicReq.get('/dashboard')
+  return response.data.users
 }
 
 // Get user by Id
@@ -21,7 +21,7 @@ const updateUser = async (userId, userData) => {
   console.log(userId)
   const response = await privateReq.put("/user/"+ userId, userData)
 
-  return response.data
+  return response.data.message
 }
 
 // Delete Actvity 

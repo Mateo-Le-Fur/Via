@@ -21,7 +21,7 @@ export const userColumns = [
     {
       field: "phone",
       headerName: "Téléphone",
-      width: 120
+      width: 100
     }
   ];
   
@@ -36,7 +36,7 @@ export const userColumns = [
     {
       field: "date",
       headerName: "Date",
-      width: 120,
+      width: 100,
     },
     {
       field: "type",

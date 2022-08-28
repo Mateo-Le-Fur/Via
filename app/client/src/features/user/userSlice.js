@@ -130,8 +130,7 @@ export const userSlice = createSlice({
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.user = action.payload
-        state.users = state.users.map(user => user.id === action.payload.id ? (action.payload) : user)
+        state.message = action.payload
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         console.log(action.payload)

@@ -8,6 +8,7 @@ module.exports = Joi.object({
     .max(30)
     .required()
     .messages({
+      'string.alphanum': 'Le pseudo doit contenir que des lettres !',
       'string.base': 'La valeur doit être de type text',
       'string.min': '3 caractères minimum !',
       'string.max': '30 caractères maximum',
@@ -33,7 +34,7 @@ module.exports = Joi.object({
     .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
     .required()
     .messages({
-      'minimum 8 caractères': '1 caractère spécial et 1 chiffre !',
+      'string.pattern.base': 'minimum 8 caractères , 1 caractère spécial et 1 chiffre !',
     }),
 
   confirmPassword: Joi.string().required().valid(Joi.ref('password'))
