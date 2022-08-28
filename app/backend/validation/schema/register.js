@@ -33,7 +33,7 @@ module.exports = Joi.object({
     .pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
     .required()
     .messages({
-      'minimum 8 caractères , 1 caractère spécial et 1 chiffre !'
+      'minimum 8 caractères': '1 caractère spécial et 1 chiffre !',
     }),
 
   confirmPassword: Joi.string().required().valid(Joi.ref('password'))

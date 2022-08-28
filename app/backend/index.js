@@ -19,6 +19,7 @@ app.use(cors('*'));
 
 app.use(cookieParser('secret'));
 
+// On fait en sorte de pouvoir récupérer le sseHandler dans toute les routes
 app.set('sseHandler', sseHandler);
 
 app.use('/api', router);

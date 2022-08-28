@@ -101,6 +101,7 @@ const activity = {
 
     await user.addParticipations(activity);
 
+    // Le fait d'incrementer cette variable va permettre au serveur d'envoyer les données en temps réel
     globalVersion += 1;
 
     res.status(200).json({ msg: 'Participe' });
@@ -110,10 +111,13 @@ const activity = {
     const { id } = req.user;
     let localVersion = 0;
 
+    // On récupere le sseHandler
     const sseHandler = req.app.get('sseHandler');
 
+    // On initialise une connexion avec l'id de l'utilisateur courrant
     sseHandler.newConnection(id, res);
 
+    // On récupere les infos de l'utilisateur courrant
     const user = await User.findByPk(id, {
       raw: true,
     });
@@ -123,6 +127,7 @@ const activity = {
     }
 
     setInterval(async () => {
+      // On va chercher toutes les activités dans la ville de l'utilisateur courrant
       const activity = await Activity.findAll({
         include: ['userParticip'],
         attributes: ['id', 'city'],
@@ -133,20 +138,35 @@ const activity = {
           city: user.city,
         },
       });
+
+      // Le localVersion et globalVersion permette d'envoyer les datas seulement quand il le faut
+      // sinon par defaut le serveur va envoyer les datas en continue en fonction du timer dans le setInterval
       if (localVersion < globalVersion) {
         const result = activity.map((elem) => {
           const count = elem.userParticip.length;
           return {
-            activityId: elem.id, count, userId: id, city: elem.city,
+            activityId: elem.id, count, city: elem.city,
           };
         });
 
-        sseHandler.sendDataToClient(id, result, result[0].city);
+        // On envoie les données en passant
+        sseHandler.sendDataToClients(id, result, result[0].city);
 
+        // ! info pour le front
+        // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application
+        // Il faut ensuite dans l'event listener écouter sur la ville de l'utilisateur actuelle
+        /* Si la ville de l'utilisateur actuelle correspond avec la ville contenu dans le tableau
+         alors on renvoie les données */
+        // Cela permet de renvoyer les données seulement aux utilisateurs de la même ville
+        /* Il faut ensuite parcourir le tableau renvoyé et mettre a jour le compteur de chaque activité
+        à l'aide des propriétées 'activityId' et 'count' contenu dans le tableau */
+
+        // Cela permet de close l'interval jusqu'a ce qu'un autre utilisateur participe a une activité
         localVersion = globalVersion;
       }
-    }, 1000);
+    }, 10);
 
+    // On close la connextion lorsque q'un utilisateur ferme son naviguateur
     res.on('close', () => {
       sseHandler.closeConnection(id);
     });
