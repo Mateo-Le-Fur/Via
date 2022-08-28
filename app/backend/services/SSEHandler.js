@@ -1,13 +1,15 @@
 const SSE = require('./SSEConnection');
 
 class SSEHandler {
-  constructor() {
+  constructor(name) {
     // On créer un map qui va contenir tout les utilisateurs connecté
     this.clients = new Map();
+    this.name = name;
   }
 
   // Méthode qui permet de créer une connexion avec un utilisateur
   newConnection(id, res) {
+    console.log(`Nouvelle connection sur le salon ${this.name}`);
     // On instancie la classe SSE
     const client = new SSE(res);
     // On set les headers
@@ -29,6 +31,7 @@ class SSEHandler {
   }
 
   closeConnection(id) {
+    console.log(`Déconnection sur le salon ${this.name}`);
     // On delete l'utilisateur dans le tableau de clients
     this.clients.delete(id);
   }
