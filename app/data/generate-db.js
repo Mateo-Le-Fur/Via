@@ -8,8 +8,8 @@ faker.locale = 'fr';
 
 // Initializes entities variables
 // Sets the number of rows per entity
-const userNb = 1000;
-const activityNb = 1000;
+const userNb = 50;
+const activityNb = 50;
 const messageNb = 0;
 const commentNb = 0;
 const bookmarkNb = 0;
