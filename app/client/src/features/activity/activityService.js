@@ -34,9 +34,26 @@ const updateActivity = async (activityId, activityData, userId) => {
 const deleteActivity = async (activityId, userId) => {
    await privateReq.delete(`/user/${userId}/activity/${activityId}`)
     return activityId
-
 }
 
+// get bookmarks
+const getBookmarks = async (userId) => {
+  const res = await privateReq.get(`/user/${userId}/bookmark/`)
+   const bookmarks = res.data.activity.map(activity => activity.id)
+   return bookmarks
+}
+
+// add bookmark
+const createBookmark = async (activityId, userId) => {
+  await privateReq.post(`/user/${userId}/bookmark/`)
+   return activityId
+}
+
+// delete bookmark
+const deleteBookmark = async (bookmarkId, userId) => {
+ await privateReq.delete(`/user/${userId}/bookmark/${bookmarkId}`)
+ return bookmarkId
+}
 
 const recipeService = {
   createActivity,
@@ -44,6 +61,9 @@ const recipeService = {
   getActivity,
   updateActivity,
   deleteActivity,
+  getBookmarks,
+  createBookmark,
+  deleteBookmark,
 }
 
 export default recipeService

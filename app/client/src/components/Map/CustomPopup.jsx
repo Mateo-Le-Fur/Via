@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import img from "../../assets/images/no-user.png"
-import { Popup } from 'react-leaflet';
+import { Popup, useMap } from 'react-leaflet';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   HiLocationMarker,
@@ -12,7 +12,7 @@ import {
 } from 'react-icons/hi';
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
-import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
+import { createBookmark, deleteActivity, deleteBookmark, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity }) => {
   // const [avatar, setAvatar] = useState("")
@@ -27,7 +27,9 @@ const CustomPopup = ({ id, type, activity }) => {
     
   //   fetchAvatar()
   // }, [activity.user_id])
+
   const {user:current} = useSelector(state => state.auth);
+  const {bookmarks} = useSelector(state => state.activity)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -62,9 +64,32 @@ const CustomPopup = ({ id, type, activity }) => {
     setDate(e.target.value)
   }
 
+  const popupRef = useRef(activity)
+
+  const map = useMap()
+  useEffect(() => {
+    if(activity.id === id){
+      map.flyTo(activity.lat, activity.long)
+      map.openPopup(popupRef.current)
+    }
+  }, [activity, id, map])
+
+  const handleBookmark = () => {
+    const booked = bookmarks.some(bookmark => {
+      if(bookmark.id === activity.id){
+        return true 
+      }
+      return false })
+      if (booked) {
+        dispatch(deleteBookmark(activity.id))
+      } else {
+        dispatch(createBookmark(activity.id))
+      }
+  }
+
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
     return (
-      <Popup>
+      <Popup ref={popupRef}>
         <div>
           <div className='popupContainer'>
             {edit && (
@@ -166,7 +191,12 @@ const CustomPopup = ({ id, type, activity }) => {
                   </div>
               )}
               <div className='right'>
-                <FaStar className='starIcon' />
+                <FaStar onClick={handleBookmark} className={bookmarks.some(bookmark => {
+                  if(bookmark.id === activity.id){
+                    return true 
+                  }
+                  return false
+                }) ? "starIcon bookmark" : "starIcon"} />
               </div>
             </div>
           </div>

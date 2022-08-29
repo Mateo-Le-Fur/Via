@@ -96,6 +96,9 @@
     font-size: 1.7rem;
     padding-right: 10%;
     fill: vars.$secondary-color;
+    &.bookmark{
+        fill: vars.$tertiary-color;
+    }
     cursor: pointer;
     &:hover{
         fill: vars.$tertiary-color;

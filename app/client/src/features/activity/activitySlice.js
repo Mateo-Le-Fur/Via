@@ -8,6 +8,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  bookmarks: []
 }
 
 export const createActivity = createAsyncThunk(
@@ -106,6 +107,63 @@ export const deleteActivity = createAsyncThunk(
   }
 )
 
+export const getBookmarks = createAsyncThunk(
+  'bookmarks/get',
+  async (_, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    try {
+      return await activityService.getBookmarks(userId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const createBookmark = createAsyncThunk(
+  'bookmarks/create',
+  async (bookmarkId, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    try {
+      return await activityService.createBookmark(bookmarkId, userId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const deleteBookmark = createAsyncThunk(
+  'activity/bookmarks',
+  async (bookmarkId, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    try {
+      return await activityService.deleteBookmark(bookmarkId, userId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const activitySlice = createSlice({
   name: "actvity",
   initialState,
@@ -164,7 +222,36 @@ export const activitySlice = createSlice({
         state.isError = false
         state.activities = state.activities.filter(activity => activity.id !== action.payload)
       })
-
+      .addCase(getBookmarks.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(getBookmarks.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.bookmarks = action.payload
+      })
+      .addCase(getBookmarks.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(createBookmark.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(createBookmark.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.bookmarks.push(action.payload)
+      })
+      .addCase(createBookmark.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(deleteBookmark.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.bookmarks = state.bookmarks.filter(bookmark => bookmark.id !== action.payload)
+      })
   }
 })
 

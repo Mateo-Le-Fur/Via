@@ -8,7 +8,7 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import { getActivities } from '../../features/activity/activitySlice'
+import { getActivities, getBookmarks } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
 
 const Home = () => {
@@ -37,11 +37,13 @@ const Home = () => {
 
    useEffect(() => {
       dispatch(getActivities())
+      dispatch(getBookmarks())
    }, [dispatch])
 
    useEffect(() => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
+
 
 
   return (

@@ -3,6 +3,8 @@ import { Marker, useMap } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux'
 // import { getActivity } from '../../store/activity/activitySlice'
 import "./Map.scss"
+// import "leaflet-canvas-markers"
+// import L from "leaflet"
 import CustomPopup from './CustomPopup'
 import getIcons from "./getIcons"
 import { getActivity } from '../../features/activity/activitySlice'
@@ -28,6 +30,7 @@ const {activity} = useSelector(state => state.activity)
     )
 
     const map = useMap();
+
   
 
     // useEffect(() => {
