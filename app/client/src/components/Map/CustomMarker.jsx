@@ -27,7 +27,7 @@ const {activity} = useSelector(state => state.activity)
       [ dispatch, marker.id],
     )
 
-    const map = useMap();
+    // const map = useMap();
   
 
     // useEffect(() => {

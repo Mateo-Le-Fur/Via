@@ -11,7 +11,6 @@ const dateFormat = require('../services/dateFormat');
 const userController = {
 
   async getCurrentUser(req, res) {
-    console.log('hello');
     const { id } = req.user;
 
     const user = await User.findByPk(id, {

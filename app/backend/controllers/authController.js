@@ -107,7 +107,6 @@ const auth = {
 
     const val = { ...user, url: `http://localhost:8080/api/user/${user.id}/avatar` };
 
-    console.log(val);
     res.json(val);
   },
 

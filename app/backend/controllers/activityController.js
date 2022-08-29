@@ -139,8 +139,6 @@ const activity = {
 
     const { types, user, ...rest } = result;
 
-    console.log(rest);
-
     res.json(rest);
   },
 
