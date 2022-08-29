@@ -30,13 +30,18 @@ const {activity} = useSelector(state => state.activity)
     const map = useMap();
   
 
-    useEffect(() => {
-      if ( marker.id === activity.id && marker.lat && marker.long) {
-        map.flyTo([activity.lat, activity.long])
-        markerRef.current.openPopup()
-      }
+    // useEffect(() => {
+    //   if ( marker.id === activity.id && marker.lat && marker.long) {
+    //     map.flyTo([activity.lat, activity.long])
+    //     markerRef.current.openPopup()
+    //   }
 
-    }, [activity, dispatch, map, marker]);
+
+    //   if(activity.user_id){
+    //     dispatch(getUser(activity.user_id))
+    //   }
+
+    // }, [activity, dispatch, map, marker]);
   
   
    if(marker.lat && marker.long) return (

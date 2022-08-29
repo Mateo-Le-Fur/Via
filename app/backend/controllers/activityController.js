@@ -16,6 +16,8 @@ let globalVersionParticipate = 0;
 const activity = {
 
   async getActivities(req, res) {
+    console.log('activities');
+
     const { id } = req.user;
 
     let getUser = await User.findByPk(id);
@@ -113,6 +115,8 @@ const activity = {
   async getActivity(req, res) {
     const { id } = req.params;
 
+    console.log('hello');
+
     const activity = await Activity.findByPk(id, {
       include: ['types', 'user'],
     });
@@ -126,7 +130,16 @@ const activity = {
     const date = dateFormat.convertActivityDate(result);
 
     result = {
-      ...result, nickname: result.user.nickname, type: result.types[0].label, date,
+      ...result,
+      nickname: result.user.nickname,
+      type: result.types[0].label,
+      date,
+      firstname: result.user.firstname,
+      lastname: result.user.lastname,
+      phone: result.user.phone,
+      userAddress: result.user.address,
+      avatar: result.user.avatar,
+      userDescription: result.user.description,
     };
 
     const { types, user, ...rest } = result;
