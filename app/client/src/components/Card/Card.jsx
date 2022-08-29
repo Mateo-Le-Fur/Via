@@ -24,15 +24,15 @@ const Card = ({kind, activity}) => {
   const dispatch = useDispatch()
 const {user} = useSelector(state => state.auth)
 const {bookmarks} = useSelector(state => state.activity)
-// const handleBookmark = () => {
-//   const booked = bookmarks.includes(activity.id)
-//   console.log(booked)
-//     if (booked) {
-//       dispatch(deleteBookmark(activity.id))
-//     } else {
-//       dispatch(createBookmark(activity.id))
-//     }
-// }
+const handleBookmark = () => {
+  const booked = bookmarks.includes(activity.id)
+  console.log(booked)
+    if (booked) {
+      dispatch(deleteBookmark(activity.id))
+    } else {
+      dispatch(createBookmark(activity.id))
+    }
+}
   return (
     <div className='card'>
       <div className='top'>
@@ -71,22 +71,10 @@ const {bookmarks} = useSelector(state => state.activity)
           <div>
           <HiThumbUp className='actionIcon' />
           </div>
-          {/* <div>
-          <FaStar onClick={handleBookmark} className={bookmarks.some(bookmark => {
-                  if(bookmark.id === activity.id){
-                    return true 
-                  }
-                  return false
-                }) ? "actionIcon bookmark" : "bookmark"}  />
-          </div> */}
-           <div>
-                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
-                 ? "starIcon bookmark" : "starIcon"} />
-              </div>
-              <div className='right'>
-                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
-                 ? "starIcon bookmark" : "starIcon"} />
-              </div>
+          <div>
+          <FaStar onClick={handleBookmark} className={bookmarks.includes(activity.id) ? "actionIcon bookmark" : "actionIcon"}  />
+          </div>
+           
         </div>
 
           {user.id === activity.user_id && (
