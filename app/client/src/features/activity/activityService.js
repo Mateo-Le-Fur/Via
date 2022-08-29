@@ -45,7 +45,7 @@ const getBookmarks = async (userId) => {
 
 // add bookmark
 const createBookmark = async (bookmarkId, userId) => {
-  console.log(bookmarkId, userId)
+  
   const res = await privateReq.post(`/user/${userId}/bookmark/`, {bookmarkId : bookmarkId})
   const bookmarks = res.data.activity.map(activity => activity.id)
    return bookmarks
