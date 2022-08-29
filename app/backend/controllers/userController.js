@@ -54,7 +54,9 @@ const userController = {
       }
     }
 
-    const getUserCoordinates = await User.findByPk(id);
+    const getUser = await User.findByPk(id, {
+      raw: true,
+    });
 
     const coordinates = await getCoordinates(req.body.address, 'housenumber');
 
@@ -62,8 +64,8 @@ const userController = {
     let long;
 
     if (!coordinates) {
-      lat = getUserCoordinates.dataValues.lat;
-      long = getUserCoordinates.dataValues.long;
+      lat = getUser.lat;
+      long = getUser.long;
     } else {
       lat = coordinates[0];
       long = coordinates[1];
@@ -71,13 +73,33 @@ const userController = {
 
     const newBody = { ...req.body, lat, long };
 
-    await User.update(newBody, {
+    if (!newBody.phone) {
+      newBody.phone = getUser.phone;
+    }
+
+    const updatedUser = await User.update(newBody, {
       where: {
         id,
       },
+      returning: true,
+      plain: true,
+
     });
 
-    res.json({ message: 'Profil mis à jour' });
+    const result = updatedUser[1].get();
+
+    const user = { ...result };
+
+    const val = {
+      message: 'Profil mis à jour',
+      user,
+
+    };
+
+    delete val.user.password;
+
+    console.log(val);
+    res.json(val);
   },
 
   async deleteUser(req, res) {
