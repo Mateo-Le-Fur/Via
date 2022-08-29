@@ -15,12 +15,13 @@ import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity }) => {
-  const [avatar, setAvatar] = useState("")
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
-        method: 'GET',
-      });
+
+  // const [avatar, setAvatar] = useState("")
+  // useEffect(() => {
+  //   const fetchAvatar = async () => {
+  //     const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
+  //       method: 'GET',
+  //     });
 
   //     setAvatar(userAvatar.url)
   //   }
