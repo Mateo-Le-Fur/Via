@@ -48,26 +48,26 @@ export const getUsers = createAsyncThunk(
 )
 
 
-export const updateUser = createAsyncThunk(
-  'user/update',
-  async (data, thunkAPI) => {
-    const {userId, userData} = data
-    console.log(data)
-    try {
-      return await userService.updateUser(userId,userData)
-    } catch (error) {
-      console.log(error)
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+// export const updateUser = createAsyncThunk(
+//   'user/update',
+//   async (data, thunkAPI) => {
+//     const {userId, userData} = data
+//     console.log(data)
+//     try {
+//       return await userService.updateUser(userId,userData)
+//     } catch (error) {
+//       console.log(error)
+//       const message =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString()
 
-      return thunkAPI.rejectWithValue(message)
-    }
-  }
-)
+//       return thunkAPI.rejectWithValue(message)
+//     }
+//   }
+// )
 
 export const deleteUser = createAsyncThunk(
   'user/delete',
@@ -119,19 +119,19 @@ export const userSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
-      .addCase(updateUser.pending, (state, action) => {
-        state.isLoading = true
-      })
-      .addCase(updateUser.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-      })
-      .addCase(updateUser.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.message = action.payload
-      })
+      // .addCase(updateUser.pending, (state, action) => {
+      //   state.isLoading = true
+      // })
+      // .addCase(updateUser.rejected, (state, action) => {
+      //   state.isLoading = false
+      //   state.isError = true
+      //   state.message = action.payload
+      // })
+      // .addCase(updateUser.fulfilled, (state, action) => {
+      //   state.isLoading = false
+      //   state.isSuccess = true
+      //   state.message = action.payload
+      // })
       .addCase(deleteUser.fulfilled, (state, action) => {
         console.log(action.payload)
         state.isLoading = false 

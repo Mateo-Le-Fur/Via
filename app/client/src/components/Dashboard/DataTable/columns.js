@@ -34,14 +34,14 @@ export const userColumns = [
       width: 120,
     },
     {
-      field: "date",
-      headerName: "Date",
-      width: 100,
-    },
-    {
       field: "type",
       headerName: "Type",
       width: 120
+    },
+    {
+      field: "user_id",
+      headerName: "Id utilisateur",
+      width: 120,
     },
   ];
   

@@ -9,8 +9,8 @@ import {
   handleShowSuggestionBox,
 } from "../../features/global/globalSlice";
 import SuggestionBox from "./SeuggestionBox";
-import { reset, updateUser } from "../../features/user/userSlice";
-import { checkUser } from "../../features/auth/authSlice";
+import { reset, updateUser } from "../../features/auth/authSlice";
+// import { checkUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
   const { isError, message } = useSelector((state) => state.user);
@@ -110,10 +110,6 @@ const Profile = () => {
     console.log({ ...form, address });
     console.log(user.id);
     dispatch(updateUser({ userId: user.id, userData: { ...form, address } }));
-    setTimeout(() => {
-
-      dispatch(checkUser())
-    }, 1000)
   };
 
 
