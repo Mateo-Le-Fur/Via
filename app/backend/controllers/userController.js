@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-destructuring */
 const path = require('path');
 const fs = require('fs');
@@ -9,6 +10,8 @@ const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
 const userController = {
+
+  globalVersion: 0,
 
   async getCurrentUser(req, res) {
     const { id } = req.user;
@@ -222,6 +225,8 @@ const userController = {
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
 
+    userController.globalVersion += 1;
+
     res.json(result);
   },
 
@@ -278,15 +283,15 @@ const userController = {
   },
 
   async getUserBookmarks(req, res) {
-    const { id } = req.params;
+    const { userId } = req.params;
 
-    if (req.user.id !== parseInt(id, 10)) {
+    if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);
       }
     }
 
-    const user = await User.findByPk(id, {
+    let user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
@@ -294,7 +299,19 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    res.json(user.get().bookmarks);
+    user = user.get();
+
+    const activity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
+    });
+
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity };
+
+    res.json(val);
   },
 
   async deleteUserBookmark(req, res) {
@@ -424,5 +441,4 @@ const userController = {
   },
 
 };
-
 module.exports = userController;

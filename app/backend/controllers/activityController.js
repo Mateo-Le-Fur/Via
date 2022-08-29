@@ -6,12 +6,15 @@ const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
+const { globalVersion: globalVersionActivities } = require('./userController');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
 const sseHandlerActivities = new SSEHandler('Activités');
 
 let globalVersionParticipate = 0;
+
+console.log(globalVersionActivities);
 
 const activity = {
 
@@ -98,7 +101,7 @@ const activity = {
         return rest;
       });
 
-      sseHandlerActivities.sendDataToClients(id, result, result[0].city);
+      sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
     }, 2000);
     res.on('close', () => {
       // On clear l'interval pour éviter de continue à recevoir les infos de l'utilisateur qui est déconnecté
@@ -230,7 +233,7 @@ const activity = {
         delete data.userParticip;
 
         // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
-        sseHandlerParticipate.sendDataToClients(id, data, data.city);
+        sseHandlerParticipate.sendDataToClients(id, JSON.stringify(data), data.city);
 
         // ! info pour le front
         // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application
