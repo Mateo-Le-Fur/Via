@@ -6,7 +6,7 @@ import "./Bookmark.scss";
 const Bookmark = () => {
   const {activities} = useSelector(state => state.activity)
   const {bookmarks} = useSelector(state => state.activity)
-  const [filtered, setFiltered] = useState(activities.filter(activity => bookmarks.indexOf(activity.id) === 1))
+  const [filtered, setFiltered] = useState(activities.filter(activity => bookmarks.indexOf(activity.id) !== -1))
   return (
     <div className="bookmark">
       <div className="activityList">
