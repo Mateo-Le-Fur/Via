@@ -13,7 +13,6 @@ const CustomMarker = ({marker, type} ) => {
 
 const icon = getIcons(type)
 const {activity} = useSelector(state => state.activity)
-const {user} = useSelector(state => state.user)
 
   const dispatch = useDispatch()
 
@@ -37,12 +36,12 @@ const {user} = useSelector(state => state.user)
     //     markerRef.current.openPopup()
     //   }
 
+
     //   if(activity.user_id){
     //     dispatch(getUser(activity.user_id))
     //   }
 
     // }, [activity, dispatch, map, marker]);
-  
   
   
    if(marker.lat && marker.long) return (
@@ -52,7 +51,7 @@ const {user} = useSelector(state => state.user)
       position={[marker.lat, marker.long]}
       icon={icon}
     >
-      <CustomPopup type={type} id={marker.id} activity={activity} user={user}/>
+      <CustomPopup type={type} id={marker.id} activity={activity}/>
   
     </Marker>
 
