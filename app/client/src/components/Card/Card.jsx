@@ -1,6 +1,7 @@
 import './Card.scss';
 import { format } from "date-fns";
 import {getIcon} from "./getIcon"
+import { createBookmark, deleteBookmark } from '../../features/activity/activitySlice';
 
 import { FaGuitar, FaStar} from 'react-icons/fa';
 import {
@@ -22,7 +23,19 @@ const Card = ({kind, activity}) => {
 
   const dispatch = useDispatch()
 const {user} = useSelector(state => state.auth)
-
+const {bookmarks} = useSelector(state => state.activity)
+const handleBookmark = () => {
+  const booked = bookmarks.some(bookmark => {
+    if(bookmark.id === activity.id){
+      return true 
+    }
+    return false })
+    if (booked) {
+      dispatch(deleteBookmark(activity.id))
+    } else {
+      dispatch(createBookmark(activity.id))
+    }
+}
   return (
     <div className='card'>
       <div className='top'>
@@ -62,7 +75,12 @@ const {user} = useSelector(state => state.auth)
           <HiThumbUp className='actionIcon' />
           </div>
           <div>
-          <FaStar className='actionIcon' />
+          <FaStar onClick={handleBookmark} className={bookmarks.some(bookmark => {
+                  if(bookmark.id === activity.id){
+                    return true 
+                  }
+                  return false
+                }) ? "actionIcon bookmark" : "bookmark"}  />
           </div>
         </div>
 
