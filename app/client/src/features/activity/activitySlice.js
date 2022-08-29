@@ -240,7 +240,7 @@ export const activitySlice = createSlice({
       .addCase(createBookmark.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.bookmarks.push(action.payload)
+        state.bookmarks = action.payload
       })
       .addCase(createBookmark.rejected, (state, action) => {
         state.isLoading = false
@@ -250,8 +250,8 @@ export const activitySlice = createSlice({
       .addCase(deleteBookmark.fulfilled, (state, action) => {
         state.isLoading = false
         state.isSuccess = true
-        state.bookmarks = state.bookmarks.filter(bookmark => bookmark.id !== action.payload)
-      })
+        state.bookmarks = action.payload
+        })
   }
 })
 
