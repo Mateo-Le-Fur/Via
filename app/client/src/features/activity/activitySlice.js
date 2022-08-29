@@ -89,8 +89,8 @@ export const updateActivity = createAsyncThunk(
 
 export const deleteActivity = createAsyncThunk(
   'activity/delete',
-  async (activityId, thunkAPI) => {
-    const userId = thunkAPI.getState().auth.user.id
+  async (data, thunkAPI) => {
+   const {activityId, userId} = data;
     try {
       return await activityService.deleteActivity(activityId, userId)
     } catch (error) {

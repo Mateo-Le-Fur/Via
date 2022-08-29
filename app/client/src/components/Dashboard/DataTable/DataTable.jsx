@@ -7,13 +7,15 @@ import { deleteActivity } from "../../../features/activity/activitySlice";
 
 const DataTable = ({kind, columns, rows}) => {
   const dispatch = useDispatch()
-    const handleDelete = (id) => {
-      if(kind === "users"){
-        dispatch(deleteUser(id))
-      } else if (kind === "activities"){
-        dispatch(deleteActivity(id))
-      }
-    }
+    // const handleDelete = (id) => {
+    //   if(kind === "users"){
+    //     // dispatch(deleteUser(id))
+    //     console.log(id)
+    //   } else if (kind === "activities"){
+
+    //     dispatch(deleteActivity())
+    //   }
+    // }
 
     const actionColumn = [
         {
@@ -25,7 +27,15 @@ const DataTable = ({kind, columns, rows}) => {
               <div className="cellAction">
                 <div
                   className="deleteButton"
-                  onClick={() => handleDelete(params.row.id)}
+                  onClick={() => {
+                    if(kind === "users"){
+                      dispatch(deleteUser(params.row.id))
+                    } 
+
+                    if(kind === "activities"){
+                      dispatch(deleteActivity({activityId: params.row.id, userId: params.row.user_id}))
+                    }
+                  }}
                 >
                  supprimer
                 </div>

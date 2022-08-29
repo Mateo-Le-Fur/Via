@@ -28,11 +28,20 @@ const logout = async () => {
   return response.data
 }
 
+//Update Activity 
+const updateUser = async (userId, userData) => {
+  console.log(userId)
+  const response = await privateReq.put("/user/"+ userId, userData)
+
+  return response.data
+}
+
 const authService = {
   register,
   logout,
   login,
   checkUser,
+  updateUser
 }
 
 export default authService
