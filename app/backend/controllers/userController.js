@@ -263,7 +263,7 @@ const userController = {
       }
     }
 
-    const user = await User.findByPk(userId, {
+    let user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
@@ -279,7 +279,23 @@ const userController = {
 
     await activity.addUser(user);
 
-    res.status(201).json({ msg: 'Activité ajouter au favori' });
+    user = await User.findByPk(userId, {
+      include: ['bookmarks'],
+    });
+
+    user = user.get();
+
+    const getActivity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
+    });
+
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity: getActivity };
+
+    res.status(201).json(val);
   },
 
   async getUserBookmarks(req, res) {
@@ -315,7 +331,7 @@ const userController = {
   },
 
   async deleteUserBookmark(req, res) {
-    const { userId, activityId } = req.params;
+    const { userId, bookmarkId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
@@ -325,13 +341,14 @@ const userController = {
 
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],
+
     });
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const activity = await Activity.findByPk(activityId);
+    const activity = await Activity.findByPk(bookmarkId);
 
     if (!activity) {
       throw new ApiError('Activité introuvable', 400);
@@ -339,11 +356,19 @@ const userController = {
 
     await activity.removeUser(user);
 
-    user = await User.findByPk(userId, {
-      include: ['bookmarks'],
+    user = user.get();
+
+    const getActivity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
     });
 
-    res.json({ msg: 'favori supprimer' });
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity: getActivity };
+
+    res.json(val);
   },
 
   async getUserAvatar(req, res) {
