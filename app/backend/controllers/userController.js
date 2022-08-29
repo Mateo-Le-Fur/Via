@@ -8,11 +8,10 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
-const count = 0;
-
 const userController = {
 
   async getCurrentUser(req, res) {
+    console.log('hello');
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
@@ -23,7 +22,9 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    res.json(user);
+    const val = { ...user, url: `http://localhost:8080/api/user/${req.user.id}/avatar` };
+
+    res.json(val);
   },
 
   async getUser(req, res) {
@@ -40,7 +41,9 @@ const userController = {
       password, is_admin, created_at, updated_at, ...newUser
     } = user.dataValues;
 
-    res.json(newUser);
+    const val = { ...newUser, url: `http://localhost:8080/api/user/${id}/avatar` };
+
+    res.json(val);
   },
 
   async updateUser(req, res) {
@@ -309,8 +312,6 @@ const userController = {
   },
 
   async getUserAvatar(req, res) {
-    const { userId } = req.params;
-
     // On recupere un utilisateur
     const user = await User.findByPk(req.user.id, {
       raw: true,
@@ -328,7 +329,7 @@ const userController = {
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, '../../images/default.jpeg'));
+      res.sendFile(path.join(__dirname, '../../images/default.png'));
       return;
     }
 

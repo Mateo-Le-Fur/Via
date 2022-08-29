@@ -16,8 +16,6 @@ let globalVersionParticipate = 0;
 const activity = {
 
   async getActivities(req, res) {
-    console.log('activities');
-
     const { id } = req.user;
 
     let getUser = await User.findByPk(id);
@@ -100,8 +98,6 @@ const activity = {
         return rest;
       });
 
-      console.log(result);
-
       sseHandlerActivities.sendDataToClients(id, result, result[0].city);
     }, 2000);
     res.on('close', () => {
@@ -114,8 +110,6 @@ const activity = {
 
   async getActivity(req, res) {
     const { id } = req.params;
-
-    console.log('hello');
 
     const activity = await Activity.findByPk(id, {
       include: ['types', 'user'],
@@ -140,9 +134,12 @@ const activity = {
       userAddress: result.user.address,
       avatar: result.user.avatar,
       userDescription: result.user.description,
+      url: `http://localhost:8080/api/user/${result.user.id}/avatar`,
     };
 
     const { types, user, ...rest } = result;
+
+    console.log(rest);
 
     res.json(rest);
   },
