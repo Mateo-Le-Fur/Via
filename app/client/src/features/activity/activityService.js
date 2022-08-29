@@ -44,9 +44,9 @@ const getBookmarks = async (userId) => {
 }
 
 // add bookmark
-const createBookmark = async (activityId, userId) => {
-  await privateReq.post(`/user/${userId}/bookmark/`)
-   return activityId
+const createBookmark = async (bookmarkId, userId) => {
+  await privateReq.post(`/user/${userId}/bookmark/`, {bookmarkId})
+   return bookmarkId
 }
 
 // delete bookmark
