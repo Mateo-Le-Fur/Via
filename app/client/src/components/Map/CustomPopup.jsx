@@ -75,15 +75,15 @@ const CustomPopup = ({ id, type, activity }) => {
   //   }
   // }, [activity, id, map])
 
-  const handleBookmark = () => {
-    const booked = bookmarks.includes(activity.id)
+  // const handleBookmark = () => {
+  //   const booked = bookmarks.includes(activity.id)
 
-      if (booked) {
-        dispatch(deleteBookmark(activity.id))
-      } else {
-        dispatch(createBookmark(activity.id))
-      }
-  }
+  //     if (booked) {
+  //       dispatch(deleteBookmark(activity.id))
+  //     } else {
+  //       dispatch(createBookmark(activity.id))
+  //     }
+  // }
 
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
     return (
@@ -189,12 +189,12 @@ const CustomPopup = ({ id, type, activity }) => {
                   </div>
               )}
               <div className='right'>
-                <FaStar onClick={handleBookmark} className={bookmarks.some(bookmark => {
-                  if(bookmark.id === activity.id){
-                    return true 
-                  }
-                  return false
-                }) ? "starIcon bookmark" : "starIcon"} />
+                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
+                 ? "starIcon bookmark" : "starIcon"} />
+              </div>
+              <div className='right'>
+                <FaStar onClick={() =>  dispatch(deleteActivity(activity.id))} className={bookmarks.includes(activity.id)
+                 ? "starIcon bookmark" : "starIcon"} />
               </div>
             </div>
           </div>

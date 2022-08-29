@@ -47,14 +47,14 @@ const getBookmarks = async (userId) => {
 const createBookmark = async (bookmarkId, userId) => {
   const res = await privateReq.post(`/user/${userId}/bookmark/`, {bookmarkId : bookmarkId})
   const bookmarks = res.data.activity.map(activity => activity.id)
-  return bookmarks
+   return bookmarks
 }
 
 // delete bookmark
 const deleteBookmark = async (bookmarkId, userId) => {
- const res = await privateReq.delete(`/user/${userId}/bookmark/${bookmarkId}`)
- const bookmarks = res.data.activity.map(activity => activity.id)
- return bookmarks
+const res = await privateReq.delete(`/user/${userId}/bookmark/${bookmarkId}`)
+const bookmarks = res.data.activity.map(activity => activity.id)
+return bookmarks
 }
 
 const recipeService = {
