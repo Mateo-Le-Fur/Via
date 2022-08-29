@@ -14,11 +14,11 @@ import {
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
 
-const CustomPopup = ({ id, type, activity, user }) => {
+const CustomPopup = ({ id, type, activity }) => {
   const [avatar, setAvatar] = useState("")
   useEffect(() => {
     const fetchAvatar = async () => {
-      const userAvatar = await fetch(`/api/user/${user.id}/avatar`, {
+      const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
         method: 'GET',
       });
 
@@ -26,7 +26,7 @@ const CustomPopup = ({ id, type, activity, user }) => {
     }
     
     fetchAvatar()
-  }, [user.id])
+  }, [activity.user_id])
   const {user:current} = useSelector(state => state.auth);
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
@@ -133,21 +133,21 @@ const CustomPopup = ({ id, type, activity, user }) => {
                 <img src={avatar} alt="" />
               </div>
               <div className="nicknameContainer">
-                <span>{user.nickname}</span>
+                <span>{activity.nickname}</span>
               </div>
               <div className='addressContainer'>
-                  <HiLocationMarker className='smIcon' /> <span>{user.address}</span>
+                  <HiLocationMarker className='smIcon' /> <span>{activity.userAddress}</span>
                 </div>
                 <div className='namesContainer'>
-                  <FaUser className='smIcon' /> <span>{user.firstname}</span> 
-                  <span>{user.lastname}</span> 
+                  <FaUser className='smIcon' /> <span>{activity.firstname}</span> 
+                  <span>{activity.lastname}</span> 
                 </div>
                 <div className='phoneContainer'>
                   <FaPhone className='smIcon' /> 
-                  <span>{user.phone}</span> 
+                  <span>{activity.phone}</span> 
                 </div>
                 <div className='descriptionContainer'>
-                  {user.description}
+                  {activity.userDescription}
                 </div>
             </div>}
             <div className='actions'>
