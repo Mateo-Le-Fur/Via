@@ -25,11 +25,8 @@ const Card = ({kind, activity}) => {
 const {user} = useSelector(state => state.auth)
 const {bookmarks} = useSelector(state => state.activity)
 const handleBookmark = () => {
-  const booked = bookmarks.some(bookmark => {
-    if(bookmark.id === activity.id){
-      return true 
-    }
-    return false })
+  const booked = bookmarks.includes(activity.id)
+  console.log(booked)
     if (booked) {
       dispatch(deleteBookmark(activity.id))
     } else {
@@ -82,6 +79,7 @@ const handleBookmark = () => {
                   return false
                 }) ? "actionIcon bookmark" : "bookmark"}  />
           </div>
+          
         </div>
 
           {user.id === activity.user_id && (

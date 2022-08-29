@@ -76,11 +76,8 @@ const CustomPopup = ({ id, type, activity }) => {
   // }, [activity, id, map])
 
   const handleBookmark = () => {
-    const booked = bookmarks.some(bookmark => {
-      if(bookmark.id === activity.id){
-        return true 
-      }
-      return false })
+    const booked = bookmarks.includes(activity.id)
+
       if (booked) {
         dispatch(deleteBookmark(activity.id))
       } else {

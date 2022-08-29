@@ -146,7 +146,7 @@ export const createBookmark = createAsyncThunk(
 )
 
 export const deleteBookmark = createAsyncThunk(
-  'activity/bookmarks',
+  'bookmarks/delete',
   async (bookmarkId, thunkAPI) => {
     const userId = thunkAPI.getState().auth.user.id
     try {
