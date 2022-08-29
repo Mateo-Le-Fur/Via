@@ -420,6 +420,10 @@ const userController = {
 
     await activity.removeUser(user);
 
+    user = await User.findByPk(userId, {
+      include: ['bookmarks'],
+    });
+
     user = user.get();
 
     const getActivity = user.bookmarks.map((el) => {
@@ -431,6 +435,7 @@ const userController = {
     const { bookmarks, password, ...rest } = user;
 
     const val = { ...rest, activity: getActivity };
+    console.log(val);
 
     res.json(val);
   },
