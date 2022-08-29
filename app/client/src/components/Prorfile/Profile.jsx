@@ -64,9 +64,9 @@ const Profile = () => {
   };
 
   // Avatar
-  const [avatar, setAvatar] = useState("");
+  const [avatar, setAvatar] = useState(user.url);
 
-  getUserAvatar(user.id);
+  // getUserAvatar(user.id);
 
   const handleAvatar = (e) => {
     const formData = new FormData();
@@ -93,16 +93,16 @@ const Profile = () => {
     } catch (error) { }
   }
 
-  async function getUserAvatar(id) {
-    const userAvatar = await fetch(`/api/user/${id}/avatar`, {
-      method: "GET",
-    });
-    if (userAvatar.ok) {
-      setTimeout(() => {
-        setAvatar(userAvatar.url);
-      }, 1000);
-    }
-  }
+  // async function getUserAvatar(id) {
+  //   const userAvatar = await fetch(`/api/user/${id}/avatar`, {
+  //     method: "GET",
+  //   });
+  //   if (userAvatar.ok) {
+  //     setTimeout(() => {
+  //       setAvatar(userAvatar.url);
+  //     }, 1000);
+  //   }
+  // }
 
   // submit
   const handleSubmit = (e) => {
