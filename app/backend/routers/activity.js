@@ -108,5 +108,4 @@ router.route('/:userId/participate').post(controllerHandler(activityController.p
 
 router.route('/sse/:activityId/participate/:city').get(controllerHandler(activityController.getParticipationsInRealTime));
 
-router.route('/sse/:city').get(controllerHandler(activityController.getActivitiesInRealTime));
 module.exports = router;

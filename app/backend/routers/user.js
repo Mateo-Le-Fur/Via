@@ -401,4 +401,6 @@ router.route('/:userId/avatar')
   .get(controllerHandler(userController.getUserAvatar))
   .post(controllerHandler(userController.uploadUserAvatar));
 
+router.route('/sse/:city').get(controllerHandler(userController.getCreatedActivitiesInRealTime));
+
 module.exports = router;

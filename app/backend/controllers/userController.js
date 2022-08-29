@@ -8,10 +8,13 @@ const ApiError = require('../errors/apiError');
 const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
+const SSEHandler = require('../services/SSEHandler');
+
+const sseHandlerActivities = new SSEHandler('Activités');
+
+let globalVersion = 0;
 
 const userController = {
-
-  globalVersion: 0,
 
   async getCurrentUser(req, res) {
     const { id } = req.user;
@@ -225,15 +228,72 @@ const userController = {
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
 
-    userController.globalVersion += 1;
+    globalVersion += 1;
 
     res.json(result);
   },
 
+  async getCreatedActivitiesInRealTime(req, res) {
+    const { id } = req.user;
+    const { city } = req.params;
+
+    let localVersion = 0;
+
+    let getUser = await User.findByPk(id);
+
+    if (!getUser) {
+      throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
+    }
+
+    getUser = getUser.get();
+
+    if (city !== getUser.city) {
+      throw new ApiError('Vous ne pouvez pas voir les activités de cette ville', 403);
+    }
+
+    sseHandlerActivities.newConnection(id, res);
+
+    const intervalId = setInterval(async () => {
+      if (localVersion < globalVersion) {
+        const activities = await Activity.findAll({
+          include: ['types', 'user'],
+          where: {
+            city: getUser.city,
+          },
+        });
+
+        if (!activities) {
+          throw new ApiError('Aucune activité n\'a été trouvée', 400);
+        }
+
+        const result = activities.map((elem) => {
+          let data = elem.get();
+
+          const date = dateFormat.convertActivityDate(data);
+
+          data = {
+            ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+          };
+
+          const { types, user, ...rest } = data;
+
+          return rest;
+        });
+
+        console.log(result);
+        sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
+
+        localVersion = globalVersion;
+      }
+    }, 10);
+    res.on('close', () => {
+      clearInterval(intervalId);
+      sseHandlerActivities.closeConnection(id);
+    });
+  },
+
   deleteUserActivity(req, res) {
     const { userId, activityId } = req.params;
-
-    console.log(userId, req.user.id);
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {

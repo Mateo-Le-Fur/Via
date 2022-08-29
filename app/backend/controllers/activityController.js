@@ -10,7 +10,6 @@ const SSEHandler = require('../services/SSEHandler');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
-const sseHandlerActivities = new SSEHandler('Activités');
 
 let globalVersionParticipate = 0;
 
@@ -55,60 +54,6 @@ const activity = {
     });
 
     res.json(result);
-  },
-
-  async getActivitiesInRealTime(req, res) {
-    const { id } = req.user;
-    const { city } = req.params;
-
-    let getUser = await User.findByPk(id);
-
-    if (!getUser) {
-      throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
-    }
-
-    getUser = getUser.get();
-
-    if (city !== getUser.city) {
-      throw new ApiError('Vous ne pouvez pas voir les activités de cette ville', 403);
-    }
-
-    sseHandlerActivities.newConnection(id, res);
-
-    const intervalId = setInterval(async () => {
-      const activities = await Activity.findAll({
-        include: ['types', 'user'],
-        where: {
-          city: getUser.city,
-        },
-      });
-
-      if (!activities) {
-        throw new ApiError('Aucune activité n\'a été trouvée', 400);
-      }
-
-      const result = activities.map((elem) => {
-        let data = elem.get();
-
-        const date = dateFormat.convertActivityDate(data);
-
-        data = {
-          ...data, nickname: data.user.nickname, type: data.types[0].label, date,
-        };
-
-        const { types, user, ...rest } = data;
-
-        return rest;
-      });
-
-      sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
-    }, 2000);
-    res.on('close', () => {
-      // On clear l'interval pour éviter de continue à recevoir les infos de l'utilisateur qui est déconnecté
-      clearInterval(intervalId);
-      // On ferme la connection de l'utilisateur
-      sseHandlerActivities.closeConnection(id);
-    });
   },
 
   async getActivity(req, res) {
