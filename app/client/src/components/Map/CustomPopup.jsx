@@ -15,6 +15,7 @@ import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { createBookmark, deleteActivity, deleteBookmark, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity }) => {
+
   // const [avatar, setAvatar] = useState("")
   // useEffect(() => {
   //   const fetchAvatar = async () => {

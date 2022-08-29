@@ -48,6 +48,7 @@ const auth = {
         city,
         lat: coordinates[0],
         long: coordinates[1],
+        url: '',
       },
 
     );
@@ -104,7 +105,9 @@ const auth = {
 
     delete user.password;
 
-    res.json(user);
+    const val = { ...user, url: `http://localhost:8080/api/user/${user.id}/avatar` };
+
+    res.json(val);
   },
 
   async logout(req, res) {

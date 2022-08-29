@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable prefer-destructuring */
 const path = require('path');
 const fs = require('fs');
@@ -8,9 +9,9 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
-const count = 0;
-
 const userController = {
+
+  globalVersion: 0,
 
   async getCurrentUser(req, res) {
     const { id } = req.user;
@@ -23,7 +24,9 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    res.json(user);
+    const val = { ...user, url: `http://localhost:8080/api/user/${req.user.id}/avatar` };
+
+    res.json(val);
   },
 
   async getUser(req, res) {
@@ -40,7 +43,9 @@ const userController = {
       password, is_admin, created_at, updated_at, ...newUser
     } = user.dataValues;
 
-    res.json(newUser);
+    const val = { ...newUser, url: `http://localhost:8080/api/user/${id}/avatar` };
+
+    res.json(val);
   },
 
   async updateUser(req, res) {
@@ -52,30 +57,49 @@ const userController = {
       }
     }
 
-    const getUserCoordinates = await User.findByPk(id);
+    const getUser = await User.findByPk(id, {
+      raw: true,
+    });
 
-    const coordinates = await getCoordinates(req.body.address, 'housenumber');
+    let coordinates;
+    let lat = getUser.lat;
+    let long = getUser.long;
+    if (req.body.address !== getUser.address) {
+      coordinates = await getCoordinates(req.body.address, 'housenumber');
 
-    let lat;
-    let long;
-
-    if (!coordinates) {
-      lat = getUserCoordinates.dataValues.lat;
-      long = getUserCoordinates.dataValues.long;
-    } else {
-      lat = coordinates[0];
-      long = coordinates[1];
+      if (coordinates) {
+        lat = coordinates[0];
+        long = coordinates[1];
+      }
     }
 
     const newBody = { ...req.body, lat, long };
 
-    await User.update(newBody, {
+    if (!newBody.phone) {
+      newBody.phone = getUser.phone;
+    }
+
+    const updatedUser = await User.update(newBody, {
       where: {
         id,
       },
+      returning: true,
+      plain: true,
+
     });
 
-    res.json({ message: 'Profil mis à jour' });
+    const result = updatedUser[1].get();
+
+    const user = { ...result, url: `http://localhost:8080/api/user/${id}/avatar` };
+
+    const val = {
+      message: 'Profil mis à jour',
+      user,
+    };
+
+    delete val.user.password;
+
+    res.json(val);
   },
 
   async deleteUser(req, res) {
@@ -201,6 +225,8 @@ const userController = {
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
 
+    userController.globalVersion += 1;
+
     res.json(result);
   },
 
@@ -237,7 +263,7 @@ const userController = {
       }
     }
 
-    const user = await User.findByPk(userId, {
+    let user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
@@ -253,31 +279,27 @@ const userController = {
 
     await activity.addUser(user);
 
-    res.status(201).json({ msg: 'Activité ajouter au favori' });
-  },
-
-  async getUserBookmarks(req, res) {
-    const { id } = req.params;
-
-    if (req.user.id !== parseInt(id, 10)) {
-      if (!req.user.is_admin) {
-        throw new ApiError('Forbidden', 403);
-      }
-    }
-
-    const user = await User.findByPk(id, {
+    user = await User.findByPk(userId, {
       include: ['bookmarks'],
     });
 
-    if (!user) {
-      throw new ApiError('Utilisateur introuvable', 400);
-    }
+    user = user.get();
 
-    res.json(user.get().bookmarks);
+    const getActivity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
+    });
+
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity: getActivity };
+
+    res.status(201).json(val);
   },
 
-  async deleteUserBookmark(req, res) {
-    const { userId, activityId } = req.params;
+  async getUserBookmarks(req, res) {
+    const { userId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
@@ -293,7 +315,40 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const activity = await Activity.findByPk(activityId);
+    user = user.get();
+
+    const activity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
+    });
+
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity };
+
+    res.json(val);
+  },
+
+  async deleteUserBookmark(req, res) {
+    const { userId, bookmarkId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
+    }
+
+    let user = await User.findByPk(userId, {
+      include: ['bookmarks'],
+
+    });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    const activity = await Activity.findByPk(bookmarkId);
 
     if (!activity) {
       throw new ApiError('Activité introuvable', 400);
@@ -301,16 +356,22 @@ const userController = {
 
     await activity.removeUser(user);
 
-    user = await User.findByPk(userId, {
-      include: ['bookmarks'],
+    user = user.get();
+
+    const getActivity = user.bookmarks.map((el) => {
+      const data = el.get();
+      const { user_has_activity, ...rest } = data;
+      return rest;
     });
 
-    res.json({ msg: 'favori supprimer' });
+    const { bookmarks, password, ...rest } = user;
+
+    const val = { ...rest, activity: getActivity };
+
+    res.json(val);
   },
 
   async getUserAvatar(req, res) {
-    const { userId } = req.params;
-
     // On recupere un utilisateur
     const user = await User.findByPk(req.user.id, {
       raw: true,
@@ -328,7 +389,7 @@ const userController = {
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, '../../images/default.jpeg'));
+      res.sendFile(path.join(__dirname, '../../images/default.png'));
       return;
     }
 
@@ -405,5 +466,4 @@ const userController = {
   },
 
 };
-
 module.exports = userController;
