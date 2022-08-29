@@ -233,6 +233,8 @@ const userController = {
   deleteUserActivity(req, res) {
     const { userId, activityId } = req.params;
 
+    console.log(userId, req.user.id);
+
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
         throw new ApiError('Forbidden', 403);
@@ -255,7 +257,9 @@ const userController = {
 
   async addBookmark(req, res) {
     const { userId } = req.params;
-    const { activityId } = req.body;
+    let { bookmarkId } = req.body;
+
+    bookmarkId = bookmarkId.toString();
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
@@ -271,7 +275,7 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const activity = await Activity.findByPk(activityId);
+    const activity = await Activity.findByPk(bookmarkId);
 
     if (!activity) {
       throw new ApiError('Activité introuvable', 400);

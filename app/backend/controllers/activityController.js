@@ -6,7 +6,7 @@ const { Activity, User } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
-const { globalVersion: globalVersionActivities } = require('./userController');
+// const { globalVersion: globalVersionActivities } = require('./userController');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
@@ -14,7 +14,7 @@ const sseHandlerActivities = new SSEHandler('Activités');
 
 let globalVersionParticipate = 0;
 
-console.log(globalVersionActivities);
+// console.log(globalVersionActivities);
 
 const activity = {
 
