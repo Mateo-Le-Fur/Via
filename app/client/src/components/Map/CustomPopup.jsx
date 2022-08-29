@@ -15,18 +15,18 @@ import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { deleteActivity, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity }) => {
-  const [avatar, setAvatar] = useState("")
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
-        method: 'GET',
-      });
+  // const [avatar, setAvatar] = useState("")
+  // useEffect(() => {
+  //   const fetchAvatar = async () => {
+  //     const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
+  //       method: 'GET',
+  //     });
 
-      setAvatar(userAvatar.url)
-    }
+  //     setAvatar(userAvatar.url)
+  //   }
     
-    fetchAvatar()
-  }, [activity.user_id])
+  //   fetchAvatar()
+  // }, [activity.user_id])
   const {user:current} = useSelector(state => state.auth);
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
@@ -130,7 +130,7 @@ const CustomPopup = ({ id, type, activity }) => {
                 <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon'/>
             </span>
               <div className="avatarContainer">
-                <img src={avatar} alt="" />
+                <img src={activity.url} alt="" />
               </div>
               <div className="nicknameContainer">
                 <span>{activity.nickname}</span>
