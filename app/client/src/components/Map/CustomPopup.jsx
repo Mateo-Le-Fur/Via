@@ -184,7 +184,7 @@ const CustomPopup = ({ id, type, activity }) => {
                    
                     />
                       </div>
-                    <div  onClick={() => dispatch(deleteActivity(activity.id))} >
+                    <div  onClick={() => dispatch(deleteActivity({activityId: activity.id, userId: activity.user_id}))} >
                     <HiTrash className='actionIcon' />
                     </div>
                  

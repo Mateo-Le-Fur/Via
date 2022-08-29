@@ -86,7 +86,7 @@ const handleBookmark = () => {
 
           {user.id === activity.user_id && (
               <div className='right'>
-              <HiTrash className='actionIcon' onClick={() => dispatch(deleteActivity(activity.id))} />
+              <HiTrash className='actionIcon' onClick={() => dispatch(deleteActivity({activityId: activity.id, userId: activity.user_id}))} />
             </div>
           )}
       
