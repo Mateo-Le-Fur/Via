@@ -8,6 +8,8 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 
+const count = 0;
+
 const userController = {
 
   async getCurrentUser(req, res) {
