@@ -67,12 +67,12 @@ const CustomPopup = ({ id, type, activity }) => {
   const popupRef = useRef(activity)
 
   const map = useMap()
-  useEffect(() => {
-    if(activity.id === id){
-      map.flyTo(activity.lat, activity.long)
-      map.openPopup(popupRef.current)
-    }
-  }, [activity, id, map])
+  // useEffect(() => {
+  //   if(activity.id === id){
+  //     map.flyTo(activity.lat, activity.long)
+  //     map.openPopup(popupRef.current)
+  //   }
+  // }, [activity, id, map])
 
   const handleBookmark = () => {
     const booked = bookmarks.some(bookmark => {
