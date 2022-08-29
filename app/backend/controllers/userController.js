@@ -58,17 +58,16 @@ const userController = {
       raw: true,
     });
 
-    const coordinates = await getCoordinates(req.body.address, 'housenumber');
+    let coordinates;
+    let lat = getUser.lat;
+    let long = getUser.long;
+    if (req.body.address !== getUser.address) {
+      coordinates = await getCoordinates(req.body.address, 'housenumber');
 
-    let lat;
-    let long;
-
-    if (!coordinates) {
-      lat = getUser.lat;
-      long = getUser.long;
-    } else {
-      lat = coordinates[0];
-      long = coordinates[1];
+      if (coordinates) {
+        lat = coordinates[0];
+        long = coordinates[1];
+      }
     }
 
     const newBody = { ...req.body, lat, long };
@@ -88,17 +87,15 @@ const userController = {
 
     const result = updatedUser[1].get();
 
-    const user = { ...result };
+    const user = { ...result, url: `http://localhost:8080/api/user/${id}/avatar` };
 
     const val = {
       message: 'Profil mis à jour',
       user,
-
     };
 
     delete val.user.password;
 
-    console.log(val);
     res.json(val);
   },
 
