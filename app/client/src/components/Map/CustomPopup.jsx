@@ -189,11 +189,11 @@ const CustomPopup = ({ id, type, activity }) => {
                   </div>
               )}
               <div className='right'>
-                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
+                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks && bookmarks.includes(activity.id)
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
               <div className='right'>
-                <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks.includes(activity.id)
+                <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks && bookmarks.includes(activity.id)
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
             </div>

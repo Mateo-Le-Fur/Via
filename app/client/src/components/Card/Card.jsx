@@ -83,8 +83,8 @@ const {bookmarks} = useSelector(state => state.activity)
                 <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
-              <div >
-                <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks.includes(activity.id)
+              <div className='right'>
+                <FaStar onClick={() =>  dispatch(createBookmark(activity.id))} className={bookmarks.includes(activity.id)
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
         </div>
