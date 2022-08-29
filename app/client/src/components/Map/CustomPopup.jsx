@@ -16,11 +16,11 @@ import { deleteActivity, updateActivity } from '../../features/activity/activity
 
 const CustomPopup = ({ id, type, activity }) => {
   const [avatar, setAvatar] = useState("")
-  // useEffect(() => {
-  //   const fetchAvatar = async () => {
-  //     const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
-  //       method: 'GET',
-  //     });
+  useEffect(() => {
+    const fetchAvatar = async () => {
+      const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
+        method: 'GET',
+      });
 
   //     setAvatar(userAvatar.url)
   //   }
@@ -130,7 +130,7 @@ const CustomPopup = ({ id, type, activity }) => {
                 <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon'/>
             </span>
               <div className="avatarContainer">
-                <img src={avatar} alt="" />
+                <img src={activity.url} alt="" />
               </div>
               <div className="nicknameContainer">
                 <span>{activity.nickname}</span>
