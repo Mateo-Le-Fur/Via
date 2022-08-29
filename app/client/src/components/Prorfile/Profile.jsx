@@ -25,10 +25,10 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const [form, setForm] = useState({
-    firstname: user.firstname,
-    lastname: user.lastname,
-    phone: user.phone,
-    description: user.description,
+    firstname: user.firstname ? user.firstname : "",
+    lastname: user.lastname ? user.lastname : "",
+    phone: user.phone ? user.phone : "",
+    description: user.description ? user.description : "",
   });
 
 
@@ -46,8 +46,8 @@ const Profile = () => {
 
   // Address
 
-  const [address, setAddress] = useState(user.address);
-  const [inputAddress, setInputAddress] = useState(user.address);
+  const [address, setAddress] = useState(user.address ? user.address : "");
+  const [inputAddress, setInputAddress] = useState(user.address ? user.address : "");
 
   const handleChangeAddress = (e) => {
     setInputAddress(e.target.value);
