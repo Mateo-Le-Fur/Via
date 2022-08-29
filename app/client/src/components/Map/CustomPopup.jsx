@@ -193,7 +193,7 @@ const CustomPopup = ({ id, type, activity }) => {
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
               <div className='right'>
-                <FaStar onClick={() =>  dispatch(deleteActivity(activity.id))} className={bookmarks.includes(activity.id)
+                <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks.includes(activity.id)
                  ? "starIcon bookmark" : "starIcon"} />
               </div>
             </div>
