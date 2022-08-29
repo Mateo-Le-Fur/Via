@@ -44,24 +44,24 @@ const Sidebar = () => {
         {showFilter && (
                 <ul className='filter'>
                 <li  className="filterLi" onClick={() => handleFIlter("")}>
-                        <BsGrid3X3GapFill className={filter === "" ? "icon filterIcon active": "icon filterIcon"}/>
+                        <BsGrid3X3GapFill title="Tous" className={filter === "" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Bénévolat")}>
+                    <li  className="filterLi" title="Bénévolat" onClick={() => handleFIlter("Bénévolat")}>
                         <FaHandsHelping className={filter === "Bénévolat" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Arts")}>
+                    <li  className="filterLi" title="Arts" onClick={() => handleFIlter("Arts")}>
                         <GiPalette className={filter === "Arts" ? "icon filterIcon active": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Cuisine")}>
+                    <li  className="filterLi" title="Cusine" onClick={() => handleFIlter("Cuisine")}>
                         <GiCook className={filter === "Cuisine" ? "icon active filterIcon": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Jardinage")}>
+                    <li  className="filterLi" title="Jardinage" onClick={() => handleFIlter("Jardinage")}>
                         <FaLeaf className={filter === "Jardinage" ? "icon active filterIcon": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Bricolage")}>
+                    <li  className="filterLi" title="Bricolage" onClick={() => handleFIlter("Bricolage")}>
                         <FaTools className={filter === "Bricolage" ? "icon active filterIcon": "icon filterIcon"}/>
                     </li>
-                    <li  className="filterLi" onClick={() => handleFIlter("Danse")}>
+                    <li  className="filterLi" title="Danse" onClick={() => handleFIlter("Danse")}>
                         <FaFootballBall className={filter === "Danse" ? "icon active filterIcon": "icon filterIcon"}/>
                     </li>
            
