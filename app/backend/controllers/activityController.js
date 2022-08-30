@@ -1,73 +1,105 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable quote-props */
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-const { Activity, User } = require('../models');
+const { Activity, User, Type } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
-// const { globalVersion: globalVersionActivities } = require('./userController');
+const sequelize = require('../config/sequelize');
+const { count } = require('../models/Activity');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
 
 let globalVersionParticipate = 0;
 
-// console.log(globalVersionActivities);
-
 const activity = {
+
+  url: 'http://localhost:8080/',
 
   async getActivities(req, res) {
     const { id } = req.user;
 
-    let getUser = await User.findByPk(id);
+    const getUser = await User.findByPk(id, {
+      raw: true,
+      attributes: ['city'],
+    });
 
     if (!getUser) {
       throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
     }
 
-    getUser = getUser.get();
-
-    const activities = await Activity.findAll({
-      include: ['types', 'user'],
+    let activities = await Activity.findAll({
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['nickname'],
+      },
+      {
+        model: Type,
+        as: 'types',
+        attributes: ['label'],
+      }],
       where: {
         city: getUser.city,
       },
+      attributes: {
+        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
+
+      },
+      raw: true,
+      nest: true,
     });
 
     if (!activities) {
       throw new ApiError('Aucune activité n\'a été trouvée', 400);
     }
 
-    const result = activities.map((elem) => {
-      let data = elem.get();
+    activities = activities.map((element) => {
+      let data = element;
 
       const date = dateFormat.convertActivityDate(data);
 
-      data = {
-        ...data, nickname: data.user.nickname, type: data.types[0].label, date,
-      };
+      data = { ...data, date };
 
-      const { types, user, ...rest } = data;
+      const { user, types, label, ...rest } = data;
 
       return rest;
     });
 
-    res.json(result);
+    res.json(activities);
   },
 
   async getActivity(req, res) {
     const { id } = req.params;
 
     const activity = await Activity.findByPk(id, {
-      include: ['types', 'user'],
+      include: [
+        {
+          model: User,
+          as: 'user',
+          attributes: ['nickname'],
+        },
+        {
+          model: Type,
+          as: 'types',
+          attributes: ['label'],
+        },
+      ],
+      attributes: {
+        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
+      },
+      raw: true,
+      nest: true,
     });
+
+    console.log(activity);
 
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
-
-    let result = activity.get();
 
     const date = dateFormat.convertActivityDate(result);
 
@@ -82,7 +114,7 @@ const activity = {
       userAddress: result.user.address,
       avatar: result.user.avatar,
       userDescription: result.user.description,
-      url: `http://localhost:8080/api/user/${result.user.id}/avatar`,
+      url: `${this.url}api/user/${result.user.id}/avatar`,
     };
 
     const { types, user, ...rest } = result;
@@ -96,7 +128,7 @@ const activity = {
     const { id } = req.user;
 
     if (id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 400);
+      throw new ApiError('Forbidden', 403);
     }
 
     const activity = await Activity.findByPk(activityId);
@@ -129,13 +161,14 @@ const activity = {
   },
 
   async getParticipationsInRealTime(req, res) {
-    const { activityId, city } = req.params;
+    const { city } = req.params;
     const { id } = req.user;
 
     let localVersion = 0;
 
     // On récupere les infos de l'utilisateur courrant
     const user = await User.findByPk(id, {
+      attributes: ['city'],
       raw: true,
     });
 
@@ -157,9 +190,12 @@ const activity = {
       // sinon par defaut le serveur va envoyer les datas en continue en fonction du timer dans le setInterval
       if (localVersion < globalVersionParticipate) {
         // On va chercher toutes les activités dans la ville de l'utilisateur courrant
-        let activity = await Activity.findByPk(activityId, {
-
-          include: ['userParticip'],
+        let activity = await Activity.findAll({
+          include: [{
+            model: User,
+            as: 'userParticip',
+            attributes: ['id'],
+          }],
           attributes: ['id', 'city'],
           order: [
             ['id', 'asc'],
@@ -169,16 +205,19 @@ const activity = {
           },
         });
 
-        activity = activity.get();
-        const count = activity.userParticip.length;
-        const data = {
-          ...activity, activityId: activity.id, userId: user.id, count, city: activity.city,
-        };
+        activity = activity.map((element) => {
+          let data = element.get();
+          const count = data.userParticip.length;
+          data = {
+            ...data, count,
+          };
+          delete data.userParticip;
 
-        delete data.userParticip;
+          return data;
+        });
 
         // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
-        sseHandlerParticipate.sendDataToClients(id, JSON.stringify(data), data.city);
+        sseHandlerParticipate.sendDataToClients(id, JSON.stringify(activity), activity.city);
 
         // ! info pour le front
         // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application

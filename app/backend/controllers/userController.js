@@ -435,7 +435,6 @@ const userController = {
     const { bookmarks, password, ...rest } = user;
 
     const val = { ...rest, activity: getActivity };
-    console.log(val);
 
     res.json(val);
   },
