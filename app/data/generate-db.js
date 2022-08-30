@@ -292,7 +292,7 @@ async function insertTypes(types) {
 function generateComments(commentNb) {
   for (let i = 0; i < commentNb; i++) {
     const comment = {
-      text: faker.lorem.paragraph((number = 3), (string = " ")),
+      text: faker.lorem.words((num = 25)),
       user_id:
         users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
       activity_id:
