@@ -8,7 +8,6 @@ const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
 const sequelize = require('../config/sequelize');
-const { count } = require('../models/Activity');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
@@ -17,7 +16,7 @@ let globalVersionParticipate = 0;
 
 const activity = {
 
-  url: 'http://localhost:8080/',
+  url: 'http://localhost:8080',
 
   async getActivities(req, res) {
     const { id } = req.user;
@@ -75,12 +74,14 @@ const activity = {
   async getActivity(req, res) {
     const { id } = req.params;
 
-    const activity = await Activity.findByPk(id, {
+    let activity = await Activity.findByPk(id, {
       include: [
         {
           model: User,
           as: 'user',
-          attributes: ['nickname'],
+          attributes: {
+            exclude: ['password'],
+          },
         },
         {
           model: Type,
@@ -89,37 +90,32 @@ const activity = {
         },
       ],
       attributes: {
-        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
+        include: [
+          'types.label',
+          [sequelize.literal('label'), 'type'],
+        ],
       },
-      raw: true,
-      nest: true,
-    });
 
-    console.log(activity);
+    });
 
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
-    // const date = dateFormat.convertActivityDate(result);
 
-    // result = {
-    //   ...result,
-    //   nickname: result.user.nickname,
-    //   type: result.types[0].label,
-    //   date,
-    //   firstname: result.user.firstname,
-    //   lastname: result.user.lastname,
-    //   phone: result.user.phone,
-    //   userAddress: result.user.address,
-    //   avatar: result.user.avatar,
-    //   userDescription: result.user.description,
-    //   url: `${this.url}api/user/${result.user.id}/avatar`,
-    // };
+    activity = activity.get();
+    const getUser = activity.user.get();
 
-    // const { types, user, ...rest } = result;
+    const date = dateFormat.convertActivityDate(activity);
 
-    // res.json(rest);
+    const result = { ...getUser, userDescription: getUser.description, userAddress: getUser.address };
+
+    activity = { ...result, ...activity, date, url: `http://localhost:8080/api/user/${getUser.id}/avatar` };
+
+    const { user, types, ...rest } = activity;
+
+    res.json(rest);
+
   },
 
   async participateToActivity(req, res) {
