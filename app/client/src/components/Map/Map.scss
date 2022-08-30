@@ -148,7 +148,7 @@
                     }
 
                     span {
-                        color: vars.$secondary-color;
+                        color: vars.$primary-color;
                         @media (max-width: 600px) {
                             font-size: .8rem;
                         }
@@ -260,38 +260,72 @@
             .actions {
                 display: flex;
                 flex-direction: row;
-                justify-content: space-between;
+                width: 100% !important;
                 .left {
-                    flex: 1;
+                    width: 20% !important;
                     > div {
                         .actionIcon {
-                            font-size: 2rem;
+                            font-size: 1.6rem;
                         }
                     }
                    
                 }
 
+                .middle{
+                    width: 65%!important;
+                    display: flex !important;
+                    align-items: center;
+                    font-size: .8rem;
+                    justify-content: center !important;
+                    flex-direction: row;
+                    > div{
+                        color: vars.$primary-color;
+                        display: flex;
+                        height: 100%;
+                        align-items: center;
+                        justify-content: center;
+                        > span{
+                            padding-left: .1rem;
+                        }
+                    
+                        &:nth-child(2){
+                            width: 10% !important;
+                        }
+                        &:nth-child(3){
+                            width: 80% !important;
+                        }
+                        &.actionMiddle{
+                            cursor: pointer;
+                        }
+                    }
+                }
+
                 .right {
                     flex: 3;
                     display: flex;
-                    justify-content: flex-end;
-                    width: 80%;
-                    .starIcon {
-                        font-size: 1.7rem;
-                        cursor: pointer;
-                        fill: vars.$primary-color;
-                        transition: fill .3s ease-in-out;
-                        &.bookmark{
-                            fill: vars.$tertiary-color;
-                        }
-                        &:hover {
-                            fill: vars.$tertiary-color;
-                        }
-
-                        &:active {
-                            transform: scale(.6);
+                    width: 15%;
+                    > div {
+                        width: 100% !important;
+                        display: flex;
+                        justify-content: flex-end;
+                        .starIcon {
+                            font-size: 1.6rem;
+                            cursor: pointer;
+                            fill: vars.$primary-color;
+                            transition: fill .3s ease-in-out;
+                            &.bookmark{
+                                fill: vars.$tertiary-color;
+                            }
+                            &:hover {
+                                fill: vars.$tertiary-color;
+                            }
+    
+                            &:active {
+                                transform: scale(.6);
+                            }
                         }
                     }
+                   
                 }
             }
         }
@@ -318,7 +352,7 @@
 .leaflet-popup-close-button {
     span {
 
-        color: vars.$secondary-color;
+        color: vars.$primary-color;
 
         &:hover {
             color: vars.$tertiary-color;
