@@ -59,6 +59,19 @@ const bookmarks = res.data.activity.map(activity => activity.id)
 return bookmarks
 }
 
+// first participations 
+const getFirstParticipations = async (userId) => {
+  console.log(userId)
+const res = await privateReq.get(`/activity/${userId}/participate/`)
+return res.data
+}
+
+//  participate 
+const participate = async (activityId, userId) => {
+const res = await privateReq.post(`/activity/${userId}/participate/`, {activityId})
+return res.data
+}
+
 const recipeService = {
   createActivity,
   getActivities,
@@ -68,6 +81,8 @@ const recipeService = {
   getBookmarks,
   createBookmark,
   deleteBookmark,
+  getFirstParticipations,
+  participate,
 }
 
 export default recipeService

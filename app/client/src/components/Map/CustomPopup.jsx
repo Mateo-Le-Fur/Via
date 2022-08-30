@@ -12,10 +12,10 @@ import {
 } from 'react-icons/hi';
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
-import { createBookmark, deleteActivity, deleteBookmark, updateActivity } from '../../features/activity/activitySlice';
+import { createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type, activity }) => {
-
+  const {participations} = useSelector(state => state.activity)
   // const [avatar, setAvatar] = useState("")
   // useEffect(() => {
   //   const fetchAvatar = async () => {
@@ -190,9 +190,9 @@ const CustomPopup = ({ id, type, activity }) => {
               )}
 
               <div className='middle'>
-                <div className='actionMiddle'>Ça m'intéresse <span styl>(12)</span></div>
+                <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
                 <div> /</div>
-                <div className='actionMiddle'> Je participe <span>(10)</span></div>
+                <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations.find(el => el.id === activity.id).count})</span></div>
               </div>
 
               <div className='right'>

@@ -8,7 +8,7 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import { getActivities, getBookmarks } from '../../features/activity/activitySlice'
+import { getActivities, getBookmarks, getFirstParticipations, realTimeParticipations } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
   const [markerGroups, setMarkerGroups] = useState([])
   const dispatch = useDispatch()
   const {activities} = useSelector(state => state.activity)
-
+  const {participations} = useSelector(state => state.activity)
   const groupMarkers = useMemo(() => {
     if(activities.length > 0 ){
     const array = activities.map(activity => (
@@ -38,26 +38,28 @@ const Home = () => {
    useEffect(() => {
       dispatch(getActivities())
       dispatch(getBookmarks())
+      dispatch(getFirstParticipations())
    }, [dispatch])
 
    useEffect(() => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
 
-  const [participations, setParticipations] = useState()
+ 
   useEffect(() => {
     if( user){
+      console.log("hello")
       const source = new EventSource(`/api/activity/sse/participate/${user.city}`)
       source.addEventListener(`${user.city}`, (e) => {
         const data  = JSON.parse(e.data);
         console.log(e.data)
-        setParticipations(data)
+        dispatch(realTimeParticipations(data))
       });
     }
    
   }, [])
 
-console.log(participations)
+  console.log(participations)
   return (
     <div className='home'>
       {user && (
