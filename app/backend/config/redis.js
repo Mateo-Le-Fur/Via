@@ -1,7 +1,7 @@
-const { createClient } = require('redis');
+// const { createClient } = require('redis');
 
-const client = createClient();
+// const client = createClient();
 
-client.connect();
+// client.connect();
 
-module.exports = client;
+// module.exports = client;

@@ -16,7 +16,6 @@ class SSE {
 
   // On créer une méthode qui prend les datas et le type d'event en paramètre
   send(data, event) {
-    console.log(event);
     this.res.write(`event: ${event}\n`);
     this.res.write(`data: ${JSON.stringify(data)} \n\n`);
   }

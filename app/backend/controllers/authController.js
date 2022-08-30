@@ -3,7 +3,7 @@ const argon2 = require('argon2');
 const { User } = require('../models');
 const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
-const redis = require('../config/redis');
+// const redis = require('../config/redis');
 
 const auth = {
 
@@ -117,8 +117,8 @@ const auth = {
       throw new ApiError('Aucun token existant', 500);
     }
 
-    await redis.set(token, token);
-    redis.expire(token, process.env.JWT_EXPIRE);
+    // await redis.set(token, token);
+    // redis.expire(token, process.env.JWT_EXPIRE);
 
     res.clearCookie('token');
 

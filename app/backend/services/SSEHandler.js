@@ -1,4 +1,5 @@
 const SSE = require('./SSEConnection');
+const ApiError = require('../errors/apiError');
 
 class SSEHandler {
   constructor(name) {
@@ -9,6 +10,10 @@ class SSEHandler {
 
   // Méthode qui permet de créer une connexion avec un utilisateur
   newConnection(id, res) {
+    const check = this.clients.get(id);
+
+    if (check) throw new ApiError(`L'id ${id} est déjà connecté`, 400);
+
     console.log(`Nouvelle connection sur le salon ${this.name} avec l'id ${id}`);
     // On instancie la classe SSE
     const client = new SSE(res);

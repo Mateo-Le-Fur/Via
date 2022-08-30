@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const ApiError = require('../errors/apiError');
-const redis = require('../config/redis');
+// const redis = require('../config/redis');
 
 const authJWT = {
 
@@ -12,11 +12,11 @@ const authJWT = {
         throw new ApiError('Vous devez être connecté', 403);
       }
 
-      const isTokenBlackListed = await redis.get(token);
+      // const isTokenBlackListed = await redis.get(token);
 
-      if (isTokenBlackListed) {
-        throw new ApiError('Token invalide', 403);
-      }
+      // if (isTokenBlackListed) {
+      //   throw new ApiError('Token invalide', 403);
+      // }
 
       jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) {

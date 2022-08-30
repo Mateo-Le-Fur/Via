@@ -1,15 +1,15 @@
 // require('dotenv').config();
-const { faker } = require("@faker-js/faker");
-const client = require("../backend/config/sequelize");
-const addressData = require("./address-data.json");
+const { faker } = require('@faker-js/faker');
+const client = require('../backend/config/sequelize');
+const addressData = require('./address-data.json');
 
 // Sets the addresses in french format
-faker.locale = "fr";
+faker.locale = 'fr';
 
 // Initializes entities variables
 // Sets the number of rows per entity
 const userNb = 50;
-const activityNb = 50;
+const activityNb = 10;
 const messageNb = 0;
 const commentNb = 50;
 const bookmarkNb = 0;
@@ -22,12 +22,12 @@ const activities = [];
 const messages = [];
 const comments = [];
 const baseTypes = [
-  "Arts",
-  "Danse",
-  "Bricolage",
-  "Bénévolat",
-  "Cuisine",
-  "Jardinage",
+  'Arts',
+  'Danse',
+  'Bricolage',
+  'Bénévolat',
+  'Cuisine',
+  'Jardinage',
 ];
 const types = [];
 const bookmarks = [];
@@ -80,7 +80,7 @@ const newAddress = addressData.map((address) => {
 function randomAddress() {
   const rand = Math.floor(Math.random() * newAddress.length + 1);
   const randStreetNumber = Math.floor(
-    Math.random() * newAddress[rand].streetNumbers.length + 1
+    Math.random() * newAddress[rand].streetNumbers.length + 1,
   );
   let number = 1;
   let { lat } = newAddress[rand];
@@ -89,8 +89,7 @@ function randomAddress() {
   if (newAddress[rand].streetNumbers[randStreetNumber]) {
     const numberRegex = /[0-9]{1,}/;
 
-    number =
-      newAddress[rand].streetNumbers[randStreetNumber].match(numberRegex);
+    number = newAddress[rand].streetNumbers[randStreetNumber].match(numberRegex);
   }
 
   newAddress[rand].latitudes.forEach((latitude) => {
@@ -120,7 +119,7 @@ function randomAddress() {
 function pgQuoteEscape(row) {
   const newRow = {};
   Object.entries(row).forEach(([prop, value]) => {
-    if (typeof value !== "string") {
+    if (typeof value !== 'string') {
       newRow[prop] = value;
       return;
     }
@@ -140,10 +139,10 @@ function generateUsers(userNb) {
       nickname: faker.name.middleName(),
       firstname: faker.name.firstName(),
       lastname: faker.name.lastName(),
-      description: faker.lorem.paragraph((number = 2), (string = " ")),
+      description: faker.lorem.paragraph((number = 2), (string = ' ')),
       address: `${address.number} ${address.street} ${address.postalCode}`,
       city: address.city,
-      phone: faker.phone.number("06 ## ## ## ##", string),
+      phone: faker.phone.number('06 ## ## ## ##', string),
       avatar: faker.image.people(400, 400),
       is_admin: false,
     };
@@ -203,7 +202,7 @@ function generateActivities(activityNb) {
 
     const activity = {
       name: faker.lorem.sentence(),
-      description: faker.lorem.paragraph((number = 2), (string = " ")),
+      description: faker.lorem.paragraph((number = 2), (string = ' ')),
       date: faker.date.future(0.5),
       address: `${address.number} ${address.street} ${address.postalCode}`,
       city: address.city,
@@ -297,7 +296,7 @@ function generateComments(commentNb) {
         users.indexOf(users[Math.floor(Math.random() * users.length)]) + 1,
       activity_id:
         activities.indexOf(
-          activities[Math.floor(Math.random() * activities.length)]
+          activities[Math.floor(Math.random() * activities.length)],
         ) + 1,
     };
 
@@ -408,8 +407,7 @@ function generateUserActivityTypes(activityNb) {
   }
 
   for (let i = 0; i < activityNb; i++) {
-    const activityRand =
-      activityArr[Math.floor(Math.random() * activityArr.length)];
+    const activityRand = activityArr[Math.floor(Math.random() * activityArr.length)];
 
     const activityType = {
       type_id:
@@ -427,7 +425,7 @@ function generateUserActivityTypes(activityNb) {
 
 async function insertActivityTypes(activityTypes) {
   await client.query(
-    'TRUNCATE TABLE "activity_has_type" RESTART IDENTITY CASCADE'
+    'TRUNCATE TABLE "activity_has_type" RESTART IDENTITY CASCADE',
   );
 
   const typeValues = activityTypes.map((type) => {
@@ -456,7 +454,7 @@ async function insertActivityTypes(activityTypes) {
   const generatedActivities = generateActivities(activityNb);
   const generatedTypes = generateTypes();
   const generatedActivityTypes = generateUserActivityTypes(
-    generatedActivities.length
+    generatedActivities.length,
   );
   const generatedComments = generateComments(commentNb);
 
