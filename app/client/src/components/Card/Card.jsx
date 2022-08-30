@@ -75,7 +75,7 @@ const handleBookmark = () => {
         </div>
 
         <div className='middle'>
-            <div className='actionMiddle'>ça m'intéresse <span>(12)</span></div>
+            <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
             <div style={{padding: "0 .2rem"}}> /</div>
             <div className='actionMiddle'> Je participe <span>(10)</span></div>
         </div>

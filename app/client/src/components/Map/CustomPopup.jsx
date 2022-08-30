@@ -25,17 +25,17 @@ const CustomPopup = ({ id, type, activity }) => {
 
   //     setAvatar(userAvatar.url)
   //   }
-    
+
   //   fetchAvatar()
   // }, [activity.user_id])
 
-  const {user:current} = useSelector(state => state.auth);
-  const {bookmarks} = useSelector(state => state.activity)
+  const { user: current } = useSelector(state => state.auth);
+  const { bookmarks } = useSelector(state => state.activity)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
   const [form, setForm] = useState(
-{
+    {
       name: activity.name,
       description: activity.description,
       address: activity.address
@@ -51,10 +51,10 @@ const CustomPopup = ({ id, type, activity }) => {
   var today = now.getFullYear() + '-' + month + '-' + day;
 
   const handleUpdate = () => {
-      if(form.name && form.description &&  form.address && date ){
-        console.log({...form, date, type})
-        dispatch(updateActivity({activityId: activity.id, activityData: {...form, date, type}}))
-      }
+    if (form.name && form.description && form.address && date) {
+      console.log({ ...form, date, type })
+      dispatch(updateActivity({ activityId: activity.id, activityData: { ...form, date, type } }))
+    }
   }
 
   const [date, setDate] = useState(today)
@@ -78,11 +78,11 @@ const CustomPopup = ({ id, type, activity }) => {
   const handleBookmark = () => {
     const booked = bookmarks.includes(activity.id)
 
-      if (booked) {
-        dispatch(deleteBookmark(activity.id))
-      } else {
-        dispatch(createBookmark(activity.id))
-      }
+    if (booked) {
+      dispatch(deleteBookmark(activity.id))
+    } else {
+      dispatch(createBookmark(activity.id))
+    }
   }
 
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
@@ -130,9 +130,9 @@ const CustomPopup = ({ id, type, activity }) => {
             {mode === 'activity' && !edit && (
               <div className='activityContainer'>
                 <div className='activityHeader'>
-                  <h1>{activity?.name.length > 15 ? activity?.name.substring(0,15).concat("...") : activity?.name }</h1>
+                  <h1>{activity?.name.length > 15 ? activity?.name.substring(0, 15).concat("...") : activity?.name}</h1>
                   <span>
-                    créé par 
+                    créé par
                     <em onClick={() => setMode('user')}>{activity.nickname}</em>
                   </span>
                 </div>
@@ -149,9 +149,9 @@ const CustomPopup = ({ id, type, activity }) => {
               </div>
             )}
             {mode === 'user' && !edit && <div className='userContainer'>
-            <span className="back">
-                <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon'/>
-            </span>
+              <span className="back">
+                <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
+              </span>
               <div className="avatarContainer">
                 <img src={activity.url} alt="" />
               </div>
@@ -159,38 +159,48 @@ const CustomPopup = ({ id, type, activity }) => {
                 <span>{activity.nickname}</span>
               </div>
               <div className='addressContainer'>
-                  <HiLocationMarker className='smIcon' /> <span>{activity.userAddress}</span>
-                </div>
-                <div className='namesContainer'>
-                  <FaUser className='smIcon' /> <span>{activity.firstname}</span> 
-                  <span>{activity.lastname}</span> 
-                </div>
-                <div className='phoneContainer'>
-                  <FaPhone className='smIcon' /> 
-                  <span>{activity.phone}</span> 
-                </div>
-                <div className='descriptionContainer'>
-                  {activity.userDescription}
-                </div>
+                <HiLocationMarker className='smIcon' /> <span>{activity.userAddress}</span>
+              </div>
+              <div className='namesContainer'>
+                <FaUser className='smIcon' /> <span>{activity.firstname}</span>
+                <span>{activity.lastname}</span>
+              </div>
+              <div className='phoneContainer'>
+                <FaPhone className='smIcon' />
+                <span>{activity.phone}</span>
+              </div>
+              <div className='descriptionContainer'>
+                {activity.userDescription}
+              </div>
             </div>}
             <div className='actions'>
               {current.id === activity.user_id && (
-                    <div className='left'>
-                      <div onClick={() => setEdit(!edit)}>
-                      <HiPencil
+                <div className='left'>
+                  <div onClick={() => setEdit(!edit)}>
+                    <HiPencil
                       className='actionIcon'
-                   
+
                     />
-                      </div>
-                    <div  onClick={() => dispatch(deleteActivity({activityId: activity.id, userId: activity.user_id}))} >
-                    <HiTrash className='actionIcon' />
-                    </div>
-                 
                   </div>
+                  <div onClick={() => dispatch(deleteActivity({ activityId: activity.id, userId: activity.user_id }))} >
+                    <HiTrash className='actionIcon' />
+                  </div>
+
+                </div>
               )}
+
+              <div className='middle'>
+                <div className='actionMiddle'>Ça m'intéresse <span styl>(12)</span></div>
+                <div> /</div>
+                <div className='actionMiddle'> Je participe <span>(10)</span></div>
+              </div>
+
               <div className='right'>
-                <FaStar onClick={handleBookmark} className={bookmarks && bookmarks.includes(activity.id)
-                 ? "starIcon bookmark" : "starIcon"} />
+                <div onClick={handleBookmark} >
+                  <FaStar className={bookmarks && bookmarks.includes(activity.id)
+                    ? "starIcon bookmark" : "starIcon"} />
+                </div>
+
               </div>
               {/* <div className='right'>
                 <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks && bookmarks.includes(activity.id)
