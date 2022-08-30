@@ -15,8 +15,8 @@ import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type }) => {
-  const {participations} = useSelector(state => state.activity)
-  const {activity} = useSelector(state => state.activity)
+  const { participations } = useSelector(state => state.activity)
+  const { activity } = useSelector(state => state.activity)
   // const [avatar, setAvatar] = useState("")
   // useEffect(() => {
   //   const fetchAvatar = async () => {
@@ -57,14 +57,14 @@ const CustomPopup = ({ id, type }) => {
   var today = now.getFullYear() + '-' + month + '-' + day;
 
   const handleUpdate = () => {
-      const object = {
-        name: form.name ? form.name : activity.name,
-        description: form.description ? form.description : activity.description,
-        address: form.address ? form.address : activity.address,
-        date: date ? date : activity.date,
-      }
-      dispatch(updateActivity({ activityId: activity.id, activityData: { ...object, type } }))
-    
+    const object = {
+      name: form.name ? form.name : activity.name,
+      description: form.description ? form.description : activity.description,
+      address: form.address ? form.address : activity.address,
+      date: date ? date : activity.date,
+    }
+    dispatch(updateActivity({ activityId: activity.id, activityData: { ...object, type } }))
+
   }
 
   const [date, setDate] = useState(today)
@@ -183,6 +183,64 @@ const CustomPopup = ({ id, type }) => {
                 {activity.userDescription}
               </div>
             </div>}
+            {
+              mode === "comments" && !edit && <div className='commentsContainer'>
+                <span className="back">
+                  <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
+                </span>
+                <div className="row">{activity.name}</div>
+                <div className="comments">
+                  <div className="comment">
+                    <div className="head">
+                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                      <div>date</div>
+                    </div>
+                    <div className="content">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam alias non beatae porro aut ipsum. Ut ipsa necessitatibus magni alias.
+                    </div>
+                  </div>
+                  <div className="comment">
+                    <div className="head">
+                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                      <div>date</div>
+                    </div>
+                    <div className="content">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi officia dicta nostrum facere assumenda reiciendis sit odio iste accusamus illum!
+                    </div>
+                  </div>
+                  <div className="comment">
+                    <div className="head">
+                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                      <div>date</div>
+                    </div>
+                    <div className="content">
+                      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium dicta dignissimos cumque voluptate omnis quia molestiae facere quae maxime nulla?
+                    </div>
+                  </div>
+                  <div className="comment">
+                    <div className="head">
+                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                      <div>date</div>
+                    </div>
+                    <div className="content">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur ipsum minima placeat eos perferendis necessitatibus mollitia nobis unde quidem eaque.
+                    </div>
+                  </div>
+                  <div className="comment">
+                    <div className="head">
+                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                      <div>date</div>
+                    </div>
+                    <div className="content">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quis ad dolore eaque laborum. Dolores ut sequi vitae libero neque.
+                    </div>
+                  </div>
+                </div>
+                <div className='add'>
+                  <input type="text" placeholder='Ajouter un commentaire...' />
+                </div>
+              </div>
+            }
             <div className='actions'>
               {current.id === activity.user_id && (
                 <div className='left'>
@@ -200,7 +258,7 @@ const CustomPopup = ({ id, type }) => {
               )}
 
               <div className='middle'>
-                <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
+                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>(12)</span></div>
                 <div> /</div>
                 <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
               </div>
