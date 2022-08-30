@@ -3,57 +3,61 @@
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-const { Activity, User, Type } = require('../models');
-const ApiError = require('../errors/apiError');
-const dateFormat = require('../services/dateFormat');
-const SSEHandler = require('../services/SSEHandler');
-const sequelize = require('../config/sequelize');
+const { Activity, User, Type, Comment } = require("../models");
+const ApiError = require("../errors/apiError");
+const dateFormat = require("../services/dateFormat");
+const SSEHandler = require("../services/SSEHandler");
+const sequelize = require("../config/sequelize");
 
 // On créer une instance du sseHandler avec le nom du salon de communication
-const sseHandlerParticipate = new SSEHandler('Participations');
+const sseHandlerParticipate = new SSEHandler("Participations");
 
 let globalVersionParticipate = 0;
 
 const activity = {
-
-  url: 'http://localhost:8080',
+  url: "http://localhost:8080",
 
   async getActivities(req, res) {
     const { id } = req.user;
 
     const getUser = await User.findByPk(id, {
       raw: true,
-      attributes: ['city'],
+      attributes: ["city"],
     });
 
     if (!getUser) {
-      throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
+      throw new ApiError("Aucun utilisateur n'a été trouvée", 400);
     }
 
     let activities = await Activity.findAll({
-      include: [{
-        model: User,
-        as: 'user',
-        attributes: ['nickname'],
-      },
-      {
-        model: Type,
-        as: 'types',
-        attributes: ['label'],
-      }],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["nickname"],
+        },
+        {
+          model: Type,
+          as: "types",
+          attributes: ["label"],
+        },
+      ],
       where: {
         city: getUser.city,
       },
       attributes: {
-        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
-
+        include: [
+          "user.nickname",
+          "types.label",
+          [sequelize.literal("label"), "type"],
+        ],
       },
       raw: true,
       nest: true,
     });
 
     if (!activities) {
-      throw new ApiError('Aucune activité n\'a été trouvée', 400);
+      throw new ApiError("Aucune activité n'a été trouvée", 400);
     }
 
     activities = activities.map((element) => {
@@ -78,24 +82,20 @@ const activity = {
       include: [
         {
           model: User,
-          as: 'user',
+          as: "user",
           attributes: {
-            exclude: ['password'],
+            exclude: ["password"],
           },
         },
         {
           model: Type,
-          as: 'types',
-          attributes: ['label'],
+          as: "types",
+          attributes: ["label"],
         },
       ],
       attributes: {
-        include: [
-          'types.label',
-          [sequelize.literal('label'), 'type'],
-        ],
+        include: ["types.label", [sequelize.literal("label"), "type"]],
       },
-
     });
 
     if (!activity) {
@@ -107,13 +107,53 @@ const activity = {
 
     const date = dateFormat.convertActivityDate(activity);
 
-    const result = { ...getUser, userDescription: getUser.description, userAddress: getUser.address };
+    const result = {
+      ...getUser,
+      userDescription: getUser.description,
+      userAddress: getUser.address,
+    };
 
-    activity = { ...result, ...activity, date, url: `http://localhost:8080/api/user/${getUser.id}/avatar` };
+    activity = {
+      ...result,
+      ...activity,
+      date,
+      url: `http://localhost:8080/api/user/${getUser.id}/avatar`,
+    };
 
     const { user, types, ...rest } = activity;
 
     res.json(rest);
+  },
+
+  async getComments(req, res) {
+    const { activityId } = req.params;
+
+    const activity = await Activity.findByPk(activityId, {
+      include: ["comments"],
+    });
+
+    if (!activity) {
+      throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
+    }
+
+    res.json(activity);
+  },
+
+  async createComment(req, res) {
+    const { activityId } = req.params;
+    const { userId } = req.body;
+
+    if (!req.body.text) {
+      throw new ApiError(`Le commentaire ne peut être vide`, 400);
+    }
+
+    const comment = await Comment.create({
+      text: req.body.text,
+      user_id: userId,
+      activity_id: activityId,
+    });
+
+    res.json(comment);
   },
 
   async participateToActivity(req, res) {
@@ -122,31 +162,36 @@ const activity = {
     const { id } = req.user;
 
     if (id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 403);
+      throw new ApiError("Forbidden", 403);
     }
 
     const activity = await Activity.findByPk(activityId, {
-      attributes: ['id', 'city'],
+      attributes: ["id", "city"],
     });
 
     if (!activity) {
-      throw new ApiError('Aucune activité trouvé', 400);
+      throw new ApiError("Aucune activité trouvé", 400);
     }
 
     const user = await User.findByPk(userId, {
-      include: [{
-        model: Activity,
-        as: 'participations',
-        attributes: ['id'],
-      }],
+      include: [
+        {
+          model: Activity,
+          as: "participations",
+          attributes: ["id"],
+        },
+      ],
     });
 
     if (!user) {
-      throw new ApiError('Aucune utilisateur trouvé', 400);
+      throw new ApiError("Aucune utilisateur trouvé", 400);
     }
 
     if (user.dataValues.city !== activity.dataValues.city) {
-      throw new ApiError('Vous ne pouvez pas parcitiper à une activité de cette ville', 403);
+      throw new ApiError(
+        "Vous ne pouvez pas parcitiper à une activité de cette ville",
+        403
+      );
     }
 
     await user.addParticipations(activity);
@@ -154,31 +199,31 @@ const activity = {
     // Le fait d'incrementer cette variable va permettre au serveur d'envoyer les données en temps réel
     globalVersionParticipate += 1;
 
-    res.status(200).json({ msg: 'Participe' });
+    res.status(200).json({ msg: "Participe" });
   },
 
   async getParticipations(req, res) {
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
-      attributes: ['city'],
+      attributes: ["city"],
       raw: true,
     });
 
     if (!user) {
-      throw new ApiError('Utilisateur introuvable', 400);
+      throw new ApiError("Utilisateur introuvable", 400);
     }
 
     let activity = await Activity.findAll({
-      include: [{
-        model: User,
-        as: 'userParticip',
-        attributes: ['id'],
-      }],
-      attributes: ['id', 'city'],
-      order: [
-        ['id', 'asc'],
+      include: [
+        {
+          model: User,
+          as: "userParticip",
+          attributes: ["id"],
+        },
       ],
+      attributes: ["id", "city"],
+      order: [["id", "asc"]],
       where: {
         city: user.city,
       },
@@ -188,7 +233,8 @@ const activity = {
       let data = element.get();
       const count = data.userParticip.length;
       data = {
-        ...data, count,
+        ...data,
+        count,
       };
       delete data.userParticip;
 
@@ -207,23 +253,26 @@ const activity = {
     const client = sseHandlerParticipate.getConnection(id);
 
     if (client) {
-      throw new ApiError('Une connection est déja ouverte avec cette id', 403);
+      throw new ApiError("Une connection est déja ouverte avec cette id", 403);
     }
 
     // On récupere les infos de l'utilisateur courrant
     const user = await User.findByPk(id, {
-      attributes: ['city'],
+      attributes: ["city"],
       raw: true,
     });
 
     if (!user) {
-      throw new ApiError('Utilisateur introuvable', 400);
+      throw new ApiError("Utilisateur introuvable", 400);
     }
 
     // On empêche l'utilisateur d'accéder aux participations d'une activité qui est dans une autre ville
     // que la sienne
     if (user.city !== city) {
-      throw new ApiError('Vous ne pouvez pas obtenir les informations de cette ville', 403);
+      throw new ApiError(
+        "Vous ne pouvez pas obtenir les informations de cette ville",
+        403
+      );
     }
 
     // On initialise une connexion avec l'id de l'utilisateur courrant
@@ -235,15 +284,15 @@ const activity = {
       if (localVersion < globalVersionParticipate) {
         // On va chercher toutes les activités dans la ville de l'utilisateur courrant
         let activity = await Activity.findAll({
-          include: [{
-            model: User,
-            as: 'userParticip',
-            attributes: ['id'],
-          }],
-          attributes: ['id', 'city'],
-          order: [
-            ['id', 'asc'],
+          include: [
+            {
+              model: User,
+              as: "userParticip",
+              attributes: ["id"],
+            },
           ],
+          attributes: ["id", "city"],
+          order: [["id", "asc"]],
           where: {
             city: user.city,
           },
@@ -253,7 +302,8 @@ const activity = {
           let data = element.get();
           const count = data.userParticip.length;
           data = {
-            ...data, count,
+            ...data,
+            count,
           };
           delete data.userParticip;
 
@@ -268,7 +318,7 @@ const activity = {
       }
     }, 10);
 
-    res.on('close', () => {
+    res.on("close", () => {
       // On clear l'interval pour éviter de continue à recevoir les infos de l'utilisateur qui est déconnecté
       clearInterval(intervalId);
       // On ferme la connection de l'utilisateur
