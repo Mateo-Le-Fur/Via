@@ -14,7 +14,7 @@ const sseHandlerParticipate = new SSEHandler('Participations');
 const sseHandlerComments = new SSEHandler('Commentaires');
 
 let globalVersionParticipate = 0;
-const globalVersionComments = 0;
+let globalVersionComments = 0;
 
 const activity = {
   url: 'http://localhost:8080',
@@ -131,7 +131,7 @@ const activity = {
     const { activityId } = req.params;
     const { id } = req.user;
 
-    const localVersion = 0;
+    let localVersion = 0;
 
     sseHandlerComments.newConnection(id);
 
@@ -148,6 +148,8 @@ const activity = {
         activity = JSON.parse(JSON.stringify(activity));
 
         sseHandlerComments.sendDataToClients(activity);
+
+        localVersion = globalVersionComments;
       }
     }, 10);
     res.on('close', () => {
@@ -183,6 +185,8 @@ const activity = {
       user_id: userId,
       activity_id: activityId,
     });
+
+    globalVersionComments += 1;
 
     res.json(comment);
   },
