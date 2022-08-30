@@ -19,6 +19,7 @@ const {activity} = useSelector(state => state.activity)
   const dispatch = useDispatch()
 
     let markerRef = useRef()
+
   
     const eventHandlers = useMemo(
       () => ({

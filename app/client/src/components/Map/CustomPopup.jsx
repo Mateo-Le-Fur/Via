@@ -35,12 +35,16 @@ const CustomPopup = ({ id, type }) => {
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
-  const [form, setForm] = useState(
-    {
-      name: activity.name ? activity.name : "" ,
-      description: activity.description ? activity.description : "",
-      address: activity.address ? activity.address : ""
-    }
+  const [form, setForm] = useState({
+    name: "",
+    description: "",
+    address: ""
+  }
+    // {
+    //   name: activity.name,
+    //   description: activity.description,
+    //   address: activity.address
+    // }
   );
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -53,10 +57,14 @@ const CustomPopup = ({ id, type }) => {
   var today = now.getFullYear() + '-' + month + '-' + day;
 
   const handleUpdate = () => {
-    if (form.name && form.description && form.address && date) {
-      console.log({ ...form, date, type })
-      dispatch(updateActivity({ activityId: activity.id, activityData: { ...form, date, type } }))
-    }
+      const object = {
+        name: form.name ? form.name : activity.name,
+        description: form.description ? form.description : activity.description,
+        address: form.address ? form.address : activity.address,
+        date: date ? date : activity.date,
+      }
+      dispatch(updateActivity({ activityId: activity.id, activityData: { ...object, type } }))
+    
   }
 
   const [date, setDate] = useState(today)
@@ -98,7 +106,7 @@ const CustomPopup = ({ id, type }) => {
                   <input
                     name='name'
                     onChange={handleChange}
-                    value={form.name}
+                    defaultValue={activity.name}
                   />
                 </div>
                 <div className='dateContainer'>
@@ -110,7 +118,7 @@ const CustomPopup = ({ id, type }) => {
                   <input
                     name='address'
                     onChange={handleChange}
-                    value={form.address}
+                    defaultValue={activity.address}
                   />
                 </div>
                 <div className='descriptionContainer'>
@@ -118,7 +126,7 @@ const CustomPopup = ({ id, type }) => {
                     name='description'
                     id='description'
                     onChange={handleChange}
-                    value={form.description}
+                    defaultValue={activity.description}
                   >
                   </textarea>
                 </div>
