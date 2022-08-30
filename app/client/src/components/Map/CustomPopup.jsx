@@ -36,15 +36,16 @@ const CustomPopup = ({ id, type, activity }) => {
   const dispatch = useDispatch()
   const [form, setForm] = useState(
     {
-      name: activity.name,
-      description: activity.description,
-      address: activity.address
+      name: activity.name ? activity.name : "" ,
+      description: activity.description ? activity.description : "",
+      address: activity.address ? activity.address : ""
     }
   );
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  console.log(form)
   var now = new Date();
   var day = ('0' + now.getDate()).slice(-2);
   var month = ('0' + (now.getMonth() + 1)).slice(-2);
@@ -192,7 +193,7 @@ const CustomPopup = ({ id, type, activity }) => {
               <div className='middle'>
                 <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
                 <div> /</div>
-                <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations.find(el => el.id === activity.id).count})</span></div>
+                <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
               </div>
 
               <div className='right'>
