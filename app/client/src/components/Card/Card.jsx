@@ -1,7 +1,7 @@
 import './Card.scss';
 import { format } from "date-fns";
 import {getIcon} from "./getIcon"
-import { createBookmark, deleteBookmark } from '../../features/activity/activitySlice';
+import { createBookmark, deleteBookmark, participate } from '../../features/activity/activitySlice';
 
 import { FaGuitar, FaStar} from 'react-icons/fa';
 import {
@@ -21,9 +21,11 @@ import { handleHideList } from '../../features/global/globalSlice';
 
 const Card = ({kind, activity}) => {
 
-  const dispatch = useDispatch()
+
+const {participations} = useSelector(state => state.activity)
 const {user} = useSelector(state => state.auth)
 const {bookmarks} = useSelector(state => state.activity)
+const dispatch = useDispatch()
 const handleBookmark = () => {
   const booked = bookmarks.includes(activity.id)
   console.log(booked)
@@ -33,6 +35,10 @@ const handleBookmark = () => {
       dispatch(createBookmark(activity.id))
     }
 }
+
+if (participations){
+
+
   return (
     <div className='card'>
       <div className='top'>
@@ -77,7 +83,7 @@ const handleBookmark = () => {
         <div className='middle'>
             <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
             <div style={{padding: "0 .2rem"}}> /</div>
-            <div className='actionMiddle'> Je participe <span>(10)</span></div>
+            <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
         </div>
 
           {user.id === activity.user_id && (
@@ -91,5 +97,6 @@ const handleBookmark = () => {
       </div>
     </div>
   );
-};
+}
+}
 export default Card;
