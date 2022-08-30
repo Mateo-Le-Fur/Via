@@ -256,7 +256,76 @@
                     }
                 }
             }
-
+            .commentsContainer{
+                display: flex;
+                flex-direction: column;
+                position: relative;
+                .back{
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+                .row{
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    color: vars.$tertiary-color;
+                    font-weight: bold;
+                }
+                .comments{
+                    width: 100%;
+                    margin-top: 1rem;
+                    height: 270px;
+                    display: flex ;
+                    flex-direction: column;
+                    overflow: auto;
+                    .comment{
+                        display: flex;
+                        flex-direction: column;
+                        font-size: .8rem;
+                        min-height: 90px !important;
+             
+                        .head{
+                            color: vars.$tertiary-color;
+                            display: flex;
+                            min-height: 20px;
+                            >div:first-child{
+                                display: flex;
+                                align-items: center;
+                                gap: 5%;
+                                img{
+                                    height: 20px;
+                                    width: 20px;
+                                    border-radius: 50%;
+                                    border: 1px solid vars.$tertiary-color;
+                                }
+                            }
+                            > div:nth-child(2){
+                               display: flex;
+                               align-items: center;
+                               justify-content: flex-end;
+                               padding-right: 1rem;
+                            }
+                        }
+                        .content{
+                            padding: .5rem;
+                            overflow: auto;
+                            color: vars.$primary-color;
+                        }
+                    }
+                }
+                .add{
+                    height: 30px;
+                  
+                    display: flex;
+                    align-items: center;
+                    input{
+                        width: 100%;
+                        border: none;
+                        outline: none;
+                    }
+                }
+            }
             .actions {
                 display: flex;
                 flex-direction: row;
