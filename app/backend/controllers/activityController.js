@@ -8,7 +8,6 @@ const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
 const sequelize = require('../config/sequelize');
-const { count } = require('../models/Activity');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
 const sseHandlerParticipate = new SSEHandler('Participations');
@@ -75,12 +74,14 @@ const activity = {
   async getActivity(req, res) {
     const { id } = req.params;
 
-    const activity = await Activity.findByPk(id, {
+    let activity = await Activity.findByPk(id, {
       include: [
         {
           model: User,
           as: 'user',
-          attributes: ['nickname'],
+          attributes: {
+            exclude: ['password'],
+          },
         },
         {
           model: Type,
@@ -89,35 +90,49 @@ const activity = {
         },
       ],
       attributes: {
-        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
+        include: [
+          'user.nickname',
+          'user.email',
+          'user.firstname',
+          'user.lastname',
+          'user.description',
+          'user.phone',
+          'user.avatar',
+          'types.label',
+          [sequelize.literal('label'), 'type'],
+          [sequelize.literal('user.address'), 'userAddress'],
+          [sequelize.literal('user.description'), 'userDescription'],
+        ],
       },
       raw: true,
       nest: true,
     });
 
-    console.log(activity);
-
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
-    const date = dateFormat.convertActivityDate(result);
+    const date = dateFormat.convertActivityDate(activity);
 
-    result = {
-      ...result,
-      nickname: result.user.nickname,
-      type: result.types[0].label,
-      date,
-      firstname: result.user.firstname,
-      lastname: result.user.lastname,
-      phone: result.user.phone,
-      userAddress: result.user.address,
-      avatar: result.user.avatar,
-      userDescription: result.user.description,
-      url: `${this.url}api/user/${result.user.id}/avatar`,
-    };
+    activity = { ...activity, date };
 
-    const { types, user, ...rest } = result;
+    const { user, types, label, ...rest } = activity;
+
+    console.log(rest);
+
+    // result = {
+    //   ...result,
+    //   nickname: result.user.nickname,
+    //   type: result.types[0].label,
+    //   date,
+    //   firstname: result.user.firstname,
+    //   lastname: result.user.lastname,
+    //   phone: result.user.phone,
+    //   userAddress: result.user.address,
+    //   avatar: result.user.avatar,
+    //   userDescription: result.user.description,
+    //   url: `${this.url}api/user/${result.user.id}/avatar`,
+    // };
 
     res.json(rest);
   },
