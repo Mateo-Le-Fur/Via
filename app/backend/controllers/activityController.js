@@ -1,11 +1,13 @@
+/* eslint-disable object-curly-newline */
 /* eslint-disable quote-props */
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-const { Activity, User } = require('../models');
+const { Activity, User, Type } = require('../models');
 const ApiError = require('../errors/apiError');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
+const sequelize = require('../config/sequelize');
 // const { globalVersion: globalVersionActivities } = require('./userController');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
@@ -13,47 +15,96 @@ const sseHandlerParticipate = new SSEHandler('Participations');
 
 let globalVersionParticipate = 0;
 
-// console.log(globalVersionActivities);
-
 const activity = {
 
   async getActivities(req, res) {
     const { id } = req.user;
 
-    let getUser = await User.findByPk(id);
+    const getUser = await User.findByPk(id, {
+      raw: true,
+      attributes: ['city'],
+    });
 
     if (!getUser) {
       throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
     }
 
-    getUser = getUser.get();
-
-    const activities = await Activity.findAll({
-      include: ['types', 'user'],
+    let activities = await Activity.findAll({
+      include: [{
+        model: User,
+        as: 'user',
+        attributes: ['nickname'],
+      },
+      {
+        model: Type,
+        as: 'types',
+        attributes: ['label'],
+      }],
       where: {
         city: getUser.city,
       },
+      attributes: {
+        include: ['user.nickname', 'types.label', [sequelize.literal('label'), 'type']],
+
+      },
+      raw: true,
+      nest: true,
     });
 
     if (!activities) {
       throw new ApiError('Aucune activité n\'a été trouvée', 400);
     }
 
-    const result = activities.map((elem) => {
-      let data = elem.get();
+    activities = activities.map((element) => {
+      let data = element;
 
       const date = dateFormat.convertActivityDate(data);
 
-      data = {
-        ...data, nickname: data.user.nickname, type: data.types[0].label, date,
-      };
+      data = { ...data, date };
 
-      const { types, user, ...rest } = data;
+      const { user, types, label, ...rest } = data;
 
       return rest;
     });
 
-    res.json(result);
+    res.json(activities);
+
+    // const { id } = req.user;
+
+    // let getUser = await User.findByPk(id);
+
+    // if (!getUser) {
+    //   throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
+    // }
+
+    // getUser = getUser.get();
+
+    // const activities = await Activity.findAll({
+    //   include: ['types', 'user'],
+    //   where: {
+    //     city: getUser.city,
+    //   },
+    // });
+
+    // if (!activities) {
+    //   throw new ApiError('Aucune activité n\'a été trouvée', 400);
+    // }
+
+    // const result = activities.map((elem) => {
+    //   let data = elem.get();
+
+    //   const date = dateFormat.convertActivityDate(data);
+
+    //   data = {
+    //     ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+    //   };
+
+    //   const { types, user, ...rest } = data;
+
+    //   return rest;
+    // });
+
+    // res.json(result);
   },
 
   async getActivity(req, res) {
@@ -96,7 +147,7 @@ const activity = {
     const { id } = req.user;
 
     if (id !== parseInt(userId, 10)) {
-      throw new ApiError('Forbidden', 400);
+      throw new ApiError('Forbidden', 403);
     }
 
     const activity = await Activity.findByPk(activityId);
