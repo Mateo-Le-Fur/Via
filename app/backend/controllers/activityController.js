@@ -102,6 +102,7 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
+
     activity = activity.get();
     const getUser = activity.user.get();
 
@@ -114,6 +115,7 @@ const activity = {
     const { user, types, ...rest } = activity;
 
     res.json(rest);
+
   },
 
   async participateToActivity(req, res) {
@@ -211,7 +213,7 @@ const activity = {
         });
 
         // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
-        sseHandlerParticipate.sendDataToClients(id, JSON.stringify(activity), activity.city);
+        sseHandlerParticipate.sendDataToClients(id, activity, activity[0].city);
 
         // ! info pour le front
         // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application
