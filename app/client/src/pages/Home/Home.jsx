@@ -44,8 +44,20 @@ const Home = () => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
 
+  const [participations, setParticipations] = useState()
+  useEffect(() => {
+    if( user){
+      const source = new EventSource(`/api/activity/sse/participate/${user.city}`)
+  
+      source.addEventListener(`${user.city}`, (e) => {
+        const data  = JSON.parse(e.data);
+        setParticipations(data)
+      });
+    }
+   
+  }, [user])
 
-
+console.log(participations)
   return (
     <div className='home'>
       {user && (
