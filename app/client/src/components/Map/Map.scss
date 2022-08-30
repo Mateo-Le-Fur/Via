@@ -279,13 +279,13 @@
                     .starIcon {
                         font-size: 1.7rem;
                         cursor: pointer;
-                        fill: vars.$secondary-color;
+                        fill: vars.$primary-color;
                         transition: fill .3s ease-in-out;
                         &.bookmark{
                             fill: vars.$tertiary-color;
                         }
                         &:hover {
-                            fill: vars.$secondary-color;
+                            fill: vars.$tertiary-color;
                         }
 
                         &:active {

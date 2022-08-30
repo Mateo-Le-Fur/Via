@@ -69,17 +69,22 @@ const handleBookmark = () => {
           <HiSearch className='actionIcon' />
           </div>
           <div>
-          <HiThumbUp className='actionIcon' />
-          </div>
-          <div>
           <FaStar onClick={handleBookmark} className={bookmarks.includes(activity.id) ? "actionIcon bookmark" : "actionIcon"}  />
           </div>
            
         </div>
 
+        <div className='middle'>
+            <div className='actionMiddle'>ça m'intéresse <span>(12)</span></div>
+            <div style={{padding: "0 .2rem"}}> /</div>
+            <div className='actionMiddle'> Je participe <span>(10)</span></div>
+        </div>
+
           {user.id === activity.user_id && (
               <div className='right'>
-              <HiTrash className='actionIcon' onClick={() => dispatch(deleteActivity({activityId: activity.id, userId: activity.user_id}))} />
+                <div>
+                <HiTrash className='actionIcon' onClick={() => dispatch(deleteActivity({activityId: activity.id, userId: activity.user_id}))} />
+                </div>
             </div>
           )}
       
