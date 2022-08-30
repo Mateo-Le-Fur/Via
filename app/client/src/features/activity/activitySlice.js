@@ -8,7 +8,8 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
-  bookmarks: []
+  bookmarks: [],
+  participations: []
 }
 
 export const createActivity = createAsyncThunk(
@@ -164,11 +165,54 @@ export const deleteBookmark = createAsyncThunk(
   }
 )
 
+export const getFirstParticipations = createAsyncThunk(
+  'participations/getFirst',
+  async (_, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    try {
+      return await activityService.getFirstParticipations(userId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const participate = createAsyncThunk(
+  'participations/participate',
+  async (activityId, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    try {
+      return await activityService.participate(activityId, userId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+
+
 export const activitySlice = createSlice({
   name: "actvity",
   initialState,
   reducers: {
     reset: (state) => initialState,
+    realTimeParticipations: (state, action) => {
+      state.participations = action.payload
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -252,8 +296,34 @@ export const activitySlice = createSlice({
         state.isSuccess = true
         state.bookmarks = action.payload
         })
+        .addCase(getFirstParticipations.pending, (state) => {
+          state.isLoading = true
+        })
+      .addCase(getFirstParticipations.fulfilled, (state, action) => {
+          state.isLoading = false
+          state.isSuccess = true
+          state.participations = action.payload
+          })
+      .addCase(getFirstParticipations.rejected, (state, action) => {
+            state.isLoading = false
+            state.isError = true
+            state.message = action.payload
+          })
+          .addCase(participate.pending, (state) => {
+            state.isLoading = true
+          })
+        .addCase(participate.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.isSuccess = true
+            state.message = action.payload
+            })
+        .addCase(participate.rejected, (state, action) => {
+              state.isLoading = false
+              state.isError = true
+              state.message = action.payload
+            })
   }
 })
 
-export const {reset} = activitySlice.actions
+export const {reset, realTimeParticipations} = activitySlice.actions
 export default activitySlice.reducer
