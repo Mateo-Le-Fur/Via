@@ -55,7 +55,7 @@ const Home = () => {
       });
     }
    
-  }, [user])
+  }, [])
 
 console.log(participations)
   return (

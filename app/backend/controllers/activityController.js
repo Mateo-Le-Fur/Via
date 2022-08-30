@@ -101,25 +101,25 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
-    const date = dateFormat.convertActivityDate(result);
+    // const date = dateFormat.convertActivityDate(result);
 
-    result = {
-      ...result,
-      nickname: result.user.nickname,
-      type: result.types[0].label,
-      date,
-      firstname: result.user.firstname,
-      lastname: result.user.lastname,
-      phone: result.user.phone,
-      userAddress: result.user.address,
-      avatar: result.user.avatar,
-      userDescription: result.user.description,
-      url: `${this.url}api/user/${result.user.id}/avatar`,
-    };
+    // result = {
+    //   ...result,
+    //   nickname: result.user.nickname,
+    //   type: result.types[0].label,
+    //   date,
+    //   firstname: result.user.firstname,
+    //   lastname: result.user.lastname,
+    //   phone: result.user.phone,
+    //   userAddress: result.user.address,
+    //   avatar: result.user.avatar,
+    //   userDescription: result.user.description,
+    //   url: `${this.url}api/user/${result.user.id}/avatar`,
+    // };
 
-    const { types, user, ...rest } = result;
+    // const { types, user, ...rest } = result;
 
-    res.json(rest);
+    // res.json(rest);
   },
 
   async participateToActivity(req, res) {
@@ -217,7 +217,7 @@ const activity = {
         });
 
         // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
-        sseHandlerParticipate.sendDataToClients(id, JSON.stringify(activity), activity.city);
+        sseHandlerParticipate.sendDataToClients(id, activity, activity[0].city);
 
         // ! info pour le front
         // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application
