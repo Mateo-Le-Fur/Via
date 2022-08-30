@@ -9,7 +9,7 @@ class SSEHandler {
 
   // Méthode qui permet de créer une connexion avec un utilisateur
   newConnection(id, res) {
-    console.log(`Nouvelle connection sur le salon ${this.name}`);
+    console.log(`Nouvelle connection sur le salon ${this.name} avec l'id ${id}`);
     // On instancie la classe SSE
     const client = new SSE(res);
     // On set les headers
@@ -18,6 +18,10 @@ class SSEHandler {
     // une instance de la classe SSE
     // Cela permet d'avoir un tableau avec pour chaque utilisateur sa propre instance
     this.clients.set(id, client);
+  }
+
+  getConnection(id) {
+    return this.clients.get(id);
   }
 
   sendDataToClients(id, data, event) {
@@ -31,7 +35,7 @@ class SSEHandler {
   }
 
   closeConnection(id) {
-    console.log(`Déconnection sur le salon ${this.name}`);
+    console.log(`Déconnection sur le salon ${this.name} avec l'id ${id}`);
     // On delete l'utilisateur dans le tableau de clients
     this.clients.delete(id);
   }

@@ -204,6 +204,12 @@ const activity = {
 
     let localVersion = 0;
 
+    const client = sseHandlerParticipate.getConnection(id);
+
+    if (client) {
+      throw new ApiError('Une connection est déja ouverte avec cette id', 403);
+    }
+
     // On récupere les infos de l'utilisateur courrant
     const user = await User.findByPk(id, {
       attributes: ['city'],
