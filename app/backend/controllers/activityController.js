@@ -16,7 +16,7 @@ let globalVersionParticipate = 0;
 
 const activity = {
 
-  url: 'http://localhost:8080/',
+  url: 'http://localhost:8080',
 
   async getActivities(req, res) {
     const { id } = req.user;
@@ -91,48 +91,27 @@ const activity = {
       ],
       attributes: {
         include: [
-          'user.nickname',
-          'user.email',
-          'user.firstname',
-          'user.lastname',
-          'user.description',
-          'user.phone',
-          'user.avatar',
           'types.label',
           [sequelize.literal('label'), 'type'],
-          [sequelize.literal('user.address'), 'userAddress'],
-          [sequelize.literal('user.description'), 'userDescription'],
         ],
       },
-      raw: true,
-      nest: true,
+
     });
 
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
+    activity = activity.get();
+    const getUser = activity.user.get();
+
     const date = dateFormat.convertActivityDate(activity);
 
-    activity = { ...activity, date };
+    const result = { ...getUser, userDescription: getUser.description, userAddress: getUser.address };
 
-    const { user, types, label, ...rest } = activity;
+    activity = { ...result, ...activity, date, url: `http://localhost:8080/api/user/${getUser.id}/avatar` };
 
-    console.log(rest);
-
-    // result = {
-    //   ...result,
-    //   nickname: result.user.nickname,
-    //   type: result.types[0].label,
-    //   date,
-    //   firstname: result.user.firstname,
-    //   lastname: result.user.lastname,
-    //   phone: result.user.phone,
-    //   userAddress: result.user.address,
-    //   avatar: result.user.avatar,
-    //   userDescription: result.user.description,
-    //   url: `${this.url}api/user/${result.user.id}/avatar`,
-    // };
+    const { user, types, ...rest } = activity;
 
     res.json(rest);
   },
