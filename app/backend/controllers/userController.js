@@ -35,20 +35,18 @@ const userController = {
   async getUser(req, res) {
     const { id } = req.params;
 
-    const user = await User.findByPk(id);
+    const user = await User.findByPk(id, {
+      raw: true,
+    });
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const {
-      // eslint-disable-next-line camelcase
-      password, is_admin, created_at, updated_at, ...newUser
-    } = user.dataValues;
+    const result = { ...user, url: `http://localhost:8080/api/user/${id}/avatar` };
+    const { password, ...rest } = result;
 
-    const val = { ...newUser, url: `http://localhost:8080/api/user/${id}/avatar` };
-
-    res.json(val);
+    res.json(rest);
   },
 
   async updateUser(req, res) {
@@ -142,7 +140,9 @@ const userController = {
 
     const val = { ...user, activities };
 
-    res.json(val);
+    const { password, ...rest } = val;
+
+    res.json(rest);
   },
 
   async updateUserActivity(req, res) {
@@ -260,6 +260,8 @@ const userController = {
           where: {
             city: getUser.city,
           },
+          limit: 1,
+          order: [['created_at', 'DESC']],
         });
 
         if (!activities) {
@@ -280,7 +282,6 @@ const userController = {
           return rest;
         });
 
-        console.log(result);
         sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
 
         localVersion = globalVersion;
