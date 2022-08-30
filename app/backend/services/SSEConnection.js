@@ -1,8 +1,10 @@
 /* eslint-disable quote-props */
+
 class SSE {
   // On passe l'objet response dans le constructor pour permettre de renvoyer des données
   constructor(res) {
     this.res = res;
+    this.initConnection = new Map();
   }
 
   // On initialise les headers qui permettent de communiquer en temps réel
