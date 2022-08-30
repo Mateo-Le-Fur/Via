@@ -106,6 +106,6 @@ router.route('/:id').get(controllerHandler(activityController.getActivity)); // 
 
 router.route('/:userId/participate').post(controllerHandler(activityController.participateToActivity));
 
-router.route('/sse/:activityId/participate/:city').get(controllerHandler(activityController.getParticipationsInRealTime));
+router.route('/sse/participate/:city').get(controllerHandler(activityController.getParticipationsInRealTime));
 
 module.exports = router;
