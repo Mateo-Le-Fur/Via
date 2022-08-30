@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import activityService from "./activityService"
 
 const initialState = {
@@ -9,12 +9,13 @@ const initialState = {
   isLoading: false,
   message: "",
   bookmarks: [],
-  participations: []
+  participations: [],
+  comments: []
 }
 
 export const createActivity = createAsyncThunk(
   'activity/create',
- 
+
   async (activityData, thunkAPI) => {
     const userId = thunkAPI.getState().auth.user.id
     try {
@@ -72,10 +73,10 @@ export const getActivities = createAsyncThunk(
 export const updateActivity = createAsyncThunk(
   'activity/update',
   async (data, thunkAPI) => {
-    const {activityId, activityData} = data
+    const { activityId, activityData } = data
     const userId = thunkAPI.getState().auth.user.id
     try {
-      return await activityService.updateActivity(activityId,activityData,userId)
+      return await activityService.updateActivity(activityId, activityData, userId)
     } catch (error) {
       const message =
         (error.response &&
@@ -92,7 +93,7 @@ export const updateActivity = createAsyncThunk(
 export const deleteActivity = createAsyncThunk(
   'activity/delete',
   async (data, thunkAPI) => {
-   const {activityId, userId} = data;
+    const { activityId, userId } = data;
     try {
       return await activityService.deleteActivity(activityId, userId)
     } catch (error) {
@@ -203,7 +204,43 @@ export const participate = createAsyncThunk(
   }
 )
 
+export const getComments = createAsyncThunk(
+  'comments/gets',
+  async (activityId, thunkAPI) => {
+    try {
+      return await activityService.getComments(activityId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
 
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const addComment = createAsyncThunk(
+  'comments/add',
+  async (data, thunkAPI) => {
+    const userId = thunkAPI.getState().auth.user.id
+    const { activityId, text } = data
+    try {
+      return await activityService.addComment(activityId, userId, text)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
 
 export const activitySlice = createSlice({
   name: "actvity",
@@ -262,7 +299,7 @@ export const activitySlice = createSlice({
       })
       .addCase(deleteActivity.fulfilled, (state, action) => {
         console.log(action.payload)
-        state.isLoading = false 
+        state.isLoading = false
         state.isError = false
         state.activities = state.activities.filter(activity => activity.id !== action.payload)
       })
@@ -295,35 +332,59 @@ export const activitySlice = createSlice({
         state.isLoading = false
         state.isSuccess = true
         state.bookmarks = action.payload
-        })
-        .addCase(getFirstParticipations.pending, (state) => {
-          state.isLoading = true
-        })
+      })
+      .addCase(getFirstParticipations.pending, (state) => {
+        state.isLoading = true
+      })
       .addCase(getFirstParticipations.fulfilled, (state, action) => {
-          state.isLoading = false
-          state.isSuccess = true
-          state.participations = action.payload
-          })
+        state.isLoading = false
+        state.isSuccess = true
+        state.participations = action.payload
+      })
       .addCase(getFirstParticipations.rejected, (state, action) => {
-            state.isLoading = false
-            state.isError = true
-            state.message = action.payload
-          })
-          .addCase(participate.pending, (state) => {
-            state.isLoading = true
-          })
-        .addCase(participate.fulfilled, (state, action) => {
-            state.isLoading = false
-            state.isSuccess = true
-            state.message = action.payload
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(participate.pending, (state) => {
+        state.isLoading = true
+      })
+      .addCase(participate.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.message = action.payload
+      })
+      .addCase(participate.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(getComments.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.isSuccess = true
+        state.comments = action.payload
+      })
+      .addCase(getComments.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(addComment.pending, (state, action) => {
+        state.isLoading = true
             })
-        .addCase(participate.rejected, (state, action) => {
-              state.isLoading = false
-              state.isError = true
-              state.message = action.payload
-            })
+      .addCase(addComment.fulfilled, (state, action) => {
+        console.log(action.payload)
+        state.isLoading = false
+        state.isSuccess = true
+        state.comments.push(action.payload)
+      })
+      .addCase(addComment.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
   }
 })
 
-export const {reset, realTimeParticipations} = activitySlice.actions
+export const { reset, realTimeParticipations } = activitySlice.actions
 export default activitySlice.reducer

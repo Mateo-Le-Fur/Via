@@ -72,6 +72,19 @@ const res = await privateReq.post(`/activity/${userId}/participate/`, {activityI
 return res.data
 }
 
+//  get comments 
+const getComments = async (activityId) => {
+  const res = await privateReq.get(`/activity/${activityId}/comment/`, {activityId})
+  return res.data.comments
+  }
+
+// add comment
+const addComment = async (activityId, userId, text) => {
+  const res = await privateReq.post(`/activity/${activityId}/comment/`, {userId, text})
+  console.log(res.data)
+  return res.data
+  }
+
 const recipeService = {
   createActivity,
   getActivities,
@@ -83,6 +96,8 @@ const recipeService = {
   deleteBookmark,
   getFirstParticipations,
   participate,
+  getComments,
+  addComment,
 }
 
 export default recipeService

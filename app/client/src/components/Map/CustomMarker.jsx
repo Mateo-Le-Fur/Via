@@ -7,7 +7,7 @@ import "./Map.scss"
 // import L from "leaflet"
 import CustomPopup from './CustomPopup'
 import getIcons from "./getIcons"
-import { getActivity } from '../../features/activity/activitySlice'
+import { getActivity, getComments } from '../../features/activity/activitySlice'
 import { getUser } from '../../features/user/userSlice'
 import { useSelect } from '@mui/base'
 
@@ -25,6 +25,7 @@ const {activity} = useSelector(state => state.activity)
       () => ({
         click() {
          dispatch(getActivity(marker.id))
+         dispatch(getComments(marker.id))
         },
       }),
       [ dispatch, marker.id],
