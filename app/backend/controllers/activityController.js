@@ -125,7 +125,9 @@ const activity = {
       throw new ApiError('Forbidden', 403);
     }
 
-    const activity = await Activity.findByPk(activityId);
+    const activity = await Activity.findByPk(activityId, {
+      attributes: ['id', 'city'],
+    });
 
     if (!activity) {
       throw new ApiError('Aucune activité trouvé', 400);
@@ -135,6 +137,7 @@ const activity = {
       include: [{
         model: Activity,
         as: 'participations',
+        attributes: ['id'],
       }],
     });
 
@@ -253,15 +256,6 @@ const activity = {
 
         // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
         sseHandlerParticipate.sendDataToClients(id, activity, activity[0].city);
-
-        // ! info pour le front
-        // Côté front il faut récupérer l'utilisateur qui est actuellement connecter sur l'application
-        // Il faut ensuite dans l'event listener écouter sur la ville de l'utilisateur actuelle
-        /* Si la ville de l'utilisateur actuelle correspond avec la ville contenu dans le tableau
-         alors on renvoie les données */
-        // Cela permet de renvoyer les données seulement aux utilisateurs de la même ville
-        /* Il faut ensuite parcourir le tableau renvoyé et mettre a jour le compteur de chaque activité
-        à l'aide des propriétées 'activityId' et 'count' contenu dans le tableau */
 
         // Cela permet de close l'interval jusqu'a ce qu'un autre utilisateur participe a une activité
         localVersion = globalVersionParticipate;
