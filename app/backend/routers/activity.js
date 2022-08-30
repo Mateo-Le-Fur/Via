@@ -104,7 +104,9 @@ router.route('/').get(controllerHandler(activityController.getActivities)); // G
 
 router.route('/:id').get(controllerHandler(activityController.getActivity)); // Gets one activity
 
-router.route('/:userId/participate').post(controllerHandler(activityController.participateToActivity));
+router.route('/:userId/participate')
+  .get(controllerHandler(activityController.getParticipations))
+  .post(controllerHandler(activityController.participateToActivity));
 
 router.route('/sse/participate/:city').get(controllerHandler(activityController.getParticipationsInRealTime));
 

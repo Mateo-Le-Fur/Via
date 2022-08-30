@@ -102,7 +102,6 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
     }
 
-
     activity = activity.get();
     const getUser = activity.user.get();
 
@@ -115,7 +114,6 @@ const activity = {
     const { user, types, ...rest } = activity;
 
     res.json(rest);
-
   },
 
   async participateToActivity(req, res) {
@@ -154,6 +152,47 @@ const activity = {
     globalVersionParticipate += 1;
 
     res.status(200).json({ msg: 'Participe' });
+  },
+
+  async getParticipations(req, res) {
+    const { id } = req.user;
+
+    const user = await User.findByPk(id, {
+      attributes: ['city'],
+      raw: true,
+    });
+
+    if (!user) {
+      throw new ApiError('Utilisateur introuvable', 400);
+    }
+
+    let activity = await Activity.findAll({
+      include: [{
+        model: User,
+        as: 'userParticip',
+        attributes: ['id'],
+      }],
+      attributes: ['id', 'city'],
+      order: [
+        ['id', 'asc'],
+      ],
+      where: {
+        city: user.city,
+      },
+    });
+
+    activity = activity.map((element) => {
+      let data = element.get();
+      const count = data.userParticip.length;
+      data = {
+        ...data, count,
+      };
+      delete data.userParticip;
+
+      return data;
+    });
+
+    res.json(activity);
   },
 
   async getParticipationsInRealTime(req, res) {
