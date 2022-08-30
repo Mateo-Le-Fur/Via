@@ -12,7 +12,7 @@ import {
 } from 'react-icons/hi';
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
-import { createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
+import { addComment, createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
 const CustomPopup = ({ id, type }) => {
   const { participations } = useSelector(state => state.activity)
@@ -32,6 +32,7 @@ const CustomPopup = ({ id, type }) => {
 
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
+  const {comments} = useSelector(state => state.activity)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -95,6 +96,20 @@ const CustomPopup = ({ id, type }) => {
     }
   }
 
+  const commentsRef = useRef()
+
+  const [inputComment, setInputComment] = useState("")
+  const submitComment = (e) => {
+    e.preventDefault()
+    if (inputComment){
+      dispatch(addComment({activityId: activity.id, text: inputComment}))
+      setInputComment("")
+      setTimeout(() => {
+
+        commentsRef.current.scroll(0, commentsRef.current.scrollHeight)
+      }, 1000)
+    }
+  }
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
     return (
       <Popup ref={popupRef}>
@@ -189,56 +204,25 @@ const CustomPopup = ({ id, type }) => {
                   <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
                 </span>
                 <div className="row">{activity.name}</div>
-                <div className="comments">
-                  <div className="comment">
-                    <div className="head">
-                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                      <div>date</div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam alias non beatae porro aut ipsum. Ut ipsa necessitatibus magni alias.
-                    </div>
-                  </div>
-                  <div className="comment">
-                    <div className="head">
-                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                      <div>date</div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi officia dicta nostrum facere assumenda reiciendis sit odio iste accusamus illum!
-                    </div>
-                  </div>
-                  <div className="comment">
-                    <div className="head">
-                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                      <div>date</div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusantium dicta dignissimos cumque voluptate omnis quia molestiae facere quae maxime nulla?
-                    </div>
-                  </div>
-                  <div className="comment">
-                    <div className="head">
-                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                      <div>date</div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur ipsum minima placeat eos perferendis necessitatibus mollitia nobis unde quidem eaque.
-                    </div>
-                  </div>
-                  <div className="comment">
-                    <div className="head">
-                      <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                      <div>date</div>
-                    </div>
-                    <div className="content">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas quis ad dolore eaque laborum. Dolores ut sequi vitae libero neque.
-                    </div>
-                  </div>
+                <div className="comments" ref={commentsRef}>
+                {comments.length > 0 ? comments.map(comment => (
+                         <div key={comment.id} className="comment">
+                         <div className="head">
+                           <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
+                           <div>date</div>
+                         </div>
+                         <div className="content">
+                          {comment.text}
+                         </div>
+                       </div>
+                  
+)): <p>Il n'y a pas encore de commentaires</p>}
+                 
                 </div>
-                <div className='add'>
-                  <input type="text" placeholder='Ajouter un commentaire...' />
-                </div>
+                <form className='add' onSubmit={submitComment}>
+                  <input type="text" placeholder='Ajouter un commentaire...' value={inputComment} onChange={(e) => setInputComment(e.target.value)} />
+                  <button type='submit'>Ajouter</button>
+                </form>
               </div>
             }
             <div className='actions'>
@@ -258,7 +242,7 @@ const CustomPopup = ({ id, type }) => {
               )}
 
               <div className='middle'>
-                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>(12)</span></div>
+                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({comments?.length || 0})</span></div>
                 <div> /</div>
                 <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
               </div>
