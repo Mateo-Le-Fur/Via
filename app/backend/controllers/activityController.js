@@ -131,7 +131,7 @@ const activity = {
 
     const data = await activity.getComments(req);
 
-    console.log(data);
+    // console.log(data);
 
     sseHandlerComments.broadcast(data, 'comment');
 
@@ -158,6 +158,7 @@ const activity = {
         city: getUser.city,
       },
     });
+    console.log(JSON.parse(JSON.stringify(activity)));
 
     if (!activity) {
       throw new ApiError('Aucune activité trouvé', 400);
@@ -165,17 +166,19 @@ const activity = {
 
     const activities = JSON.parse(JSON.stringify(activity));
 
-    const resultComments = activities.map((element) => {
-      const data = element;
+    // const resultComments = activities.map((element) => {
+    //   const data = element;
 
-      return data.comments[0];
-    });
+    //   return data.comments.length;
+    // });
 
     const val = [];
-    resultComments.forEach((element) => {
-      if (element !== undefined) {
-        val.push(element);
-      }
+    activities.forEach((activity) => {
+      activity.comments.forEach((comment) => {
+        if (comment !== undefined) {
+          val.push(comment);
+        }
+      });
     });
 
     return val;
