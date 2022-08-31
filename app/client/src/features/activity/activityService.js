@@ -60,11 +60,11 @@ return bookmarks
 }
 
 // first participations 
-const getFirstParticipations = async (userId) => {
-  console.log(userId)
-const res = await privateReq.get(`/activity/${userId}/participate/`)
-return res.data
-}
+// const getFirstParticipations = async (userId) => {
+//   console.log(userId)
+// const res = await privateReq.get(`/activity/${userId}/participate/`)
+// return res.data
+// }
 
 //  participate 
 const participate = async (activityId, userId) => {
@@ -73,10 +73,10 @@ return res.data
 }
 
 //  get comments 
-const getComments = async (activityId) => {
-  const res = await privateReq.get(`/activity/${activityId}/comment/`, {activityId})
-  return res.data.comments
-  }
+// const getComments = async (activityId) => {
+//   const res = await privateReq.get(`/activity/${activityId}/comment/`, {activityId})
+//   return res.data.comments
+//   }
 
 // add comment
 const addComment = async (activityId, userId, text) => {
@@ -94,9 +94,7 @@ const recipeService = {
   getBookmarks,
   createBookmark,
   deleteBookmark,
-  getFirstParticipations,
   participate,
-  getComments,
   addComment,
 }
 

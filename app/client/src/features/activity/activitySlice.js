@@ -166,24 +166,24 @@ export const deleteBookmark = createAsyncThunk(
   }
 )
 
-export const getFirstParticipations = createAsyncThunk(
-  'participations/getFirst',
-  async (_, thunkAPI) => {
-    const userId = thunkAPI.getState().auth.user.id
-    try {
-      return await activityService.getFirstParticipations(userId)
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+// export const getFirstParticipations = createAsyncThunk(
+//   'participations/getFirst',
+//   async (_, thunkAPI) => {
+//     const userId = thunkAPI.getState().auth.user.id
+//     try {
+//       return await activityService.getFirstParticipations(userId)
+//     } catch (error) {
+//       const message =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString()
 
-      return thunkAPI.rejectWithValue(message)
-    }
-  }
-)
+//       return thunkAPI.rejectWithValue(message)
+//     }
+//   }
+// )
 
 export const participate = createAsyncThunk(
   'participations/participate',
@@ -204,23 +204,23 @@ export const participate = createAsyncThunk(
   }
 )
 
-export const getComments = createAsyncThunk(
-  'comments/gets',
-  async (activityId, thunkAPI) => {
-    try {
-      return await activityService.getComments(activityId)
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString()
+// export const getComments = createAsyncThunk(
+//   'comments/gets',
+//   async (activityId, thunkAPI) => {
+//     try {
+//       return await activityService.getComments(activityId)
+//     } catch (error) {
+//       const message =
+//         (error.response &&
+//           error.response.data &&
+//           error.response.data.message) ||
+//         error.message ||
+//         error.toString()
 
-      return thunkAPI.rejectWithValue(message)
-    }
-  }
-)
+//       return thunkAPI.rejectWithValue(message)
+//     }
+//   }
+// )
 
 export const addComment = createAsyncThunk(
   'comments/add',
@@ -249,6 +249,9 @@ export const activitySlice = createSlice({
     reset: (state) => initialState,
     realTimeParticipations: (state, action) => {
       state.participations = action.payload
+    },
+    realTimeComments: (state, action) => {
+      state.comments = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -333,19 +336,19 @@ export const activitySlice = createSlice({
         state.isSuccess = true
         state.bookmarks = action.payload
       })
-      .addCase(getFirstParticipations.pending, (state) => {
-        state.isLoading = true
-      })
-      .addCase(getFirstParticipations.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.participations = action.payload
-      })
-      .addCase(getFirstParticipations.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-      })
+      // .addCase(getFirstParticipations.pending, (state) => {
+      //   state.isLoading = true
+      // })
+      // .addCase(getFirstParticipations.fulfilled, (state, action) => {
+      //   state.isLoading = false
+      //   state.isSuccess = true
+      //   state.participations = action.payload
+      // })
+      // .addCase(getFirstParticipations.rejected, (state, action) => {
+      //   state.isLoading = false
+      //   state.isError = true
+      //   state.message = action.payload
+      // })
       .addCase(participate.pending, (state) => {
         state.isLoading = true
       })
@@ -359,24 +362,22 @@ export const activitySlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
-      .addCase(getComments.fulfilled, (state, action) => {
-        state.isLoading = false
-        state.isSuccess = true
-        state.comments = action.payload
-      })
-      .addCase(getComments.rejected, (state, action) => {
-        state.isLoading = false
-        state.isError = true
-        state.message = action.payload
-      })
+      // .addCase(getComments.fulfilled, (state, action) => {
+      //   state.isLoading = false
+      //   state.isSuccess = true
+      //   state.comments = action.payload
+      // })
+      // .addCase(getComments.rejected, (state, action) => {
+      //   state.isLoading = false
+      //   state.isError = true
+      //   state.message = action.payload
+      // })
       .addCase(addComment.pending, (state, action) => {
         state.isLoading = true
             })
       .addCase(addComment.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.isLoading = false
         state.isSuccess = true
-        state.comments.push(action.payload)
       })
       .addCase(addComment.rejected, (state, action) => {
         state.isLoading = false
@@ -386,5 +387,5 @@ export const activitySlice = createSlice({
   }
 })
 
-export const { reset, realTimeParticipations } = activitySlice.actions
+export const { reset, realTimeParticipations, realTimeComments } = activitySlice.actions
 export default activitySlice.reducer

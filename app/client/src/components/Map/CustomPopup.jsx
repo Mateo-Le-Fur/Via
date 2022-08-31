@@ -33,6 +33,9 @@ const CustomPopup = ({ id, type }) => {
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
   const {comments} = useSelector(state => state.activity)
+  const [filteredComments, setFilteredComments] = useState(
+    comments.find(el => el.id === activity.id).comments
+  )
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -207,7 +210,7 @@ const CustomPopup = ({ id, type }) => {
                 </span>
                 <div className="row">{activity.name}</div>
                 <div className="comments" ref={commentsRef}>
-                {comments.length > 0 ? comments.map(comment => (
+                {filteredComments.length > 0 ? filteredComments.map(comment => (
                          <div key={comment.id} className="comment">
                          <div className="head">
                            <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
