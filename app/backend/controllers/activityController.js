@@ -131,6 +131,8 @@ const activity = {
 
     const data = await activity.getComments(req);
 
+    console.log(data);
+
     sseHandlerComments.broadcast(data, 'comment');
 
     res.on('close', () => {
@@ -161,9 +163,14 @@ const activity = {
       throw new ApiError('Aucune activité trouvé', 400);
     }
 
-    const val = JSON.parse(JSON.stringify(activity));
+    const activities = JSON.parse(JSON.stringify(activity));
 
-    return val;
+    const resultComments = activities.map((element) => {
+      const data = element;
+      return data.comments[0];
+    });
+
+    return resultComments;
   },
 
   async createComment(req, res) {
@@ -182,8 +189,6 @@ const activity = {
 
     if (comment) {
       const data = await activity.getComments(req);
-
-      console.log(data);
 
       sseHandlerComments.broadcast(data, 'comment');
     }
