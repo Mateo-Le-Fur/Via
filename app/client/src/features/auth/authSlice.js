@@ -157,9 +157,6 @@ export const authSlice = createSlice({
         state.isError = true
         state.message = action.payload
       })
-      .addCase(updateUser.pending, (state, action) => {
-        state.isLoading = true
-      })
       .addCase(updateUser.rejected, (state, action) => {
         state.isLoading = false
         state.isError = true
