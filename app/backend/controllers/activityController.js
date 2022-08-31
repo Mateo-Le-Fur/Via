@@ -13,9 +13,6 @@ const sequelize = require('../config/sequelize');
 const sseHandlerParticipate = new SSEHandler('Participations');
 const sseHandlerComments = new SSEHandler('Commentaires');
 
-let globalVersionParticipate = 0;
-let globalVersionComments = 0;
-
 const activity = {
   url: 'http://localhost:8080',
 
@@ -131,34 +128,27 @@ const activity = {
     const { activityId } = req.params;
     const { id } = req.user;
 
-    let localVersion = 0;
-
     sseHandlerComments.newConnection(id);
 
-    const intervalId = setInterval(async () => {
-      if (localVersion < globalVersionComments) {
-        let activity = await Activity.findByPk(activityId, {
-          include: ['comments'],
-        });
+    let activity = await Activity.findByPk(activityId, {
+      include: ['comments'],
+    });
 
-        if (!activity) {
-          throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
-        }
+    if (!activity) {
+      throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
+    }
 
-        activity = JSON.parse(JSON.stringify(activity));
+    activity = JSON.parse(JSON.stringify(activity));
 
-        sseHandlerComments.sendDataToClients(activity);
+    sseHandlerComments.sendDataToClients(activity);
 
-        localVersion = globalVersionComments;
-      }
-    }, 10);
     res.on('close', () => {
-      clearInterval(intervalId);
       sseHandlerParticipate.closeConnection(id);
     });
   },
 
   async getComments(req, res) {
+    const { id } = req.params;
     const { activityId } = req.params;
 
     const activity = await Activity.findByPk(activityId, {
@@ -168,6 +158,8 @@ const activity = {
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
     }
+
+    sseHandlerComments.newConnection(id, res);
 
     res.json(activity);
   },
@@ -186,8 +178,6 @@ const activity = {
       activity_id: activityId,
     });
 
-    globalVersionComments += 1;
-
     res.json(comment);
   },
 
@@ -200,11 +190,11 @@ const activity = {
       throw new ApiError('Forbidden', 403);
     }
 
-    const activity = await Activity.findByPk(activityId, {
+    const getActivity = await Activity.findByPk(activityId, {
       attributes: ['id', 'city'],
     });
 
-    if (!activity) {
+    if (!getActivity) {
       throw new ApiError('Aucune activité trouvé', 400);
     }
 
@@ -222,22 +212,26 @@ const activity = {
       throw new ApiError('Aucune utilisateur trouvé', 400);
     }
 
-    if (user.dataValues.city !== activity.dataValues.city) {
+    if (user.dataValues.city !== getActivity.dataValues.city) {
       throw new ApiError(
         'Vous ne pouvez pas parcitiper à une activité de cette ville',
         403,
       );
     }
 
-    await user.addParticipations(activity);
+    await user.addParticipations(getActivity);
 
     // Le fait d'incrementer cette variable va permettre au serveur d'envoyer les données en temps réel
-    globalVersionParticipate += 1;
+
+    const data = await activity.getParticipations(req);
+
+    sseHandlerParticipate.broadcast(data, data[0].city);
 
     res.status(200).json({ msg: 'Participe' });
   },
 
-  async getParticipations(req, res) {
+  // ne renvoie plus de json, retourne un tableau
+  async getParticipations(req) {
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
@@ -255,6 +249,7 @@ const activity = {
           model: User,
           as: 'userParticip',
           attributes: ['id'],
+          nested: false,
         },
       ],
       attributes: ['id', 'city'],
@@ -276,81 +271,21 @@ const activity = {
       return data;
     });
 
-    res.json(activity);
+    return activity;
   },
 
+  // L'utilisateur qui se connecte sur l'appli passera au moins une fois dans cette
+  // route
   async getParticipationsInRealTime(req, res) {
-    const { city } = req.params;
     const { id } = req.user;
 
-    let localVersion = 0;
-
-    // On récupere les infos de l'utilisateur courrant
-    const user = await User.findByPk(id, {
-      attributes: ['city'],
-      raw: true,
-    });
-
-    if (!user) {
-      throw new ApiError('Utilisateur introuvable', 400);
-    }
-
-    // On empêche l'utilisateur d'accéder aux participations d'une activité qui est dans une autre ville
-    // que la sienne
-    if (user.city !== city) {
-      throw new ApiError(
-        'Vous ne pouvez pas obtenir les informations de cette ville',
-        403,
-      );
-    }
-
-    // On initialise une connexion avec l'id de l'utilisateur courrant
     sseHandlerParticipate.newConnection(id, res);
 
-    const intervalId = setInterval(async () => {
-      // Le localVersion et globalVersion permette d'envoyer les datas seulement quand il le faut
-      // sinon par defaut le serveur va envoyer les datas en continue en fonction du timer dans le setInterval
-      if (localVersion < globalVersionParticipate) {
-        // On va chercher toutes les activités dans la ville de l'utilisateur courrant
-        let activity = await Activity.findAll({
-          include: [
-            {
-              model: User,
-              as: 'userParticip',
-              attributes: ['id'],
-            },
-          ],
-          attributes: ['id', 'city'],
-          order: [['id', 'asc']],
-          where: {
-            city: user.city,
-          },
-        });
+    const getActivities = await activity.getParticipations(req);
 
-        activity = activity.map((element) => {
-          let data = element.get();
-          const count = data.userParticip.length;
-          data = {
-            ...data,
-            count,
-          };
-          delete data.userParticip;
-
-          return data;
-        });
-
-        // On envoie les données en passant l'id de l'utilisateur, les datas et la ville qui servira d'event pour le front
-        sseHandlerParticipate.sendDataToClients(id, activity, activity[0].city);
-
-        // Cela permet de close l'interval jusqu'a ce qu'un autre utilisateur participe a une activité
-        localVersion = globalVersionParticipate;
-      }
-    }, 10);
+    sseHandlerParticipate.broadcast(getActivities, getActivities[0].city);
 
     res.on('close', () => {
-      // On clear l'interval pour éviter de continue à recevoir les infos de l'utilisateur qui est déconnecté
-      clearInterval(intervalId);
-      // On ferme la connection de l'utilisateur
       sseHandlerParticipate.closeConnection(id);
     });
   },
