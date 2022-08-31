@@ -148,6 +148,7 @@ const activity = {
   },
 
   async getComments(req, res) {
+    const { id } = req.params;
     const { activityId } = req.params;
 
     const activity = await Activity.findByPk(activityId, {
@@ -157,6 +158,8 @@ const activity = {
     if (!activity) {
       throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
     }
+
+    sseHandlerComments.newConnection(id, res);
 
     res.json(activity);
   },
@@ -227,6 +230,7 @@ const activity = {
     res.status(200).json({ msg: 'Participe' });
   },
 
+  // ne renvoie plus de json, retourne un tableau
   async getParticipations(req) {
     const { id } = req.user;
 
@@ -270,56 +274,16 @@ const activity = {
     return activity;
   },
 
+  // L'utilisateur qui se connecte sur l'appli passera au moins une fois dans cette
+  // route
   async getParticipationsInRealTime(req, res) {
-    const { city } = req.params;
     const { id } = req.user;
-
-    const user = await User.findByPk(id, {
-      attributes: ['city'],
-      raw: true,
-    });
-
-    if (!user) {
-      throw new ApiError('Utilisateur introuvable', 400);
-    }
-
-    if (user.city !== city) {
-      throw new ApiError(
-        'Vous ne pouvez pas obtenir les informations de cette ville',
-        403,
-      );
-    }
 
     sseHandlerParticipate.newConnection(id, res);
 
-    let activity = await Activity.findAll({
+    const getActivities = await activity.getParticipations(req);
 
-      include: [
-        {
-          model: User,
-          as: 'userParticip',
-          attributes: ['id'],
-        },
-      ],
-      attributes: ['id', 'city'],
-      order: [['id', 'asc']],
-      where: {
-        city: user.city,
-      },
-    });
-
-    activity = activity.map((element) => {
-      let data = element.get();
-      const count = data.userParticip.length;
-      data = {
-        ...data,
-        count,
-      };
-      delete data.userParticip;
-      return data;
-    });
-
-    sseHandlerParticipate.broadcast(activity, activity[0].city);
+    sseHandlerParticipate.broadcast(getActivities, getActivities[0].city);
 
     res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);

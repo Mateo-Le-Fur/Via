@@ -7,7 +7,7 @@ class SSEHandler {
     this.name = name;
   }
 
-  // Méthode qui permet de créer une connexion avec un utilisateur
+  // créer une connexion avec un utilisateur
   newConnection(id, res) {
     console.log(`Nouvelle connection sur le salon ${this.name} avec l'id ${id}`);
     // On instancie la classe SSE
@@ -20,11 +20,7 @@ class SSEHandler {
     this.clients.set(id, client);
   }
 
-  getConnection(id) {
-    return this.clients.get(id);
-  }
-
-  // Les dates seront envoyé seulement à l'utilisateur courant
+  // Les data seront envoyé seulement à l'utilisateur courant
   sendDataToClient(id, data, event) {
     // On récupere le client dans le tableau avec son id
     const client = this.clients.get(id);
@@ -35,8 +31,7 @@ class SSEHandler {
     }
   }
 
-  /* Chacun ayant son propre interval il suffit de parcourir
-  toutes les connections et d'envoyer les donnéesa chaque client connecté */
+  // On parcour toutes les connections et on envoie les data pour chacunes d'entre elles */
   broadcast(data, event) {
     // eslint-disable-next-line no-restricted-syntax
     for (const [id] of this.clients) {
