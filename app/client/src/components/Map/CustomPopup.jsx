@@ -112,7 +112,7 @@ const CustomPopup = ({ id, type }) => {
       setTimeout(() => {
 
         commentsRef.current.scroll(0, commentsRef.current.scrollHeight)
-      }, 1000)
+      }, 100)
     }
   }
   if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
