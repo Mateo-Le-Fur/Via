@@ -167,10 +167,18 @@ const activity = {
 
     const resultComments = activities.map((element) => {
       const data = element;
+
       return data.comments[0];
     });
 
-    return resultComments;
+    const val = [];
+    resultComments.forEach((element) => {
+      if (element !== undefined) {
+        val.push(element);
+      }
+    });
+
+    return val;
   },
 
   async createComment(req, res) {
