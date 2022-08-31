@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const activityController = require('../controllers/activityController');
+const validator = require('../validation/validator');
+const commentValidator = require('../validation/schema/comment');
 const controllerHandler = require('../helpers/controllerHandler');
 
 /**
@@ -107,7 +109,7 @@ router.route('/:id').get(controllerHandler(activityController.getActivity)); // 
 router
   .route('/:activityId/comment')
   .get(controllerHandler(activityController.getComments)) // Gets comments for one activity
-  .post(controllerHandler(activityController.createComment)); // Posts one comment on one activity
+  .post(validator('body', commentValidator), controllerHandler(activityController.createComment)); // Posts one comment on one activity
 
 router
   .route('/:userId/participate')

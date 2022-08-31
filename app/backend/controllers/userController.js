@@ -12,19 +12,14 @@ const SSEHandler = require('../services/SSEHandler');
 
 const sseHandlerActivities = new SSEHandler('Activités');
 
-let globalVersion = 0;
-
 const userController = {
 
   async getCurrentUser(req, res) {
-    console.time('user');
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
       raw: true,
     });
-
-    console.timeEnd('user');
 
     if (!user) {
       throw new ApiError('Utilisateur introuvable', 400);
@@ -233,16 +228,12 @@ const userController = {
 
     result = { ...result, type: req.body.type, nickname: user.nickname };
 
-    globalVersion += 1;
-
     res.json(result);
   },
 
   async getCreatedActivitiesInRealTime(req, res) {
     const { id } = req.user;
     const { city } = req.params;
-
-    let localVersion = 0;
 
     let getUser = await User.findByPk(id);
 
@@ -258,44 +249,34 @@ const userController = {
 
     sseHandlerActivities.newConnection(id, res);
 
-    const intervalId = setInterval(async () => {
-      if (localVersion < globalVersion) {
-        const activities = await Activity.findAll({
-          include: ['types', 'user'],
-          where: {
-            city: getUser.city,
-          },
-          limit: 1,
-          order: [['created_at', 'DESC']],
-        });
-
-        if (!activities) {
-          throw new ApiError('Aucune activité n\'a été trouvée', 400);
-        }
-
-        const result = activities.map((elem) => {
-          let data = elem.get();
-
-          const date = dateFormat.convertActivityDate(data);
-
-          data = {
-            ...data, nickname: data.user.nickname, type: data.types[0].label, date,
-          };
-
-          const { types, user, ...rest } = data;
-
-          return rest;
-        });
-
-        sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
-
-        localVersion = globalVersion;
-      }
-    }, 10);
-    res.on('close', () => {
-      clearInterval(intervalId);
-      sseHandlerActivities.closeConnection(id);
+    const activities = await Activity.findAll({
+      include: ['types', 'user'],
+      where: {
+        city: getUser.city,
+      },
+      limit: 1,
+      order: [['created_at', 'DESC']],
     });
+
+    if (!activities) {
+      throw new ApiError('Aucune activité n\'a été trouvée', 400);
+    }
+
+    const result = activities.map((elem) => {
+      let data = elem.get();
+
+      const date = dateFormat.convertActivityDate(data);
+
+      data = {
+        ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+      };
+
+      const { types, user, ...rest } = data;
+
+      return rest;
+    });
+
+    sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
   },
 
   deleteUserActivity(req, res) {
@@ -505,7 +486,7 @@ const userController = {
         const newImageName = Date.now();
 
         if (user.avatar === null) {
-          user.avatar = 'vide';
+          user.avatar = 'empty';
         }
 
         const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
@@ -532,7 +513,6 @@ const userController = {
             },
           },
         );
-
         res.json({ message: 'Image envoyée', userId });
       } catch (error) {
         console.error(error);
