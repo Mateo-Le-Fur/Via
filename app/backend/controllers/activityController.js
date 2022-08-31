@@ -125,40 +125,45 @@ const activity = {
   },
 
   async getCommentsSSE(req, res) {
-    const { activityId } = req.params;
     const { id } = req.user;
 
-    sseHandlerComments.newConnection(id);
+    sseHandlerComments.newConnection(id, res);
 
-    let activity = await Activity.findByPk(activityId, {
-      include: ['comments'],
-    });
+    const data = await activity.getComments(req);
 
-    if (!activity) {
-      throw new ApiError(`L'activité portant l'id ${id} n'existe pas`, 400);
-    }
-
-    activity = JSON.parse(JSON.stringify(activity));
-
-    sseHandlerComments.broadcast(activity);
+    sseHandlerComments.broadcast(data, 'comment');
 
     res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);
     });
   },
 
-  async getComments(req, res) {
-    const { activityId } = req.params;
+  async getComments(req) {
+    const { id } = req.user;
 
-    const activity = await Activity.findByPk(activityId, {
+    const getUser = await User.findByPk(id, {
+      raw: true,
+      attributes: ['city'],
+    });
+
+    if (!getUser) {
+      throw new ApiError("Aucun utilisateur n'a été trouvée", 400);
+    }
+
+    const activity = await Activity.findAll({
       include: ['comments'],
+      where: {
+        city: getUser.city,
+      },
     });
 
     if (!activity) {
-      throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
+      throw new ApiError('Aucune activité trouvé', 400);
     }
 
-    res.json(activity);
+    const val = JSON.parse(JSON.stringify(activity));
+
+    return val;
   },
 
   async createComment(req) {
@@ -169,13 +174,15 @@ const activity = {
       throw new ApiError('Le commentaire ne peut être vide', 400);
     }
 
-    const comment = await Comment.create({
+    await Comment.create({
       text: req.body.text,
       user_id: userId,
       activity_id: activityId,
     });
 
-    sseHandlerComments.broadcast(comment, 'comment');
+    const data = activity.getComments(req);
+
+    sseHandlerComments.broadcast(data, 'comment');
   },
 
   async participateToActivity(req, res) {
@@ -246,11 +253,9 @@ const activity = {
           model: User,
           as: 'userParticip',
           attributes: ['id'],
-          nested: false,
         },
       ],
       attributes: ['id', 'city'],
-      order: [['id', 'asc']],
       where: {
         city: user.city,
       },

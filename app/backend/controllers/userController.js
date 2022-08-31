@@ -27,6 +27,8 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
+    delete user.password;
+
     const val = { ...user, url: `http://localhost:8080/api/user/${req.user.id}/avatar` };
 
     res.json(val);
