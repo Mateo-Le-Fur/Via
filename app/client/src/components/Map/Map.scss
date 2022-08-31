@@ -334,11 +334,17 @@
                     border: 1px solid vars.$primary-color;
                     border-radius: 5px;
                     overflow: hidden;
+                    &.form-error{
+                        border-color: tomato;
+                    }
                     input{
                         height: 100%;
                         width: 70%;
                         border: none;
                         outline: none;
+                        &.input-error{
+                            color: tomato;
+                        }
                     }
                     button{
                         height: 100%;
@@ -346,6 +352,14 @@
                         border: 0;
                         background-color: vars.$primary-color;
                         color: white;
+                        &.disabled{
+                            background-color: vars.$gray;
+                            cursor: not-allowed;
+                            &:hover{
+                                background-color: vars.$gray;
+                            }
+                        }
+                        
                         &:hover{
                             background-color: vars.$tertiary-color;
                         }

@@ -95,7 +95,7 @@ const CustomPopup = ({ marker, type }) => {
   const [inputComment, setInputComment] = useState("")
   const submitComment = (e) => {
     e.preventDefault()
-    if (inputComment){
+    if (inputComment && inputComment.length < 250){
       dispatch(addComment({activityId: activity.id, text: inputComment}))
       setInputComment("")
       setTimeout(() => {
@@ -220,9 +220,9 @@ const CustomPopup = ({ marker, type }) => {
 )): <p>Il n'y a pas encore de commentaires</p>}
                  
                 </div>
-                <form className='add' onSubmit={submitComment}>
-                  <input type="text" placeholder='Ajouter un commentaire...' value={inputComment} onChange={(e) => setInputComment(e.target.value)} />
-                  <button type='submit'>Ajouter</button>
+                <form  className={inputComment.length > 250 ? "add form-error" : "add"}  onSubmit={submitComment}>
+                  <input type="text" className={inputComment.length > 250 ? "input-error" : ""}  placeholder='Ajouter un commentaire...' value={inputComment} onChange={(e) => setInputComment(e.target.value)} />
+                  <button className={inputComment.length > 250 ? "disabled" : ""} disabled={inputComment.length > 250} type='submit'>Ajouter</button>
                 </form>
               </div>
             }
