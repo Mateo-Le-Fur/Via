@@ -33,11 +33,11 @@ const CustomPopup = ({ id, type }) => {
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
   const {comments} = useSelector(state => state.activity)
-  const [filteredComments, setFilteredComments] = useState(
-    comments?.find(el => el.id === activity.id)?.comments || []
-  )
+  // const [filteredComments, setFilteredComments] = useState(
+  //   comments.filter(comment => comment.activity_id === activity.id) 
+  // )
 
-  console.log(filteredComments)
+  // console.log(filteredComments)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -212,7 +212,7 @@ const CustomPopup = ({ id, type }) => {
                 </span>
                 <div className="row">{activity.name}</div>
                 <div className="comments" ref={commentsRef}>
-                {filteredComments.length > 0 ? filteredComments.map(comment => (
+                {comments.length > 0 ? comments.filter(comment => comment.activity_id === activity.id).map(comment => (
                          <div key={comment.id} className="comment">
                          <div className="head">
                            <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
@@ -249,7 +249,7 @@ const CustomPopup = ({ id, type }) => {
               )}
 
               <div className='middle'>
-                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({filteredComments?.length || 0})</span></div>
+                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({comments?.filter(comment => comment.activity_id === activity.id)?.length || 0})</span></div>
                 <div> /</div>
                 <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
               </div>

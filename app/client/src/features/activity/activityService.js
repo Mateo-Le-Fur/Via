@@ -82,7 +82,7 @@ return res.data
 const addComment = async (activityId, userId, text) => {
   const res = await privateReq.post(`/activity/${activityId}/comment/`, {userId, text})
   console.log(res.data)
-  return res.data
+  return res.data.message
   }
 
 const recipeService = {
