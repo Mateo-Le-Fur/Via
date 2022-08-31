@@ -38,7 +38,7 @@ const Home = () => {
    useEffect(() => {
       dispatch(getActivities())
       dispatch(getBookmarks())
-      dispatch(getFirstParticipations())
+      // dispatch(getFirstParticipations())
    }, [dispatch])
 
    useEffect(() => {
