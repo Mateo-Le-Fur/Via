@@ -33,9 +33,11 @@ const CustomPopup = ({ id, type }) => {
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
   const {comments} = useSelector(state => state.activity)
-  // const [filteredComments, setFilteredComments] = useState(
-  //   comments.find(el => el.id === activity.id).comments
-  // )
+  const [filteredComments, setFilteredComments] = useState(
+    comments?.find(el => el.id === activity.id)?.comments || []
+  )
+
+  console.log(filteredComments)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -203,7 +205,7 @@ const CustomPopup = ({ id, type }) => {
                 {activity.userDescription}
               </div>
             </div>}
-            {/* {
+            {
               mode === "comments" && !edit && <div className='commentsContainer'>
                 <span className="back">
                   <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
@@ -229,7 +231,7 @@ const CustomPopup = ({ id, type }) => {
                   <button type='submit'>Ajouter</button>
                 </form>
               </div>
-            } */}
+            }
             <div className='actions'>
               {current.id === activity.user_id && (
                 <div className='left'>
@@ -247,7 +249,7 @@ const CustomPopup = ({ id, type }) => {
               )}
 
               <div className='middle'>
-                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({comments?.length || 0})</span></div>
+                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({filteredComments?.length || 0})</span></div>
                 <div> /</div>
                 <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
               </div>
