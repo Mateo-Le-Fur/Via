@@ -209,8 +209,8 @@ const CustomPopup = ({ marker, type }) => {
                 {comments.length > 0 ? comments.filter(comment => comment.activity_id === activity.id).map(comment => (
                          <div key={comment.id} className="comment">
                          <div className="head">
-                           <div><img src={activity.url} alt="" /> <span>Marcel</span></div>
-                           <div>date</div>
+                           <div><img src={comment.avatar} alt="" /> <span>{comment.user}</span></div>
+                           <div>{comment.date}</div>
                          </div>
                          <div className="content">
                           {comment.text}

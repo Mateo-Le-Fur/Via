@@ -131,6 +131,8 @@ const activity = {
 
     const data = await activity.getComments(req);
 
+    // console.log(data);
+
     sseHandlerComments.broadcast(data, 'comment');
 
     res.on('close', () => {
@@ -169,11 +171,30 @@ const activity = {
     //   return data.comments.length;
     // });
 
+    const users = await User.findAll();
+
+    const userArr = [];
+
+    users.forEach((user) => {
+      userArr.push({ id: user.id, nickname: user.nickname });
+    });
+
     const val = [];
     activities.forEach((activity) => {
       activity.comments.forEach((comment) => {
         if (comment !== undefined) {
-          val.push(comment);
+          const newUserArr = userArr.filter(
+            (user) => user.id === comment.user_id,
+          );
+
+          const newComment = {
+            ...comment,
+            user: newUserArr[0].nickname,
+            avatar: `http://localhost:8080/api/user/${comment.user_id}/avatar`,
+            date: dateFormat.convertActivityDate(comment.created_at),
+          };
+
+          val.push(newComment);
         }
       });
     });
@@ -189,11 +210,20 @@ const activity = {
       throw new ApiError('Le commentaire ne peut être vide', 400);
     }
 
-    const comment = await Comment.create({
+    let comment = await Comment.create({
       text: req.body.text,
       user_id: userId,
       activity_id: activityId,
     });
+
+    const user = await User.findByPk(userId);
+
+    comment = {
+      ...comment.get(),
+      user: user.get().nickname,
+      avatar: `http://localhost:8080/api/user/${userId}/avatar`,
+      date: dateFormat.convertActivityDate(comment.get().created_at),
+    };
 
     if (comment) {
       const data = await activity.getComments(req);
