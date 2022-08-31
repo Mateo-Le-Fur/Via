@@ -140,7 +140,7 @@ const activity = {
 
     activity = JSON.parse(JSON.stringify(activity));
 
-    sseHandlerComments.sendDataToClients(activity);
+    sseHandlerComments.broadcast(activity);
 
     res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);
@@ -148,7 +148,6 @@ const activity = {
   },
 
   async getComments(req, res) {
-    const { id } = req.user;
     const { activityId } = req.params;
 
     const activity = await Activity.findByPk(activityId, {
@@ -159,9 +158,7 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
     }
 
-    sseHandlerComments.newConnection(id, res);
-
-    sseHandlerComments.broadcast(activity, 'comment');
+    res.json(activity);
   },
 
   async createComment(req) {

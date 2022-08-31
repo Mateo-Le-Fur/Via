@@ -403,4 +403,6 @@ router.route('/:userId/avatar')
 
 router.route('/sse/:city').get(controllerHandler(userController.getCreatedActivitiesInRealTime));
 
+router.route('/sse/:city').get(controllerHandler(userController.getCreatedActivitiesInRealTime));
+
 module.exports = router;
