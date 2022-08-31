@@ -14,10 +14,10 @@ import {
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { addComment, createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
-const CustomPopup = ({ marker, type }) => {
+const CustomPopup = ({ id, type }) => {
   const { participations } = useSelector(state => state.activity)
   const { activity } = useSelector(state => state.activity)
-  const [popup, setPopup] = useState()
+  const map = useMap()
   const popupRef = useRef(activity)
   
   const { user: current } = useSelector(state => state.auth);
@@ -41,7 +41,7 @@ const CustomPopup = ({ marker, type }) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  console.log(form)
+  
   var now = new Date();
   var day = ('0' + now.getDate()).slice(-2);
   var month = ('0' + (now.getMonth() + 1)).slice(-2);
@@ -66,19 +66,19 @@ const CustomPopup = ({ marker, type }) => {
     setDate(e.target.value)
   }
 
-  const map = useMap()
 
 
-  useEffect(() => {
-    if(popupRef && popupRef.current && popupRef.current._latlng){
-
-
-    if(activity.id === marker.id){
-      map.flyTo([activity.lat, activity.long])
-      map.openPopup(popupRef.current)
-    }
-  }
-  }, [activity, popup, marker.id, map])
+  // useEffect(() => {
+   
+  //   if(activity.id === id ){
+  //     map.flyTo([activity.lat, activity.long])
+      
+  //     // if(popupRef.current && popupRef.current._latlng && popupRef.current._latlng.lat && popupRef.current._latlng.lng){
+  //     //   map.openPopup(popupRef.current)
+  //     // }
+  //   }
+  
+  // }, [activity, id, map])
 
   const handleBookmark = () => {
     const booked = bookmarks.includes(activity.id)

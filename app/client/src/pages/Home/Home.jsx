@@ -63,14 +63,12 @@ const Home = () => {
     
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
-      console.log(data)
     
         dispatch(realTimeComments(data))
     
     });
   },  [])
 
-  console.log(participations)
   return (
     <div className='home'>
       {user && (
