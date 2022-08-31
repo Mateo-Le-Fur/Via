@@ -178,7 +178,9 @@ const CustomPopup = ({ id, type }) => {
                 <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
               </span>
               <div className="avatarContainer">
+                <div>
                 <img src={activity.url} alt="" />
+                </div>
               </div>
               <div className="nicknameContainer">
                 <span>{activity.nickname}</span>
