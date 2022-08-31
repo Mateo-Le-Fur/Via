@@ -159,8 +159,6 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
     }
 
-    sseHandlerComments.newConnection(id, res);
-
     res.json(activity);
   },
 

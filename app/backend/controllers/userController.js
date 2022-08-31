@@ -441,8 +441,9 @@ const userController = {
   },
 
   async getUserAvatar(req, res) {
+    const { userId } = req.params;
     // On recupere un utilisateur
-    const user = await User.findByPk(req.user.id, {
+    const user = await User.findByPk(userId, {
       raw: true,
     });
 
