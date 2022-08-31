@@ -8,7 +8,7 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import { getActivities, getBookmarks, getFirstParticipations, realTimeParticipations } from '../../features/activity/activitySlice'
+import { getActivities, getBookmarks, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
 
 const Home = () => {
@@ -48,16 +48,22 @@ const Home = () => {
  
   useEffect(() => {
     if( user){
-      console.log("hello")
       const source = new EventSource(`/api/activity/sse/participate/${user.city}`)
       source.addEventListener(`${user.city}`, (e) => {
         const data  = JSON.parse(e.data);
-        console.log(e.data)
         dispatch(realTimeParticipations(data))
       });
     }
    
   }, [])
+
+  useEffect(() => {
+    const source = new EventSource(`/api/activity/sse/comments/`)
+    source.addEventListener("comment", (e) => {
+      const data  = JSON.parse(e.data);
+      dispatch(realTimeComments(data))
+    });
+  },  [])
 
   console.log(participations)
   return (
