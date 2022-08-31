@@ -14,30 +14,15 @@ import {
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { addComment, createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
-const CustomPopup = ({ type }) => {
+const CustomPopup = ({ marker, type }) => {
   const { participations } = useSelector(state => state.activity)
   const { activity } = useSelector(state => state.activity)
-  // const [avatar, setAvatar] = useState("")
-  // useEffect(() => {
-  //   const fetchAvatar = async () => {
-  //     const userAvatar = await fetch(`/api/user/${activity.user_id}/avatar`, {
-  //       method: 'GET',
-  //     });
-
-  //     setAvatar(userAvatar.url)
-  //   }
-
-  //   fetchAvatar()
-  // }, [activity.user_id])
-
+  const [popup, setPopup] = useState()
+  const popupRef = useRef(activity)
+  
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
   const {comments} = useSelector(state => state.activity)
-  // const [filteredComments, setFilteredComments] = useState(
-  //   comments.filter(comment => comment.activity_id === activity.id) 
-  // )
-
-  // console.log(filteredComments)
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -81,15 +66,19 @@ const CustomPopup = ({ type }) => {
     setDate(e.target.value)
   }
 
-  const popupRef = useRef(activity)
-
   const map = useMap()
-  // useEffect(() => {
-  //   if(activity.id === id){
-  //     map.flyTo(activity.lat, activity.long)
-  //     map.openPopup(popupRef.current)
-  //   }
-  // }, [activity, id, map])
+
+
+  useEffect(() => {
+    if(popupRef && popupRef.current && popupRef.current._latlng){
+
+
+    if(activity.id === marker.id){
+      map.flyTo([activity.lat, activity.long])
+      map.openPopup(popupRef.current)
+    }
+  }
+  }, [activity, popup, marker.id, map])
 
   const handleBookmark = () => {
     const booked = bookmarks.includes(activity.id)
@@ -115,6 +104,8 @@ const CustomPopup = ({ type }) => {
       }, 100)
     }
   }
+
+  
 
     return (
       <Popup ref={popupRef}>

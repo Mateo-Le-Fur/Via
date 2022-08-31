@@ -56,7 +56,7 @@ const icon = getIcons(type)
       position={[marker.lat, marker.long]}
       icon={icon}
     >
-      <CustomPopup type={type} id={marker.id}/>
+      <CustomPopup type={type} marker={marker}/>
   
     </Marker>
 
