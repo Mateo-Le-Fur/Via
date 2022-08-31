@@ -64,9 +64,9 @@ const Home = () => {
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       console.log(data)
-      setTimeout(() => {
+    
         dispatch(realTimeComments(data))
-      }, 2000)
+    
     });
   },  [])
 
