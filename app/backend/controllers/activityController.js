@@ -166,7 +166,7 @@ const activity = {
     return val;
   },
 
-  async createComment(req) {
+  async createComment(req, res) {
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -174,15 +174,21 @@ const activity = {
       throw new ApiError('Le commentaire ne peut être vide', 400);
     }
 
-    await Comment.create({
+    const comment = await Comment.create({
       text: req.body.text,
       user_id: userId,
       activity_id: activityId,
     });
 
-    const data = activity.getComments(req);
+    if (comment) {
+      const data = await activity.getComments(req);
 
-    sseHandlerComments.broadcast(data, 'comment');
+      console.log(data);
+
+      sseHandlerComments.broadcast(data, 'comment');
+    }
+
+    res.json({ message: 'ok' });
   },
 
   async participateToActivity(req, res) {
