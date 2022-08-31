@@ -1,6 +1,6 @@
-const router = require("express").Router();
-const activityController = require("../controllers/activityController");
-const controllerHandler = require("../helpers/controllerHandler");
+const router = require('express').Router();
+const activityController = require('../controllers/activityController');
+const controllerHandler = require('../helpers/controllerHandler');
 
 /**
  * @swagger
@@ -74,7 +74,7 @@ const controllerHandler = require("../helpers/controllerHandler");
  *          description: Internal server error.
  */
 
-router.route("/").get(controllerHandler(activityController.getActivities)); // Gets all activities
+router.route('/').get(controllerHandler(activityController.getActivities)); // Gets all activities
 
 /**
  * @swagger
@@ -102,20 +102,24 @@ router.route("/").get(controllerHandler(activityController.getActivities)); // G
  *          description: Internal server error.
  */
 
-router.route("/:id").get(controllerHandler(activityController.getActivity)); // Gets one activity
+router.route('/:id').get(controllerHandler(activityController.getActivity)); // Gets one activity
 
 router
-  .route("/:activityId/comment")
+  .route('/:activityId/comment')
   .get(controllerHandler(activityController.getComments)) // Gets comments for one activity
   .post(controllerHandler(activityController.createComment)); // Posts one comment on one activity
 
 router
-  .route("/:userId/participate")
+  .route('/:userId/participate')
   .get(controllerHandler(activityController.getParticipations))
   .post(controllerHandler(activityController.participateToActivity));
 
 router
-  .route("/sse/participate/:city")
+  .route('/sse/participate/:city')
   .get(controllerHandler(activityController.getParticipationsInRealTime));
+
+router
+  .route('/sse/comments/')
+  .get(controllerHandler(activityController.getCommentsSSE));
 
 module.exports = router;

@@ -140,7 +140,7 @@ const activity = {
 
     activity = JSON.parse(JSON.stringify(activity));
 
-    sseHandlerComments.sendDataToClients(activity);
+    sseHandlerComments.broadcast(activity);
 
     res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);
@@ -148,7 +148,6 @@ const activity = {
   },
 
   async getComments(req, res) {
-    const { id } = req.params;
     const { activityId } = req.params;
 
     const activity = await Activity.findByPk(activityId, {
@@ -162,7 +161,7 @@ const activity = {
     res.json(activity);
   },
 
-  async createComment(req, res) {
+  async createComment(req) {
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -176,7 +175,7 @@ const activity = {
       activity_id: activityId,
     });
 
-    res.json(comment);
+    sseHandlerComments.broadcast(comment, 'comment');
   },
 
   async participateToActivity(req, res) {
