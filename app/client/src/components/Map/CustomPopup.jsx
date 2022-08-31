@@ -118,8 +118,9 @@ const CustomPopup = ({ type }) => {
 
     return (
       <Popup ref={popupRef}>
-        {activity && (
+        {activity && activity.name && activity.description && activity.address && activity.date && activity.nickname && (
 
+ 
         <div>
           <div className='popupContainer'>
             {edit && (
@@ -270,7 +271,7 @@ const CustomPopup = ({ type }) => {
             </div>
           </div>
         </div>
-              )}
+               )}
       </Popup>
     );
 };
