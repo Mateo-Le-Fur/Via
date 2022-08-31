@@ -131,8 +131,6 @@ const activity = {
 
     const data = await activity.getComments(req);
 
-    // console.log(data);
-
     sseHandlerComments.broadcast(data, 'comment');
 
     res.on('close', () => {
@@ -158,7 +156,6 @@ const activity = {
         city: getUser.city,
       },
     });
-    console.log(JSON.parse(JSON.stringify(activity)));
 
     if (!activity) {
       throw new ApiError('Aucune activité trouvé', 400);
