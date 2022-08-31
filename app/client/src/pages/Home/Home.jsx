@@ -18,6 +18,7 @@ const Home = () => {
   const dispatch = useDispatch()
   const {activities} = useSelector(state => state.activity)
   const {participations} = useSelector(state => state.activity)
+
   const groupMarkers = useMemo(() => {
     if(activities.length > 0 ){
     const array = activities.map(activity => (
@@ -61,6 +62,7 @@ const Home = () => {
     const source = new EventSource(`/api/activity/sse/comments/`)
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
+      console.log(data)
       dispatch(realTimeComments(data))
     });
   },  [])

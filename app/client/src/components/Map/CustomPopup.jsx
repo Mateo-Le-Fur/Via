@@ -33,9 +33,9 @@ const CustomPopup = ({ id, type }) => {
   const { user: current } = useSelector(state => state.auth);
   const { bookmarks } = useSelector(state => state.activity)
   const {comments} = useSelector(state => state.activity)
-  const [filteredComments, setFilteredComments] = useState(
-    comments.find(el => el.id === activity.id).comments
-  )
+  // const [filteredComments, setFilteredComments] = useState(
+  //   comments.find(el => el.id === activity.id).comments
+  // )
   const [edit, setEdit] = useState(false);
   const [mode, setMode] = useState('activity');
   const dispatch = useDispatch()
@@ -203,7 +203,7 @@ const CustomPopup = ({ id, type }) => {
                 {activity.userDescription}
               </div>
             </div>}
-            {
+            {/* {
               mode === "comments" && !edit && <div className='commentsContainer'>
                 <span className="back">
                   <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
@@ -229,7 +229,7 @@ const CustomPopup = ({ id, type }) => {
                   <button type='submit'>Ajouter</button>
                 </form>
               </div>
-            }
+            } */}
             <div className='actions'>
               {current.id === activity.user_id && (
                 <div className='left'>
