@@ -14,7 +14,6 @@ import { useSelect } from '@mui/base'
 const CustomMarker = ({marker, type} ) => {
 
 const icon = getIcons(type)
-const {activity} = useSelector(state => state.activity)
 
   const dispatch = useDispatch()
 
@@ -57,7 +56,7 @@ const {activity} = useSelector(state => state.activity)
       position={[marker.lat, marker.long]}
       icon={icon}
     >
-      <CustomPopup type={type} id={marker.id} activity={activity}/>
+      <CustomPopup type={type} id={marker.id}/>
   
     </Marker>
 

@@ -14,7 +14,7 @@ import {
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { addComment, createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
 
-const CustomPopup = ({ id, type }) => {
+const CustomPopup = ({ type }) => {
   const { participations } = useSelector(state => state.activity)
   const { activity } = useSelector(state => state.activity)
   // const [avatar, setAvatar] = useState("")
@@ -115,9 +115,11 @@ const CustomPopup = ({ id, type }) => {
       }, 100)
     }
   }
-  if (activity && activity.name && activity.description && activity.address && activity.date && activity.nickname)
+
     return (
       <Popup ref={popupRef}>
+        {activity && (
+
         <div>
           <div className='popupContainer'>
             {edit && (
@@ -268,6 +270,7 @@ const CustomPopup = ({ id, type }) => {
             </div>
           </div>
         </div>
+              )}
       </Popup>
     );
 };
