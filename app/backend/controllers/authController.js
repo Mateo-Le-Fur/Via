@@ -68,7 +68,9 @@ const auth = {
 
     delete createdUser.password;
 
-    res.json(createdUser);
+    const val = { ...createdUser, url: `http://localhost:8080/api/user/${createdUser.id}/avatar` };
+
+    res.json(val);
   },
 
   async login(req, res) {

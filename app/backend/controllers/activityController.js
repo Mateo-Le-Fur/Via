@@ -148,7 +148,7 @@ const activity = {
   },
 
   async getComments(req, res) {
-    const { id } = req.params;
+    const { id } = req.user;
     const { activityId } = req.params;
 
     const activity = await Activity.findByPk(activityId, {
@@ -159,10 +159,12 @@ const activity = {
       throw new ApiError(`L'activité portant l'id ${activityId} n'existe pas`, 400);
     }
 
-    res.json(activity);
+    sseHandlerComments.newConnection(id, res);
+
+    sseHandlerComments.broadcast(activity, 'comment');
   },
 
-  async createComment(req, res) {
+  async createComment(req) {
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -176,7 +178,7 @@ const activity = {
       activity_id: activityId,
     });
 
-    res.json(comment);
+    sseHandlerComments.broadcast(comment, 'comment');
   },
 
   async participateToActivity(req, res) {
