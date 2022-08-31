@@ -60,10 +60,13 @@ const Home = () => {
 
   useEffect(() => {
     const source = new EventSource(`/api/activity/sse/comments/`)
+    
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       console.log(data)
-      dispatch(realTimeComments(data))
+      setTimeout(() => {
+        dispatch(realTimeComments(data))
+      }, 2000)
     });
   },  [])
 
