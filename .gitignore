@@ -6,3 +6,5 @@ node_modules
 *.log
 /upload
 /images
+localhost-cert.pem
+localhost-privkey.pem
