@@ -13,10 +13,9 @@ import { reset, updateUser } from "../../features/auth/authSlice";
 // import { checkUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
-  const { isError, message } = useSelector((state) => state.user);
   const { activities } = useSelector((state) => state.activity);
   const [filtered, setFiltered] = useState([]);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isError, message, isSuccess} = useSelector((state) => state.auth);
   const { showSuggestionBox } = useSelector((state) => state.global);
 
   useEffect(() => {
@@ -118,7 +117,8 @@ const Profile = () => {
     return (
 
       <div className="profile">
-        {message && <p className="server-error">{message}</p>}
+        {isError && message && <p className="server-error">{message}</p>}
+        {isSuccess  && message && <p className="server-success">{message}</p>}
         <form className="editForm" onSubmit={handleSubmit}>
           <div className="avatar">
             <input
