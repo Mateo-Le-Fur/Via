@@ -77,7 +77,7 @@ const Home = () => {
   return (
     <div className='home'>
       {user && (
-        <Map center={[user.lat, user.long]} zoom={13} zoomControl={true}>
+        <Map center={[user.lat, user.long]} scrollWheelZoom={true} zoom={13} doubleClickZoom={true} zoomControl={true}>
         {markerGroups && markerGroups.map((group) => (
         <CustomLayer key={group[0]} group={group}/>
       ))}

@@ -3,10 +3,10 @@
 
 .sidebar {
     position: absolute;
-    z-index: 3000;
+    z-index: 4000;
     top: 0;
     right: 0;
-    height: 98%;
+    height: 100%;
     width: 4%;
     @media (max-width: 600px){
         width:  15%;
@@ -15,7 +15,7 @@
     display: flex;
     flex-direction: column;
     padding-top: 1rem;
-    padding-bottom: .5rem;
+    padding-bottom: 1rem;
     gap: 2%;
     align-items: center;
     justify-content: space-between;

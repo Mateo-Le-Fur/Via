@@ -132,9 +132,7 @@ const Profile = () => {
             </label>
           </div>
           <div
-            className={
-              form.firstname.length > 0 ? "field field--has-content" : "field"
-            }
+            className="field"
           >
             <input
               className="field-input"
@@ -145,14 +143,9 @@ const Profile = () => {
               placeholder="Prénom"
               onChange={handleChange}
             />
-            <label className="field-label" htmlFor="firstname">
-              Prénom
-            </label>
           </div>
           <div
-            className={
-              form.lastname.length > 0 ? "field field--has-content" : "field"
-            }
+            className="field"
           >
             <input
               value={form.lastname}
@@ -163,16 +156,9 @@ const Profile = () => {
               placeholder="Nom"
               onChange={handleChange}
             />
-            <label htmlFor="lastname" className="field-label">
-              Nom
-            </label>
           </div>
           <div
-            className={
-              inputAddress.length > 0
-                ? "field field--has-content field-address"
-                : "field field-address"
-            }
+            className="field address"
           >
             <input
               value={inputAddress}
@@ -188,14 +174,10 @@ const Profile = () => {
                 handleAddress={handleAddress}
               />
             )}
-            <label htmlFor="lastname" className="field-label">
-              Adresse
-            </label>
+         
           </div>
           <div
-            className={
-              form.phone.length > 0 ? "field field--has-content" : "field"
-            }
+              className="field"
           >
             <input
               value={form.phone}
@@ -206,10 +188,6 @@ const Profile = () => {
               placeholder="Téléphone"
               onChange={handleChange}
             />
-            <label htmlFor="phone" className="field-label">
-              Téléphone
-            </label>
-
           </div>
           <div className="areaContainer">
             <textarea
