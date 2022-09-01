@@ -7,11 +7,6 @@ import { useEffect } from "react";
 
 const Landing = () => {
 
-  useEffect(() => {
-    EventSource.close()
-  }, [])
-  
-  
   return (
     <div className='landing'>
       <Map zoom={13} center={[48.86, 2.33]} blur={true} />
