@@ -266,6 +266,8 @@
                 }
             }
             .commentsContainer{
+              
+                position: relative;
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
@@ -285,7 +287,7 @@
                 }
                 .comments{
                     width: 100%;
-                    height: 235px !important;
+                    height: 260px !important;
                     display: block;
                     flex-direction: column;
                     overflow: auto;
@@ -325,21 +327,26 @@
                     }
                 }
                 .add{
-                    height: 20px !important;
+                    height: 80px !important;
+                    position: absolute;
+                    align-self: center;
+                    bottom: 4px;
                     margin-top: .4rem;
                     display: flex;
-                    width: 100%;
+                    width: 90%;
+                    box-shadow: -4px 0px 4px 2px rgba(204, 204, 204, 0.25);
                     flex-direction: row;
                     gap: 0;
-                    border-bottom: 1px solid vars.$primary-color;
                     border-radius: 5px;
                     overflow: hidden;
                     &.form-error{
                         border-color: tomato;
                     }
-                    input{
+                    textarea{
+                        padding: .5rem;
+                        resize: none;
                         height: 100% !important;
-                        width: 80%;
+                        width: 90%;
                         border: none;
                         outline: none;
                         &.input-error{
@@ -347,14 +354,14 @@
                         }
                     }
                     button{
-                        height: 20px !important;
-                        width: 20%;
+                        height: 100% !important;
+                        width: 10%;
                         border: none;
                         outline: none;
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        border-radius: 5px;
+                     
                         background-color: vars.$primary-color;
                         color: white;
                         cursor: pointer;
