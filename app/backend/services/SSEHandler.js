@@ -1,3 +1,4 @@
+const ApiError = require('../errors/apiError');
 const SSE = require('./SSEConnection');
 
 class SSEHandler {
@@ -9,6 +10,12 @@ class SSEHandler {
 
   // créer une connexion avec un utilisateur
   newConnection(id, res) {
+    const checkConnection = this.clients.get(id);
+
+    if (checkConnection) {
+      throw new ApiError('Connection deja établie', 403);
+    }
+
     console.log(`Nouvelle connection sur le salon ${this.name} avec l'id ${id}`);
     // On instancie la classe SSE
     const client = new SSE(res);
