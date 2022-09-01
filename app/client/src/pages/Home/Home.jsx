@@ -13,7 +13,7 @@ import { checkUser } from '../../features/auth/authSlice'
 
 
 const Home = () => {
-  const { user } = useSelector(state => state.auth)
+  const { user, message } = useSelector(state => state.auth)
   const {filter} = useSelector(state => state.global)
   const [markerGroups, setMarkerGroups] = useState([])
   const dispatch = useDispatch()
@@ -55,7 +55,10 @@ const Home = () => {
         const data  = JSON.parse(e.data);
         dispatch(realTimeParticipations(data))
       });
-    }
+
+    } 
+
+  
    
   }, [])
 
@@ -69,6 +72,8 @@ const Home = () => {
       
     
     });
+
+
   },  [])
 
   return (
