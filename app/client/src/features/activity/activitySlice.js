@@ -246,7 +246,12 @@ export const activitySlice = createSlice({
   name: "actvity",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    reset: (state) => {
+      state.isError =  false
+  state.isSuccess = false
+ state.isLoading =false
+  state.message = ""
+    },
     realTimeParticipations: (state, action) => {
       state.participations = action.payload
     },

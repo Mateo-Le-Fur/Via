@@ -40,7 +40,9 @@ const handleSubmit = (e) => {
   if (form.name  && form.description && address && type && date){
     console.log({...form, type, date, address})
     dispatch(createActivity({...form, type, date, address}))
-    dispatch(activePanel(""))
+    if(!isError){
+      dispatch(activePanel(""))
+    }
   
   } else {
     return;
