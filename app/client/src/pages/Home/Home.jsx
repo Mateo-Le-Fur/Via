@@ -8,7 +8,7 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import { getActivities, getBookmarks, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
+import { getActivities, getBookmarks, getComments, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
 
 let comments = []
@@ -41,7 +41,7 @@ const Home = () => {
    useEffect(() => {
       dispatch(getActivities())
       dispatch(getBookmarks())
-      // dispatch(getFirstParticipations())
+      dispatch(getComments())
    }, [dispatch])
 
    useEffect(() => {
@@ -63,8 +63,6 @@ const Home = () => {
   useEffect(() => {
     const source = new EventSource(`/api/activity/sse/comments/`)
      
-    
-
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       comments.push(data)

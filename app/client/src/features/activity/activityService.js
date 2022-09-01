@@ -72,11 +72,11 @@ const res = await privateReq.post(`/activity/${userId}/participate/`, {activityI
 return res.data
 }
 
-//  get comments 
-// const getComments = async (activityId) => {
-//   const res = await privateReq.get(`/activity/${activityId}/comment/`, {activityId})
-//   return res.data.comments
-//   }
+ // get comments 
+const getComments = async () => {
+  const res = await privateReq.get(`/activity/comments/`)
+  return res.data
+  }
 
 // add comment
 const addComment = async (activityId, userId, text) => {
@@ -95,6 +95,7 @@ const recipeService = {
   createBookmark,
   deleteBookmark,
   participate,
+  getComments,
   addComment,
 }
 
