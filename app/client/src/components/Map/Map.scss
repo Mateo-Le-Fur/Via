@@ -433,7 +433,7 @@
                             fill: vars.$primary-color;
                             transition: fill .3s ease-in-out;
                             &.bookmark{
-                                fill: vars.$tertiary-color;
+                                fill: vars.$secondary-color;
                             }
                             &:hover {
                                 fill: vars.$tertiary-color;
