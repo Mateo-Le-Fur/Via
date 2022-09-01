@@ -14,7 +14,7 @@ import {
 } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { getActivity, deleteActivity } from '../../features/activity/activitySlice';
-import { handleHideList } from '../../features/global/globalSlice';
+import { activePanel, handleHideList, handleHideSidebar } from '../../features/global/globalSlice';
 
 
 
@@ -70,6 +70,8 @@ if (participations){
         <div className='left'>
           <div onClick={() => {
             dispatch(handleHideList())
+            dispatch(handleHideSidebar())
+            dispatch(activePanel(""))
             dispatch(getActivity(activity.id))
           }} >
           <HiSearch className='actionIcon' />

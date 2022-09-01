@@ -184,7 +184,11 @@ const CustomPopup = ({ id, type }) => {
               <div className="nicknameContainer">
                 <span>{activity.nickname}</span>
               </div>
-              <div className='addressContainer'>
+              {!activity.userAddress && !activity.firstname && !activity.lastname && !activity.phone && !activity.userDescription ? (
+                  <p>L'utilisateur n'a pas encore renseigné ces infromations</p>
+              ): (
+                <>
+                   <div className='addressContainer'>
                 <HiLocationMarker className='smIcon' /> <span>{activity.userAddress}</span>
               </div>
               <div className='namesContainer'>
@@ -198,6 +202,9 @@ const CustomPopup = ({ id, type }) => {
               <div className='descriptionContainer'>
                 {activity.userDescription}
               </div>
+                  </>
+              )}
+             
             </div>}
             {
               mode === "comments" && !edit && <div className='commentsContainer'>
