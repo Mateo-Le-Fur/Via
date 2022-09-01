@@ -206,8 +206,6 @@ const activity = {
   },
 
   async createComment(req) {
-    console.time('test');
-
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -231,8 +229,6 @@ const activity = {
     };
 
     sseHandlerComments.broadcast(comment, 'comment');
-
-    console.timeEnd('test');
   },
 
   async participateToActivity(req, res) {
