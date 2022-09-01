@@ -129,18 +129,14 @@ const activity = {
 
     sseHandlerComments.newConnection(id, res);
 
-    const data = await activity.getComments(req);
-
     // console.log(data);
 
-    sseHandlerComments.broadcast(data, 'comment');
-
     res.on('close', () => {
-      sseHandlerParticipate.closeConnection(id);
+      sseHandlerComments.closeConnection(id);
     });
   },
 
-  async getComments(req) {
+  async getComments(req, res) {
     const { id } = req.user;
 
     const getUser = await User.findByPk(id, {
@@ -206,10 +202,12 @@ const activity = {
       });
     });
 
-    return val;
+    res.json(val);
   },
 
-  async createComment(req, res) {
+  async createComment(req) {
+    console.time('test');
+
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -232,13 +230,9 @@ const activity = {
       date: dateFormat.convertActivityDate(comment.get().created_at),
     };
 
-    if (comment) {
-      const data = await activity.getComments(req);
+    sseHandlerComments.broadcast(comment, 'comment');
 
-      sseHandlerComments.broadcast(data, 'comment');
-    }
-
-    res.json({ message: 'ok' });
+    console.timeEnd('test');
   },
 
   async participateToActivity(req, res) {

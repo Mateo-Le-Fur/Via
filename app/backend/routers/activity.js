@@ -104,11 +104,14 @@ router.route('/').get(controllerHandler(activityController.getActivities)); // G
  *          description: Internal server error.
  */
 
+router
+  . route('/comments')
+  .get(controllerHandler(activityController.getComments));
+
 router.route('/:id').get(controllerHandler(activityController.getActivity)); // Gets one activity
 
 router
   .route('/:activityId/comment')
-  .get(controllerHandler(activityController.getComments)) // Gets comments for one activity
   .post(validator('body', commentValidator), controllerHandler(activityController.createComment)); // Posts one comment on one activity
 
 router
