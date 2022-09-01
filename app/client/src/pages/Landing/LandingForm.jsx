@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import {useNavigate} from "react-router-dom"
 import { reset } from '../../features/auth/authSlice';
+import logo from "../../assets/images/logo.png"
 
 const LandingForm = () => {
     const [isMember, setIsMember] = useState(true)
@@ -36,7 +37,7 @@ const LandingForm = () => {
     <div className="landingForm">
       <div className="container">
         <div className="logo">
-          <img src='/via.png' alt="" />
+          <img src={logo} alt="logo" />
         </div>
         <div className="form">
           {message && message !== "Le token n'existe pas" && <p className='server-error'>{message}</p>}
