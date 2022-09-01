@@ -68,6 +68,8 @@ const Home = () => {
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
+
+      
     
     });
 
