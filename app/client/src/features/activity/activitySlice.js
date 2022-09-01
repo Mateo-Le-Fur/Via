@@ -303,12 +303,10 @@ export const activitySlice = createSlice({
       })
       .addCase(updateActivity.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.activity = action.payload
         state.activities = state.activities.map(activity => activity.id === action.payload.id ? (action.payload) : activity)
       })
       .addCase(deleteActivity.fulfilled, (state, action) => {
-        console.log(action.payload)
         state.isLoading = false
         state.isError = false
         state.activities = state.activities.filter(activity => activity.id !== action.payload)
@@ -330,7 +328,6 @@ export const activitySlice = createSlice({
       })
       .addCase(createBookmark.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.bookmarks = action.payload
       })
       .addCase(createBookmark.rejected, (state, action) => {
@@ -340,7 +337,6 @@ export const activitySlice = createSlice({
       })
       .addCase(deleteBookmark.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.bookmarks = action.payload
       })
       // .addCase(getFirstParticipations.pending, (state) => {
@@ -361,7 +357,6 @@ export const activitySlice = createSlice({
       })
       .addCase(participate.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.message = action.payload
       })
       .addCase(participate.rejected, (state, action) => {
@@ -371,7 +366,6 @@ export const activitySlice = createSlice({
       })
       .addCase(getComments.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
         state.comments = action.payload
       })
       .addCase(getComments.rejected, (state, action) => {
@@ -384,7 +378,7 @@ export const activitySlice = createSlice({
             })
       .addCase(addComment.fulfilled, (state, action) => {
         state.isLoading = false
-        state.isSuccess = true
+        
       })
       .addCase(addComment.rejected, (state, action) => {
         state.isLoading = false

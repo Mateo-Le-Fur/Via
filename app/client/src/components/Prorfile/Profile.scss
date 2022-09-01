@@ -6,9 +6,8 @@
 
     h2{
         font-size: 1.1rem;
-
         letter-spacing: 5px;
-        margin-bottom: 1rem;
+        margin-bottom: .8rem;
     }
     .server-error{
         text-align: center;
@@ -20,13 +19,13 @@
       color: vars.$quaternary-color;
     }
     .editForm {
-      padding-top: 2rem;
+      padding-top: 1.3rem;
         width: 97%;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
         .avatar{
           width: 100%;
           height: 70px;
@@ -117,7 +116,8 @@
     }
 
     .activityList{
-      width: 97%;
+      padding: 0 30px;
+      width: 100%;
       @media (min-height: 800px){
         height: 50%;
       };
