@@ -144,7 +144,6 @@ const activity = {
     const { id } = req.user;
 
     const getUser = await User.findByPk(id, {
-      raw: true,
       attributes: ['city'],
     });
 
@@ -157,6 +156,9 @@ const activity = {
       where: {
         city: getUser.city,
       },
+      order: [
+        [{ model: Comment, as: 'comments' }, 'created_at', 'asc'],
+      ],
     });
 
     if (!activity) {
@@ -171,7 +173,11 @@ const activity = {
     //   return data.comments.length;
     // });
 
-    const users = await User.findAll();
+    const users = await User.findAll({
+      where: {
+        city: getUser.city,
+      },
+    });
 
     const userArr = [];
 
@@ -180,6 +186,7 @@ const activity = {
     });
 
     const val = [];
+
     activities.forEach((activity) => {
       activity.comments.forEach((comment) => {
         if (comment !== undefined) {
