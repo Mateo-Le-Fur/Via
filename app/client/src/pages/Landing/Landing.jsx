@@ -9,8 +9,6 @@ const Landing = () => {
 
   useEffect(() => {
     EventSource.close()
-  
-  
   }, [])
   
   
