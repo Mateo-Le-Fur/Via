@@ -100,6 +100,7 @@ Once a user has opened an activity window, she/he can post comments on it, letti
 
 </br>
 <a id="technologies"><h2 style="color:#ffa64d; font-weight:bold">--- Technologies ---</h2></a>
+</br>
 
 <img alt="React" src="https://img.shields.io/badge/-React-61DAFB?style=flat-square&logo=React&logoColor=black"  style="margin: 0 5px"/>
 <img alt="redux" src="https://img.shields.io/badge/-Redux-764ABC?style=flat-square&logo=redux&logoColor=white"  style="margin: 0 5px"/>
@@ -123,6 +124,6 @@ Once a user has opened an activity window, she/he can post comments on it, letti
 </br>
 <a id="members"><h2 style="color:#ffa64d; font-weight:bold">--- Project members ---</h2></a>
 
-<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Louis Leca</h4> - <h4 style="color:#307cff">Lead dev Front<h4></div>
-<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Mateo Le Fur</h4> - <h4 style="color:#307cff">Lead dev Back, Git master<h4></div>
-<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Benjamin Boy</h4> - <h4 style="color:#307cff">Product owner, scrum master, dev back<h4></div>
+<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Louis Leca</h4><h4 style="color:#307cff"> - Lead dev Front<h4></div>
+<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Mateo Le Fur</h4><h4 style="color:#307cff"> - Lead dev Back, Git master<h4></div>
+<div style="display:flex; gap:10px"><h4 style="color:#30b3ff; font-weight:bold">Benjamin Boy</h4><h4 style="color:#307cff"> - Product owner, scrum master, dev back<h4></div>
