@@ -266,12 +266,14 @@ export const activitySlice = createSlice({
       })
       .addCase(createActivity.fulfilled, (state, action) => {
         state.isLoading = false
+        state.isError = false
         state.isSuccess = true
         state.activity = action.payload
         state.activities.push(action.payload)
       })
       .addCase(createActivity.rejected, (state, action) => {
         state.isLoading = false
+        state.isSuccess = false
         state.isError = true
         state.message = action.payload
       })

@@ -9,7 +9,7 @@ import {GiCook, GiPalette, } from "react-icons/gi"
 import { useDispatch, useSelector } from 'react-redux';
 import { createActivity, reset } from '../../features/activity/activitySlice';
 import SuggestionBox from './SeuggestionBox';
-import { activePanel, handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
+import { activePanel, handleHideSidebar, handleHideSuggestionBox, handleShowSuggestionBox } from '../../features/global/globalSlice';
 import OutsideWrapper from '../../hooks/ClickOutsideHook'
 
 const Add = () => {
@@ -37,26 +37,27 @@ const [address, setAddress] = useState("")
 const handleSubmit = (e) => {
   e.preventDefault()
   console.log({...form, type, date})
-  if (form.name  && form.description && address && type && date){
-    console.log({...form, type, date, address})
     dispatch(createActivity({...form, type, date, address}))
-  
-  } else {
-    return;
-  }
 }
   useEffect(() => {
-    if(message){
+    if(message && isError){
       setTimeout(() => {
+     
         dispatch(reset())
       }, 3000)
     }
 
     if(isSuccess){
-        dispatch(activePanel(""))
+      dispatch(activePanel(""))
+      dispatch(handleHideSidebar())
+      dispatch(reset())
     }
+ 
     
-  }, [message, isSuccess, dispatch])
+  }, [message, isError, isSuccess, dispatch])
+
+
+
 
   const  [inputAddress, setInputAddress] = useState("");
 
@@ -79,16 +80,14 @@ const handleSubmit = (e) => {
 
   return (
     <div className='add'>
-    {isError && message &&   <p className='server-error'>{message}</p> }
+    {isError && message &&  <p className='server-error'>{message}</p> }
       <form className='editForm' onSubmit={handleSubmit}>
-      <div className={form.name.length > 0 ? "field field--has-content" : "field"}>
+      <div className="field">
             <input className='field-input' name="name" type="text" id="name" value={form.nickname} placeholder="Nom de l'activité" onChange={handleChange} />
-            <label className='field-label' htmlFor="firstname">Nom de l'activité</label>
         </div>
-         <div className={inputAddress.length > 0 ? "field field--has-content field-address" : "field field-address"}>
+         <div className= "field field-address">
             <input value={inputAddress}  className='field-input' type="text" id="address" placeholder='Adresse'  onChange={handleChangeAddress} />
             {showSuggestionBox &&    <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress}/>}
-            <label htmlFor="lastname" className="field-label">Adresse</label>
         </div>
         <div className='areaContainer'>
               <textarea onChange={handleChange} value={form.description} name="description" id="description" placeholder='Description'></textarea>
