@@ -56,9 +56,6 @@ const Home = () => {
         dispatch(realTimeParticipations(data))
       });
 
-      if(message === "déconnecté"){
-        source.close()
-      }
     } 
 
   
@@ -74,9 +71,7 @@ const Home = () => {
     
     });
 
-    if(message === "déconnecté"){
-      source.close()
-    }
+
   },  [])
 
   return (
