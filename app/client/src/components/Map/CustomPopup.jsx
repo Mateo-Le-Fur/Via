@@ -210,9 +210,8 @@ const CustomPopup = ({ id, type }) => {
             {
               mode === "comments" && !edit && <div className='commentsContainer'>
                 <span className="back">
-                  <FaChevronLeft onClick={() => setMode("activity")} className='actionIcon' />
+                  <FaChevronLeft  onClick={() => setMode("activity")} className="chevron" />
                 </span>
-                <div className="row">{activity.name}</div>
                 <div className="comments" ref={commentsRef}>
                 {comments.length > 0 ? comments.filter(comment => comment.activity_id === activity.id).map(comment => (
                          <div key={comment.id} className="comment">

@@ -270,25 +270,25 @@
             }
             .commentsContainer{
                 display: flex;
+                height: 100%;
                 flex-direction: column;
-                gap: 10px;
-                position: relative;
                 .back{
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                }
-                .row{
+                    height: 5% !important;
                     width: 100%;
                     display: flex;
-                    padding-left: 2rem;
-                    justify-content: center;
-                    color: vars.$tertiary-color;
-                    font-weight: bold;
+                    .chevron{
+                        font-size: 1.3rem;
+                        color: vars.$primary-color;
+                        cursor: pointer;
+                        &:hover{
+                            color: vars.$tertiary-color;
+                        }
+                    }
                 }
+                
                 .comments{
                     width: 100%;
-                    height: 70% !important;
+                    height: 75% !important;
                     display: block;
                     flex-direction: column;
                     overflow: auto;
@@ -330,7 +330,8 @@
                 .add{                
                     align-self: center;
                     display: flex;
-                    height: 30%;
+                    min-height: 20%;
+                    height: 25% !important;
                     margin-bottom: 3px;
                     width: 90%;
                     box-shadow: -4px 0px 4px 2px rgba(204, 204, 204, 0.25);
