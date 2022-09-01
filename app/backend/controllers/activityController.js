@@ -127,7 +127,11 @@ const activity = {
   async getCommentsSSE(req, res) {
     const { id } = req.user;
 
+    console.log('hi !');
+
     sseHandlerComments.newConnection(id, res);
+
+    sseHandlerComments.broadcast('init', 'comment');
 
     // console.log(data);
 
@@ -205,7 +209,7 @@ const activity = {
     res.json(val);
   },
 
-  async createComment(req) {
+  async createComment(req, res) {
     const { activityId } = req.params;
     const { userId } = req.body;
 
@@ -229,6 +233,8 @@ const activity = {
     };
 
     sseHandlerComments.broadcast(comment, 'comment');
+
+    res.end();
   },
 
   async participateToActivity(req, res) {
