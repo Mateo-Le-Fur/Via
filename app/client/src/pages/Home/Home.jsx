@@ -73,6 +73,10 @@ const Home = () => {
       dispatch(realTimeComments(data))
     
     });
+
+    if(message === "déconnecté"){
+      source.close()
+    }
   },  [])
 
   return (
