@@ -9,11 +9,10 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    color: vars.$gray;
     align-items: center;
     transform: translateY(90%);
     transition: all .6s ease-in-out;
-    background-color: transparent;
+    background-color: rgba(255, 255, 255, 0.4);
     @media (max-width: 600px) {
         height: 100%;
         transform: translateY(95%);
@@ -25,7 +24,7 @@
         height: 10%;
         .chevronIcon{
             font-size: 2rem;
-            fill: vars.$tertiary-color;
+            fill: vars.$primary-color;
             cursor: pointer;
         }
     }
@@ -43,6 +42,15 @@
         gap: 2%;
         
     }
+
+    .wrapper::-webkit-scrollbar{
+        height: 10px;
+    }
+
+    .wrapper::-webkit-scrollbar-thumb{
+        border-radius: 8px;
+    }
+
     &.showList{
         transform: translateY(0%);
         background-color: rgba(255,255,255,0.5);
