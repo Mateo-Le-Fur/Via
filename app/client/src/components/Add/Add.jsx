@@ -40,9 +40,6 @@ const handleSubmit = (e) => {
   if (form.name  && form.description && address && type && date){
     console.log({...form, type, date, address})
     dispatch(createActivity({...form, type, date, address}))
-    if(!isError){
-      dispatch(activePanel(""))
-    }
   
   } else {
     return;
@@ -54,8 +51,12 @@ const handleSubmit = (e) => {
         dispatch(reset())
       }, 3000)
     }
+
+    if(isSuccess){
+        dispatch(activePanel(""))
+    }
     
-  }, [message, dispatch])
+  }, [message, isSuccess, dispatch])
 
   const  [inputAddress, setInputAddress] = useState("");
 
