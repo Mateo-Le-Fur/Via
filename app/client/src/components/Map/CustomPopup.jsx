@@ -234,40 +234,42 @@ const CustomPopup = ({ id, type }) => {
                 </form>
               </div>
             }
-            <div className='actions'>
-              {current.id === activity.user_id && (
-                <div className='left'>
-                  <div onClick={() => setEdit(!edit)}>
-                    <HiPencil
-                      className='actionIcon'
-
-                    />
+            {
+              mode !== "comments" && (
+                <div className='actions'>
+                {current.id === activity.user_id && (
+                  <div className='left'>
+                    <div onClick={() => setEdit(!edit)}>
+                      <HiPencil
+                        className='actionIcon'
+  
+                      />
+                    </div>
+                    <div onClick={() => dispatch(deleteActivity({ activityId: activity.id, userId: activity.user_id }))} >
+                      <HiTrash className='actionIcon' />
+                    </div>
+  
                   </div>
-                  <div onClick={() => dispatch(deleteActivity({ activityId: activity.id, userId: activity.user_id }))} >
-                    <HiTrash className='actionIcon' />
+                )}
+  
+                <div className='middle'>
+                  <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({comments?.filter(comment => comment.activity_id === activity.id)?.length || 0})</span></div>
+                  <div> /</div>
+                  <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
+                </div>
+  
+                <div className='right'>
+                  <div onClick={handleBookmark} >
+                    <FaStar className={bookmarks && bookmarks.includes(activity.id)
+                      ? "starIcon bookmark" : "starIcon"} />
                   </div>
-
+  
                 </div>
-              )}
-
-              <div className='middle'>
-                <div className='actionMiddle' onClick={() => setMode("comments")}>Commentaires <span>({comments?.filter(comment => comment.activity_id === activity.id)?.length || 0})</span></div>
-                <div> /</div>
-                <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>
+  
               </div>
+              )
+            }
 
-              <div className='right'>
-                <div onClick={handleBookmark} >
-                  <FaStar className={bookmarks && bookmarks.includes(activity.id)
-                    ? "starIcon bookmark" : "starIcon"} />
-                </div>
-
-              </div>
-              {/* <div className='right'>
-                <FaStar onClick={() =>  dispatch(deleteBookmark(activity.id))} className={bookmarks && bookmarks.includes(activity.id)
-                 ? "starIcon bookmark" : "starIcon"} />
-              </div> */}
-            </div>
           </div>
         </div>
                )}
