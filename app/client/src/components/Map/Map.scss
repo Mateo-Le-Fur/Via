@@ -332,7 +332,7 @@
                     width: 100%;
                     flex-direction: row;
                     gap: 0;
-                    border: 1px solid vars.$primary-color;
+                    border-bottom: 1px solid vars.$primary-color;
                     border-radius: 5px;
                     overflow: hidden;
                     &.form-error{

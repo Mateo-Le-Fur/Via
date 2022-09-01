@@ -11,7 +11,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { getActivities, getBookmarks, getComments, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
 
-let comments = []
 
 const Home = () => {
   const { user } = useSelector(state => state.auth)
@@ -65,8 +64,7 @@ const Home = () => {
      
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
-      comments.push(data)
-      dispatch(realTimeComments(comments))
+      dispatch(realTimeComments(data))
     
     });
   },  [])

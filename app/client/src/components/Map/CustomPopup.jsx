@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import img from "../../assets/images/no-user.png"
+import {FiSend} from "react-icons/fi"
 import { Popup, useMap } from 'react-leaflet';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -229,7 +230,7 @@ const CustomPopup = ({ id, type }) => {
                 </div>
                 <form  className={inputComment.length > 250 ? "add form-error" : "add"}  onSubmit={submitComment}>
                   <input type="text" className={inputComment.length > 250 ? "input-error" : ""}  placeholder='Ajouter un commentaire...' value={inputComment} onChange={(e) => setInputComment(e.target.value)} />
-                  <button className={inputComment.length > 250 ? "disabled" : ""} disabled={inputComment.length > 250} type='submit'>Ajouter</button>
+                  <button className={inputComment.length > 250 ? "disabled" : ""} disabled={inputComment.length > 250} type='submit'><FiSend /></button>
                 </form>
               </div>
             }
