@@ -142,6 +142,6 @@ router
  *        200:
  *          description: OK
  */
-router.route('/logout').get(controllerHandler(authController.logout)); // Log out user from app
+router.route('/logout').post(controllerHandler(authController.logout)); // Log out user from app
 
 module.exports = router;

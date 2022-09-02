@@ -5,9 +5,8 @@ module.exports = Joi.object({
   firstname: Joi.string()
     .allow(null, '')
     .max(50)
-    .pattern(/^[a-zA-Z\s]*$/)
+    .pattern(/^[a-zA-Z\u00C0-\u00FF\s]*$/)
     .messages({
-      'string.empty': 'firstname: Chaine vide !',
       'string.max': 'Le prénom ne peut dépasser 50 caractères',
       'string.pattern.base': 'prenom: format invalide',
     }),
@@ -15,7 +14,7 @@ module.exports = Joi.object({
   lastname: Joi.string()
     .allow(null, '')
     .max(50)
-    .pattern(/^[a-zA-Z\s]*$/)
+    .pattern(/^[a-zA-Z\u00C0-\u00FF\s]*$/)
     .trim(false)
     .messages({
       'string.max': 'Le nom ne peut dépasser 50 caractères',

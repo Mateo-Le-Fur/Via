@@ -576,7 +576,7 @@ const userController = {
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, '../../images/default.png'));
+      res.sendFile(path.join(__dirname, '../../images/default.webp'));
       return;
     }
 
