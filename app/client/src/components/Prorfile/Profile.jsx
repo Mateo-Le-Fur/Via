@@ -14,7 +14,7 @@ import {
   handleShowSuggestionBox,
 } from "../../features/global/globalSlice";
 import SuggestionBox from "./SeuggestionBox";
-import { reset, updateUser } from "../../features/auth/authSlice";
+import { deleteAccount, reset, updateUser } from "../../features/auth/authSlice";
 import OutsideWrapper from "../../hooks/ClickOutsideHook";
 // import { checkUser } from "../../features/auth/authSlice";
 
@@ -141,7 +141,7 @@ const Profile = () => {
               <FaCog style={{fill: "white"}} />
               </div>
             {showDelete && (
-                 <div className="delete" onClick={() => console.log()}>
+                 <div className="delete" onClick={() => dispatch(deleteAccount(user.id))}>
                  Supprimer mon compte
                </div>
             )}
