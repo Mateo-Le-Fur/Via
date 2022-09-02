@@ -39,13 +39,13 @@ CREATE TABLE "comment" (
 
 CREATE TABLE "user_has_activity" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "user_id" int NOT NULL REFERENCES "user"(id),
+    "user_id" int NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     "activity_id" int NOT NULL REFERENCES activity(id) ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE TABLE "user_to_activity" (
     "id" int GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    "user_id" int NOT NULL REFERENCES "user"(id),
+    "user_id" int NOT NULL REFERENCES "user"(id) ON DELETE CASCADE,
     "activity_id" int NOT NULL REFERENCES activity(id) ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
