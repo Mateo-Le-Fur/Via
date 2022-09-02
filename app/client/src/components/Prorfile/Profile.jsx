@@ -29,12 +29,10 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const [form, setForm] = useState({
-    nickname: user.nickname ? user.nickname : "",
     firstname: user.firstname ? user.firstname : "",
     lastname: user.lastname ? user.lastname : "",
     phone: user.phone ? user.phone : "",
     description: user.description ? user.description : "",
-    city: user.city ? user.city : ""
   });
 
 
@@ -139,7 +137,7 @@ const Profile = () => {
             </label>
           </div>
           <div className="pseudo">
-              <input type="text" name="nickname" id="nickname" value={form.nickname} placeholder="Pesudo" onChange={handleChange} />
+            <h2>{user.nickname}</h2>
           </div>
           <div
             className="profile-field"
@@ -206,20 +204,7 @@ const Profile = () => {
             )}
          
           </div>
-          <div
-              className="profile-field"
-          >
-            <FaBuilding className="smIcon" />
-            <input
-              value={form.city}
-              name="city"
-              className="input-profile"
-              type="text"
-              id="city"
-              placeholder="Ville"
-              onChange={handleChange}
-            />
-          </div>
+          
           <div className="areaContainer">
             <HiInformationCircle className="smIcon" />
             <textarea

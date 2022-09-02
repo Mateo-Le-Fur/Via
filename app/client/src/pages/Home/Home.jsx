@@ -63,14 +63,13 @@ const Home = () => {
         const data  = JSON.parse(e.data);
         dispatch(realTimeParticipations(data))
       });
+
     } 
 
    
   }, [])
 
   useEffect(() => {
-
-
     if (commentSource) {
       console.log('exist!')
       commentSource.close();

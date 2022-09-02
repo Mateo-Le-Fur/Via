@@ -23,13 +23,19 @@
         position: fixed;
         top: 2%;
         right: 2%;
+        
         cursor: pointer;
         .x{
-         fill: vars.$secondary-color;
-         border: 1px solid vars.$secondary-color;
+         fill: vars.$primary-color;
+         border: 1px solid vars.$primary-color;
+         background-color: white;
          border-radius: 50%;
          font-size: 1.6rem;
          padding: .2rem;
+         &:hover{
+            fill: vars.$tertiary-color;
+            border: 1px solid vars.$tertiary-color;
+         }
         }   
     }
     .cover{
