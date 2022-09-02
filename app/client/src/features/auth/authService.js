@@ -28,7 +28,7 @@ const logout = async (userId) => {
   return response.data
 }
 
-//Update Activity 
+//Update user 
 const updateUser = async (userId, userData) => {
   console.log(userId)
   const response = await privateReq.put("/user/"+ userId, userData)
@@ -36,12 +36,21 @@ const updateUser = async (userId, userData) => {
   return response.data
 }
 
+const deleteAccount = async (userId) => {
+  const response = await privateReq.delete("/user/"+ userId)
+
+  return response.data
+}
+
+
+
 const authService = {
   register,
   logout,
   login,
   checkUser,
-  updateUser
+  updateUser,
+  deleteAccount,
 }
 
 export default authService
