@@ -63,8 +63,6 @@ const Home = () => {
         const data  = JSON.parse(e.data);
         dispatch(realTimeParticipations(data))
       });
-
-      return (() => source.close() )
     } 
 
    
@@ -84,8 +82,6 @@ const Home = () => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
     });
-
-    return (() => source.close() )
   },  [])
 
   return (
