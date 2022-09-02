@@ -12,6 +12,7 @@ const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
 const extract = require('../services/extractString');
+const convertActivityDate = require('../services/dateFormat');
 
 const sseHandlerActivities = new SSEHandler('Activités');
 const sseHandlerMessages = new SSEHandler('Messages');
@@ -250,13 +251,17 @@ const userController = {
       city: user.city,
     };
 
+    const date = dateFormat.convertActivityDate(req.body.date);
+
     const activity = await Activity.create(newBody);
 
     activity.addTypes(type);
 
     let result = activity.get();
 
-    result = { ...result, type: req.body.type, nickname: user.nickname };
+    result = {
+      ...result, type: req.body.type, nickname: user.nickname, date,
+    };
 
     res.json(result);
   },
