@@ -82,7 +82,7 @@ if (participations){
            
         </div>
 
-        <div className='middle'>
+        <div className='center'>
             <div className='actionMiddle'>Ça m'intéresse <span>(12)</span></div>
             <div style={{padding: "0 .2rem"}}> /</div>
             <div className='actionMiddle' onClick={() => dispatch(participate(activity.id))}> Je participe <span>({participations?.find(el => el.id === activity.id)?.count || 0})</span></div>

@@ -23,14 +23,17 @@ const Modal = () => {
     }}>
         <MdOutlineClose className='x' />
     </span>
-        <div className="cover">
-            <h1>
-            {panel === "profile" && "Profil"}
-            {panel === "add" && "Ajouter"}
-            {panel === "bookmark" && "Favoris"}
-            {panel === "dashboard" && "Tableau de bord"}
-            </h1>
-        </div>
+    
+         <div className="cover">
+         <h1>
+         {panel === "profile" && "Profil"}
+         {panel === "add" && "Ajouter"}
+         {panel === "bookmark" && "Favoris"}
+         {panel === "dashboard" && "Tableau de bord"}
+         </h1>
+     </div>
+ 
+       
         <div className="container">
         {panel === "profile" && <Profile user={user} />}
           {panel === "add" && <Add />}

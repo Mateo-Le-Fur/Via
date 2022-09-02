@@ -3,9 +3,9 @@ import Map from "../../components/Map/Map"
 import LandingForm from "./LandingForm"
 import "./Landing.scss";
 import Banner from "./Banner";
-import { useEffect } from "react";
 
 const Landing = () => {
+
 
   return (
     <div className='landing'>

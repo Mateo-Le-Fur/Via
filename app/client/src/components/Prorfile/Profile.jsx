@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import "./Profile.scss";
 import img from "../../assets/images/no-user.png";
 import Card from "../Card/Card";
+import {RiFileEditFill, } from "react-icons/ri"
+import {BsFillTelephoneFill} from "react-icons/bs"
+import {HiLocationMarker, HiInformationCircle} from "react-icons/hi"
+import {FaBuilding} from "react-icons/fa"
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,6 +14,7 @@ import {
 } from "../../features/global/globalSlice";
 import SuggestionBox from "./SeuggestionBox";
 import { reset, updateUser } from "../../features/auth/authSlice";
+import OutsideWrapper from "../../hooks/ClickOutsideHook";
 // import { checkUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
@@ -24,10 +29,12 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const [form, setForm] = useState({
+    nickname: user.nickname ? user.nickname : "",
     firstname: user.firstname ? user.firstname : "",
     lastname: user.lastname ? user.lastname : "",
     phone: user.phone ? user.phone : "",
     description: user.description ? user.description : "",
+    city: user.city ? user.city : ""
   });
 
 
@@ -131,11 +138,15 @@ const Profile = () => {
               <img src={avatar} alt="avatar" />
             </label>
           </div>
+          <div className="pseudo">
+              <input type="text" name="nickname" id="nickname" value={form.nickname} placeholder="Pesudo" onChange={handleChange} />
+          </div>
           <div
-            className="field"
-          >
+            className="profile-field"
+          > 
+            <RiFileEditFill className="smIcon"/>
             <input
-              className="field-input"
+              className="input-profile"
               name="firstname"
               type="text"
               id="firstname"
@@ -145,12 +156,14 @@ const Profile = () => {
             />
           </div>
           <div
-            className="field"
+            className="profile-field"
           >
+          <RiFileEditFill className="smIcon"/>
+
             <input
               value={form.lastname}
               name="lastname"
-              className="field-input"
+              className="input-profile"
               type="text"
               id="lastname"
               placeholder="Nom"
@@ -158,38 +171,57 @@ const Profile = () => {
             />
           </div>
           <div
-            className="field address"
+              className="profile-field"
           >
-            <input
-              value={inputAddress}
-              className="field-input"
-              type="text"
-              id="address"
-              placeholder="Adresse"
-              onChange={handleChangeAddress}
-            />
-            {showSuggestionBox && (
-              <SuggestionBox
-                inputAddress={inputAddress}
-                handleAddress={handleAddress}
-              />
-            )}
-         
-          </div>
-          <div
-              className="field"
-          >
+            <BsFillTelephoneFill className="smIcon" />
             <input
               value={form.phone}
               name="phone"
-              className="field-input"
+              className="input-profile"
               type="text"
               id="phone"
               placeholder="Téléphone"
               onChange={handleChange}
             />
           </div>
+          <div
+            className="profile-field field-address"
+          > 
+          <HiLocationMarker className="smIcon"/>
+            <input
+              value={inputAddress}
+              className="input-profile"
+              type="text"
+              id="address"
+              placeholder="Adresse"
+              onChange={handleChangeAddress}
+            />
+            {showSuggestionBox && (
+          
+              <SuggestionBox
+                inputAddress={inputAddress}
+                handleAddress={handleAddress}
+              />
+           
+            )}
+         
+          </div>
+          <div
+              className="profile-field"
+          >
+            <FaBuilding className="smIcon" />
+            <input
+              value={form.city}
+              name="city"
+              className="input-profile"
+              type="text"
+              id="city"
+              placeholder="Ville"
+              onChange={handleChange}
+            />
+          </div>
           <div className="areaContainer">
+            <HiInformationCircle className="smIcon" />
             <textarea
               onChange={handleChange}
               value={form.description}
