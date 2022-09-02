@@ -11,6 +11,8 @@ const multerUpload = require('../helpers/multer');
 const compressImage = require('../services/compress');
 const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
+const extract = require('../services/extractString');
+const convertActivityDate = require('../services/dateFormat');
 
 const sseHandlerActivities = new SSEHandler('Activités');
 const sseHandlerMessages = new SSEHandler('Messages');
@@ -82,7 +84,11 @@ const userController = {
       }
     }
 
-    const newBody = { ...req.body, lat, long };
+    const city = extract(req.body.address);
+
+    const newBody = {
+      ...req.body, lat, long, city,
+    };
 
     if (!newBody.phone) {
       newBody.phone = getUser.phone;
@@ -245,13 +251,17 @@ const userController = {
       city: user.city,
     };
 
+    const date = dateFormat.convertActivityDate(req.body.date);
+
     const activity = await Activity.create(newBody);
 
     activity.addTypes(type);
 
     let result = activity.get();
 
-    result = { ...result, type: req.body.type, nickname: user.nickname };
+    result = {
+      ...result, type: req.body.type, nickname: user.nickname, date,
+    };
 
     res.json(result);
   },
