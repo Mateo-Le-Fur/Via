@@ -15,7 +15,9 @@
         height: 70%;
         transform: translateX(-25%);
         z-index: 5000;
-    
+        @media (max-width: 600px){
+            display: none;
+        }
         > h2{
             font-weight: normal;
             color: vars.$tertiary-color;

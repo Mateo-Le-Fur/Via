@@ -10,7 +10,6 @@ import "./Modal.scss";
 import Profile from '../../../components/Prorfile/Profile';
 import Add from '../../../components/Add/Add';
 import Bookmark from '../../../components/Bookmark/Bookmark';
-import Dashboard from '../../../components/Dashboard/Dashboard';
 const Modal = () => {
     const {panel} = useSelector(state => state.global);
     const {user} = useSelector(state => state.user);
@@ -29,7 +28,6 @@ const Modal = () => {
          {panel === "profile" && "Profil"}
          {panel === "add" && "Ajouter"}
          {panel === "bookmark" && "Favoris"}
-         {panel === "dashboard" && "Tableau de bord"}
          </h1>
      </div>
  
@@ -38,7 +36,7 @@ const Modal = () => {
         {panel === "profile" && <Profile user={user} />}
           {panel === "add" && <Add />}
           {panel === "bookmark" && <Bookmark />}
-          {panel === "dashboard" && <Dashboard />}
+        
         </div>
         <div className="actions">
         <li onClick={() => dispatch(activePanel("profile"))}>
@@ -48,7 +46,6 @@ const Modal = () => {
             <FaPlus  className={panel === "add" ? "icon active": "icon"}/>
         </li>
         <li onClick={() => dispatch(activePanel("bookmark"))}><FaStar className={panel === "bookmark" ? "icon active": "icon"} /></li>
-        <li onClick={() => dispatch(activePanel("dashboard"))}><MdAdminPanelSettings className={panel === "dashboard" ? "icon active": "icon"} /></li>
         </div>
     </div>
   )

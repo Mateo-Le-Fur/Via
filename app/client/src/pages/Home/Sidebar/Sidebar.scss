@@ -51,6 +51,12 @@
     }
 
     .bottom{
+    
+        .button-dash{
+            @media (max-width: 600px) {
+                display: none;
+            }
+        }
         li{
             margin-bottom: 1rem;
         }
@@ -67,6 +73,7 @@
     fill: white;
     border: 1px solid vars.$gray;
     cursor: pointer;
+    box-shadow: vars.$box-shadow;
     transition: all 0.2s ease-in-out;
     &.filterIcon{
         font-size: 2.4rem;

@@ -56,7 +56,7 @@ const Home = () => {
         dispatch(realTimeParticipations(data))
       });
 
-      return (() => source.close() )
+     
     } 
 
    
@@ -64,13 +64,13 @@ const Home = () => {
 
   useEffect(() => {
     const source = new EventSource(`/api/activity/sse/comments/`)
-     
+    
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
     });
 
-    return (() => source.close() )
+  
   },  [])
 
   return (

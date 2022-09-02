@@ -70,7 +70,7 @@ const Sidebar = () => {
       </ul>
       <ul className='bottom'>
         {user && user.is_admin && (
-          <li onClick={() => handlePanel('dashboard')}>
+          <li className='button-dash' onClick={() => handlePanel('dashboard')}>
           <MdAdminPanelSettings  className={panel === "dashboard" ? "icon active": "icon"} />
           </li>
         )}
