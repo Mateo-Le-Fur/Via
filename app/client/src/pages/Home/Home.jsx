@@ -56,9 +56,9 @@ const Home = () => {
         dispatch(realTimeParticipations(data))
       });
 
+      return (() => source.close() )
     } 
 
-  
    
   }, [])
 
@@ -68,12 +68,9 @@ const Home = () => {
     source.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
-
-      
-    
     });
 
-
+    return (() => source.close() )
   },  [])
 
   return (
