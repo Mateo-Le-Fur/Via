@@ -7,7 +7,7 @@ class SSE {
     this.initConnection = new Map();
   }
 
-  // On initialise les headers qui permettent de communiquer en temps réel
+  // On initialise les headers qui permettent de garder la communication ouverte.
   init() {
     this.res.writeHead(200, {
       'Content-Type': 'text/event-stream',
@@ -16,7 +16,7 @@ class SSE {
     });
   }
 
-  // On créer une méthode qui prend les datas et le type d'event en paramètre
+  // Envoie des données
   send(data, event) {
     this.res.write(`event: ${event}\n`);
     this.res.write(`data: ${JSON.stringify(data)} \n\n`);
