@@ -148,7 +148,10 @@ const Profile = () => {
          
           </div>
           <div className="pseudo">
+          {!showDelete && (
             <h2>{user.nickname}</h2>
+
+            )}
           </div>
           <div
             className="profile-field"
