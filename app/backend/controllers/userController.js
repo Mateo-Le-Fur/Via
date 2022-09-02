@@ -641,7 +641,7 @@ const userController = {
         // upload de la nouvelle image
         await User.update(
           {
-            avatar: `/images/${newImageName}.jpeg`,
+            avatar: `/images/${newImageName}.webp`,
           },
           {
             where: {

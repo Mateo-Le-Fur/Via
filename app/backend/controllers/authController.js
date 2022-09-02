@@ -119,9 +119,6 @@ const auth = {
       throw new ApiError('Aucun token existant', 500);
     }
 
-    // await redis.set(token, token);
-    // redis.expire(token, process.env.JWT_EXPIRE);
-
     res.clearCookie('token');
 
     res.json({ msg: 'déconnecté' });

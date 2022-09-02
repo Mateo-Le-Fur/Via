@@ -54,10 +54,6 @@ class SSEHandler {
     });
   }
 
-  get getCurrentConnection() {
-    return this.clients;
-  }
-
   closeConnection(id) {
     console.log(`Disconnection in room [${this.name}] with id ${id}`);
     // On delete l'utilisateur dans le tableau de clients

@@ -10,6 +10,8 @@ import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
 import { getActivities, getBookmarks, getComments, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
 import { checkUser } from '../../features/auth/authSlice'
+let participeSource;
+let commentSource;
 
 
 const Home = () => {
@@ -49,9 +51,15 @@ const Home = () => {
 
  
   useEffect(() => {
+
+
+    if (participeSource) {
+      participeSource.close();
+    }
+
     if( user){
-      const source = new EventSource(`/api/activity/sse/participate/${user.city}`)
-      source.addEventListener(`${user.city}`, (e) => {
+      participeSource = new EventSource(`/api/activity/sse/participate/${user.city}`)
+      participeSource.addEventListener(`${user.city}`, (e) => {
         const data  = JSON.parse(e.data);
         dispatch(realTimeParticipations(data))
       });
@@ -63,9 +71,16 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
-    const source = new EventSource(`/api/activity/sse/comments/`)
-     
-    source.addEventListener("comment", (e) => {
+
+
+    if (commentSource) {
+      console.log('exist!')
+      commentSource.close();
+    }
+
+    commentSource = new EventSource(`/api/activity/sse/comments/`)
+  
+    commentSource.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
 
