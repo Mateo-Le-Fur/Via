@@ -57,7 +57,7 @@
         .pseudo{
           width: 40%;
           margin-bottom: .4rem;
-          input{
+          h2 {
             width: 100%;
          
             text-align: center;
@@ -108,6 +108,12 @@
        
             width: 80%;
             color: vars.$primary-color;
+            &:focus{
+              border: 1px solid vars.$gray;
+              box-shadow: vars.$box-shadow;
+              border-radius: 1rem;
+              padding: .7rem;
+            }
           }
         }
    
@@ -163,13 +169,18 @@
         font-size: .9rem;
         outline: none;
         border: none;
+        padding: .2rem;
         color: vars.$primary-color;
         &::placeholder{
           color: vars.$primary-color;
         }
         &:focus{
-          border-color: vars.$primary-color ;
-        }
+            border: 1px solid vars.$gray;
+            box-shadow: vars.$box-shadow;
+            border-radius: 1rem;
+            padding: .4rem;
+          }
+        
       }
     }
     .buttonContainer{
@@ -186,7 +197,7 @@
         color: white;
         border: none;
         background-color: vars.$tertiary-color;
-        width: 25%;
+        width: 27%;
         border-radius: 7px;
         box-shadow: -4px 0px 4px 2px rgba(204, 204, 204, 0.25);
       }
