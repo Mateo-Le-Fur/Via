@@ -138,7 +138,7 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    res.json(user);
+    res.json('Compte supprimé');
   },
 
   async getUserActivities(req, res) {
