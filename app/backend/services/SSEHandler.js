@@ -3,20 +3,22 @@ const SSE = require('./SSEConnection');
 
 class SSEHandler {
   constructor(name) {
-    // On créer un map qui va contenir tout les utilisateurs connecté
+    // On créer un Map qui va contenir tout les utilisateurs connecté
     this.clients = new Map();
     this.name = name;
   }
 
-  // créer une connexion avec un utilisateur
+  // créer une connection avec un utilisateur
   newConnection(id, res) {
     const checkConnection = this.clients.get(id);
 
+    // On vérifie que l'utilisateur n'a pas déjà une connection établie
+    // Si c'est le cas on la rejette
     if (checkConnection) {
-      throw new ApiError('Connection deja établie', 403);
+      throw new ApiError('A connection already exists!', 403);
     }
 
-    console.log(`Nouvelle connection sur le salon ${this.name} avec l'id ${id}`);
+    console.log(`New connection in room [${this.name}] with id ${id}`);
     // On instancie la classe SSE
     const client = new SSE(res);
     // On set les headers
@@ -40,22 +42,24 @@ class SSEHandler {
 
   // On parcour toutes les connections et on envoie les data pour chacunes d'entre elles */
   broadcast(data, event) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [id] of this.clients) {
+    this.clients.forEach((_, id) => {
       this.sendDataToClient(id, data, event);
-    }
+    });
   }
 
   /* On passe un tableau d'id qui contient les utilisateurs qui recevront les données */
   multicast(clientIds, data, event) {
-    // eslint-disable-next-line no-restricted-syntax
-    for (const id of clientIds) {
-      this.sendDataToClient(id, data, event);
-    }
+    clientIds.forEach((client) => {
+      this.sendDataToClient(client, data, event);
+    });
+  }
+
+  get getCurrentConnection() {
+    return this.clients;
   }
 
   closeConnection(id) {
-    console.log(`Déconnection sur le salon ${this.name} avec l'id ${id}`);
+    console.log(`Disconnection in room [${this.name}] with id ${id}`);
     // On delete l'utilisateur dans le tableau de clients
     this.clients.delete(id);
   }

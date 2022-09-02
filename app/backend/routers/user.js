@@ -397,12 +397,30 @@ router
   // eslint-disable-next-line max-len
   .delete(controllerHandler(userController.deleteUserBookmark)); // Delete one bookmark created by user
 
-router.route('/:userId/avatar')
+router
+  .route('/message/sse')
+  .get(controllerHandler(userController.getUserMessagesSSE));
+
+router
+  .route('/:userId/message')
+  .get(controllerHandler(userController.getUserMessages))
+  .post(controllerHandler(userController.createMessage));
+
+router
+  .route('/:userId/message/:messageId')
+  .delete(controllerHandler(userController.deleteMessage));
+
+router
+  .route('/:userId/avatar')
   .get(controllerHandler(userController.getUserAvatar))
   .post(controllerHandler(userController.uploadUserAvatar));
 
-router.route('/sse/:city').get(controllerHandler(userController.getCreatedActivitiesInRealTime));
+router
+  .route('/sse/:city')
+  .get(controllerHandler(userController.getCreatedActivitiesInRealTime));
 
-router.route('/sse/:city').get(controllerHandler(userController.getCreatedActivitiesInRealTime));
+router
+  .route('/sse/:city')
+  .get(controllerHandler(userController.getCreatedActivitiesInRealTime));
 
 module.exports = router;

@@ -1,6 +1,6 @@
 <div style="background-color:#282C34; color:#B0B0B1">
 <p style="text-align:center; margin-right:20px"><img src="./app/client/src/assets/images/logo.png" alt="via-logo"/></p>
-<h3 style="text-align:center; color:#30b3ff; font-weight:bold;">A neighbours social media</h3>
+<h3 style="text-align:center; color:#30b3ff; font-weight:bold;">A neighbours social application</h3>
 
 </br>
 </br>

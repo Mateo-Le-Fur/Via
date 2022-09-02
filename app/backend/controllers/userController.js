@@ -2,7 +2,9 @@
 /* eslint-disable prefer-destructuring */
 const path = require('path');
 const fs = require('fs');
-const { User, Activity, Type } = require('../models');
+const {
+  User, Activity, Type, Message,
+} = require('../models');
 const getCoordinates = require('../services/getCoordinates');
 const ApiError = require('../errors/apiError');
 const multerUpload = require('../helpers/multer');
@@ -11,9 +13,9 @@ const dateFormat = require('../services/dateFormat');
 const SSEHandler = require('../services/SSEHandler');
 
 const sseHandlerActivities = new SSEHandler('Activités');
+const sseHandlerMessages = new SSEHandler('Messages');
 
 const userController = {
-
   async getCurrentUser(req, res) {
     const { id } = req.user;
 
@@ -27,7 +29,10 @@ const userController = {
 
     delete user.password;
 
-    const val = { ...user, url: `http://localhost:8080/api/user/${req.user.id}/avatar` };
+    const val = {
+      ...user,
+      url: `http://localhost:8080/api/user/${req.user.id}/avatar`,
+    };
 
     res.json(val);
   },
@@ -43,7 +48,10 @@ const userController = {
       throw new ApiError('Utilisateur introuvable', 400);
     }
 
-    const result = { ...user, url: `http://localhost:8080/api/user/${id}/avatar` };
+    const result = {
+      ...user,
+      url: `http://localhost:8080/api/user/${id}/avatar`,
+    };
     const { password, ...rest } = result;
 
     res.json(rest);
@@ -86,12 +94,14 @@ const userController = {
       },
       returning: true,
       plain: true,
-
     });
 
     const result = updatedUser[1].get();
 
-    const user = { ...result, url: `http://localhost:8080/api/user/${id}/avatar` };
+    const user = {
+      ...result,
+      url: `http://localhost:8080/api/user/${id}/avatar`,
+    };
 
     const val = {
       message: 'Profil mis à jour',
@@ -154,13 +164,19 @@ const userController = {
       }
     }
 
-    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
+    const coordinates = await getCoordinates(
+      `${req.body.address.split(' ').join('+')}+${req.body.city}`,
+      'street',
+    );
 
     const lat = coordinates[0];
     const long = coordinates[1];
 
     const newBody = {
-      ...req.body, user_id: userId, lat, long,
+      ...req.body,
+      user_id: userId,
+      lat,
+      long,
     };
 
     await Activity.update(newBody, {
@@ -172,15 +188,17 @@ const userController = {
 
     const getUpdatedActivity = await Activity.findByPk(activityId, {
       include: ['types', 'user'],
-
     });
 
     let result = getUpdatedActivity.get();
 
-    const date = dateFormat.convertActivityDate(result);
+    const date = dateFormat.convertActivityDate(result.date);
 
     result = {
-      ...result, nickname: result.user.nickname, type: result.types[0].label, date,
+      ...result,
+      nickname: result.user.nickname,
+      type: result.types[0].label,
+      date,
     };
 
     const { types, user, ...rest } = result;
@@ -205,7 +223,10 @@ const userController = {
       throw new ApiError('Uitlisateur introuvable', 400);
     }
 
-    const coordinates = await getCoordinates(`${req.body.address.split(' ').join('+')}+${req.body.city}`, 'street');
+    const coordinates = await getCoordinates(
+      `${req.body.address.split(' ').join('+')}+${req.body.city}`,
+      'street',
+    );
 
     const lat = coordinates[0];
     const long = coordinates[1];
@@ -217,7 +238,11 @@ const userController = {
     });
 
     const newBody = {
-      ...req.body, user_id: id, lat, long, city: user.city,
+      ...req.body,
+      user_id: id,
+      lat,
+      long,
+      city: user.city,
     };
 
     const activity = await Activity.create(newBody);
@@ -238,13 +263,16 @@ const userController = {
     let getUser = await User.findByPk(id);
 
     if (!getUser) {
-      throw new ApiError('Aucun utilisateur n\'a été trouvée', 400);
+      throw new ApiError("Aucun utilisateur n'a été trouvée", 400);
     }
 
     getUser = getUser.get();
 
     if (city !== getUser.city) {
-      throw new ApiError('Vous ne pouvez pas voir les activités de cette ville', 403);
+      throw new ApiError(
+        'Vous ne pouvez pas voir les activités de cette ville',
+        403,
+      );
     }
 
     sseHandlerActivities.newConnection(id, res);
@@ -259,16 +287,19 @@ const userController = {
     });
 
     if (!activities) {
-      throw new ApiError('Aucune activité n\'a été trouvée', 400);
+      throw new ApiError("Aucune activité n'a été trouvée", 400);
     }
 
     const result = activities.map((elem) => {
       let data = elem.get();
 
-      const date = dateFormat.convertActivityDate(data);
+      const date = dateFormat.convertActivityDate(data.date);
 
       data = {
-        ...data, nickname: data.user.nickname, type: data.types[0].label, date,
+        ...data,
+        nickname: data.user.nickname,
+        type: data.types[0].label,
+        date,
       };
 
       const { types, user, ...rest } = data;
@@ -276,7 +307,11 @@ const userController = {
       return rest;
     });
 
-    sseHandlerActivities.sendDataToClients(id, JSON.stringify(result), result[0].city);
+    sseHandlerActivities.sendDataToClients(
+      id,
+      JSON.stringify(result),
+      result[0].city,
+    );
   },
 
   deleteUserActivity(req, res) {
@@ -299,7 +334,7 @@ const userController = {
       throw new ApiError('Activité introuvable', 400);
     }
 
-    res.status(201).json({ msg: 'Activité supprimer' });
+    res.status(201).json({ msg: 'Activité supprimée' });
   },
 
   async addBookmark(req, res) {
@@ -392,7 +427,6 @@ const userController = {
 
     let user = await User.findByPk(userId, {
       include: ['bookmarks'],
-
     });
 
     if (!user) {
@@ -424,6 +458,103 @@ const userController = {
     const val = { ...rest, activity: getActivity };
 
     res.json(val);
+  },
+
+  async getUserMessagesSSE(req, res) {
+    const { id } = req.user;
+
+    sseHandlerMessages.newConnection(id, res);
+
+    res.on('close', () => {
+      sseHandlerMessages.closeConnection(id);
+    });
+  },
+
+  async getUserMessages(req, res) {
+    const { userId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
+    }
+
+    const userMessages = [];
+
+    const sentMessages = await Message.findAll({
+      where: {
+        exp_user_id: userId,
+      },
+    });
+
+    sentMessages.forEach((message) => {
+      console.log(message);
+      userMessages.push(message.get());
+    });
+
+    const receivedMessages = await Message.findAll({
+      where: {
+        dest_user_id: userId,
+      },
+    });
+
+    receivedMessages.forEach((message) => {
+      userMessages.push(message.get());
+    });
+
+    res.json(userMessages);
+  },
+
+  async createMessage(req, res) {
+    const { userId } = req.params;
+    const { recipientId, message } = req.body;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
+    }
+
+    let newMessage = await Message.create({
+      message,
+      exp_user_id: userId,
+      dest_user_id: recipientId,
+    });
+
+    const user = await User.findByPk(userId);
+
+    newMessage = {
+      ...newMessage.get(),
+      user: user.get().nickname,
+      avatar: `http://localhost:8080/api/user/${userId}/avatar`,
+      date: dateFormat.convertActivityDate(newMessage.get().created_at),
+    };
+
+    const clients = [userId, recipientId];
+
+    sseHandlerMessages.multicast(clients, newMessage, 'Messages');
+
+    res.json({ message: 'sent!' });
+  },
+
+  async deleteMessage(req, res) {
+    const { userId, messageId } = req.params;
+
+    if (req.user.id !== parseInt(userId, 10)) {
+      if (!req.user.is_admin) {
+        throw new ApiError('Forbidden', 403);
+      }
+    }
+
+    const message = await Message.findByPk(messageId);
+
+    if (!message) {
+      throw new ApiError('Message introuvable', 400);
+    }
+
+    await message.destroy();
+
+    res.json({ msg: 'Message supprimé' });
   },
 
   async getUserAvatar(req, res) {
@@ -489,13 +620,18 @@ const userController = {
           user.avatar = 'empty';
         }
 
-        const isAvatarExist = fs.existsSync(path.join(__dirname, '../../', user.avatar));
+        const isAvatarExist = fs.existsSync(
+          path.join(__dirname, '../../', user.avatar),
+        );
 
         // Supression de l'ancienne image de l'utilisateur si elle existe
         if (isAvatarExist) {
-          fs.unlink(path.join(__dirname, '../../', user.avatar), (unlinkError) => {
-            if (unlinkError) throw unlinkError;
-          });
+          fs.unlink(
+            path.join(__dirname, '../../', user.avatar),
+            (unlinkError) => {
+              if (unlinkError) throw unlinkError;
+            },
+          );
         }
 
         // Compression de la nouvelle image si son poids est supérieur a 100kB
@@ -519,6 +655,5 @@ const userController = {
       }
     });
   },
-
 };
 module.exports = userController;
