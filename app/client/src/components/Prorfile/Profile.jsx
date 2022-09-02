@@ -6,6 +6,7 @@ import {RiFileEditFill, } from "react-icons/ri"
 import {BsFillTelephoneFill} from "react-icons/bs"
 import {HiLocationMarker, HiInformationCircle} from "react-icons/hi"
 import {FaBuilding} from "react-icons/fa"
+import {FaCog} from "react-icons/fa"
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -116,6 +117,7 @@ const Profile = () => {
     dispatch(updateUser({ userId: user.id, userData: { ...form, address } }));
   };
 
+  const [showDelete, setShowDelete] = useState(false)
 
   if (user) {
 
@@ -133,8 +135,17 @@ const Profile = () => {
               name="avatar"
             />
             <label htmlFor="avatar">
-              <img src={avatar} alt="avatar" />
+              <img src={avatar} alt="avatar" /> 
             </label>
+            <div className="cog" onClick={() => setShowDelete(!showDelete)}>
+              <FaCog style={{fill: "white"}} />
+              </div>
+            {showDelete && (
+                 <div className="delete" onClick={() => console.log()}>
+                 Supprimer mon compte
+               </div>
+            )}
+         
           </div>
           <div className="pseudo">
             <h2>{user.nickname}</h2>
