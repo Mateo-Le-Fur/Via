@@ -1,17 +1,19 @@
 /* eslint-disable camelcase */
 /* eslint-disable prefer-destructuring */
-const path = require("path");
-const fs = require("fs");
-const { User, Activity, Type, Message } = require("../models");
-const getCoordinates = require("../services/getCoordinates");
-const ApiError = require("../errors/apiError");
-const multerUpload = require("../helpers/multer");
-const compressImage = require("../services/compress");
-const dateFormat = require("../services/dateFormat");
-const SSEHandler = require("../services/SSEHandler");
-const { message } = require("../validation/schema/profil");
+const path = require('path');
+const fs = require('fs');
+const {
+  User, Activity, Type, Message,
+} = require('../models');
+const getCoordinates = require('../services/getCoordinates');
+const ApiError = require('../errors/apiError');
+const multerUpload = require('../helpers/multer');
+const compressImage = require('../services/compress');
+const dateFormat = require('../services/dateFormat');
+const SSEHandler = require('../services/SSEHandler');
 
-const sseHandlerActivities = new SSEHandler("Activités");
+const sseHandlerActivities = new SSEHandler('Activités');
+const sseHandlerMessages = new SSEHandler('Messages');
 
 const userController = {
   async getCurrentUser(req, res) {
@@ -22,7 +24,7 @@ const userController = {
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     delete user.password;
@@ -43,7 +45,7 @@ const userController = {
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     const result = {
@@ -60,7 +62,7 @@ const userController = {
 
     if (req.user.id !== parseInt(id, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -72,7 +74,7 @@ const userController = {
     let lat = getUser.lat;
     let long = getUser.long;
     if (req.body.address !== getUser.address) {
-      coordinates = await getCoordinates(req.body.address, "housenumber");
+      coordinates = await getCoordinates(req.body.address, 'housenumber');
 
       if (coordinates) {
         lat = coordinates[0];
@@ -102,7 +104,7 @@ const userController = {
     };
 
     const val = {
-      message: "Profil mis à jour",
+      message: 'Profil mis à jour',
       user,
     };
 
@@ -116,7 +118,7 @@ const userController = {
 
     if (req.user.id !== parseInt(id, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -127,7 +129,7 @@ const userController = {
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     res.json(user);
@@ -136,11 +138,11 @@ const userController = {
   async getUserActivities(req, res) {
     const { id } = req.params;
     const result = await User.findByPk(id, {
-      include: ["activities"],
+      include: ['activities'],
     });
 
     if (!result) {
-      throw new ApiError("Activité introuvable", 400);
+      throw new ApiError('Activité introuvable', 400);
     }
     const user = result.get();
 
@@ -158,13 +160,13 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
     const coordinates = await getCoordinates(
-      `${req.body.address.split(" ").join("+")}+${req.body.city}`,
-      "street"
+      `${req.body.address.split(' ').join('+')}+${req.body.city}`,
+      'street',
     );
 
     const lat = coordinates[0];
@@ -185,7 +187,7 @@ const userController = {
     });
 
     const getUpdatedActivity = await Activity.findByPk(activityId, {
-      include: ["types", "user"],
+      include: ['types', 'user'],
     });
 
     let result = getUpdatedActivity.get();
@@ -209,7 +211,7 @@ const userController = {
 
     if (req.user.id !== parseInt(id, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -218,12 +220,12 @@ const userController = {
     });
 
     if (!user) {
-      throw new ApiError("Uitlisateur introuvable", 400);
+      throw new ApiError('Uitlisateur introuvable', 400);
     }
 
     const coordinates = await getCoordinates(
-      `${req.body.address.split(" ").join("+")}+${req.body.city}`,
-      "street"
+      `${req.body.address.split(' ').join('+')}+${req.body.city}`,
+      'street',
     );
 
     const lat = coordinates[0];
@@ -268,20 +270,20 @@ const userController = {
 
     if (city !== getUser.city) {
       throw new ApiError(
-        "Vous ne pouvez pas voir les activités de cette ville",
-        403
+        'Vous ne pouvez pas voir les activités de cette ville',
+        403,
       );
     }
 
     sseHandlerActivities.newConnection(id, res);
 
     const activities = await Activity.findAll({
-      include: ["types", "user"],
+      include: ['types', 'user'],
       where: {
         city: getUser.city,
       },
       limit: 1,
-      order: [["created_at", "DESC"]],
+      order: [['created_at', 'DESC']],
     });
 
     if (!activities) {
@@ -308,7 +310,7 @@ const userController = {
     sseHandlerActivities.sendDataToClients(
       id,
       JSON.stringify(result),
-      result[0].city
+      result[0].city,
     );
   },
 
@@ -317,7 +319,7 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -329,10 +331,10 @@ const userController = {
     });
 
     if (!activity) {
-      throw new ApiError("Activité introuvable", 400);
+      throw new ApiError('Activité introuvable', 400);
     }
 
-    res.status(201).json({ msg: "Activité supprimée" });
+    res.status(201).json({ msg: 'Activité supprimée' });
   },
 
   async addBookmark(req, res) {
@@ -343,28 +345,28 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
     let user = await User.findByPk(userId, {
-      include: ["bookmarks"],
+      include: ['bookmarks'],
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     const activity = await Activity.findByPk(bookmarkId);
 
     if (!activity) {
-      throw new ApiError("Activité introuvable", 400);
+      throw new ApiError('Activité introuvable', 400);
     }
 
     await activity.addUser(user);
 
     user = await User.findByPk(userId, {
-      include: ["bookmarks"],
+      include: ['bookmarks'],
     });
 
     user = user.get();
@@ -387,16 +389,16 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
     let user = await User.findByPk(userId, {
-      include: ["bookmarks"],
+      include: ['bookmarks'],
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     user = user.get();
@@ -419,28 +421,28 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
     let user = await User.findByPk(userId, {
-      include: ["bookmarks"],
+      include: ['bookmarks'],
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     const activity = await Activity.findByPk(bookmarkId);
 
     if (!activity) {
-      throw new ApiError("Activité introuvable", 400);
+      throw new ApiError('Activité introuvable', 400);
     }
 
     await activity.removeUser(user);
 
     user = await User.findByPk(userId, {
-      include: ["bookmarks"],
+      include: ['bookmarks'],
     });
 
     user = user.get();
@@ -458,12 +460,22 @@ const userController = {
     res.json(val);
   },
 
+  async getUserMessagesSSE(req, res) {
+    const { id } = req.user;
+
+    sseHandlerMessages.newConnection(id, res);
+
+    res.on('close', () => {
+      sseHandlerMessages.closeConnection(id);
+    });
+  },
+
   async getUserMessages(req, res) {
     const { userId } = req.params;
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -480,13 +492,13 @@ const userController = {
       userMessages.push(message.get());
     });
 
-    const redeivedMessages = await Message.findAll({
+    const receivedMessages = await Message.findAll({
       where: {
         dest_user_id: userId,
       },
     });
 
-    redeivedMessages.forEach((message) => {
+    receivedMessages.forEach((message) => {
       userMessages.push(message.get());
     });
 
@@ -499,7 +511,7 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -518,7 +530,11 @@ const userController = {
       date: dateFormat.convertActivityDate(newMessage.get().created_at),
     };
 
-    res.json(newMessage);
+    const clients = [userId, recipientId];
+
+    sseHandlerMessages.multicast(clients, newMessage, 'Messages');
+
+    res.json({ message: 'sent!' });
   },
 
   async deleteMessage(req, res) {
@@ -526,19 +542,19 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
     const message = await Message.findByPk(messageId);
 
     if (!message) {
-      throw new ApiError("Message introuvable", 400);
+      throw new ApiError('Message introuvable', 400);
     }
 
     await message.destroy();
 
-    res.json({ msg: "Message supprimé" });
+    res.json({ msg: 'Message supprimé' });
   },
 
   async getUserAvatar(req, res) {
@@ -549,7 +565,7 @@ const userController = {
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     // On va chercher le chemin de son image
@@ -560,7 +576,7 @@ const userController = {
     // Si l'image n'existe pas dans le serveur, ou que le chemin de l'image n'est pas en bdd,
     // alors on renvoie l'image par defaut
     if (!isAvatarExist || !user.avatar) {
-      res.sendFile(path.join(__dirname, "../../images/default.png"));
+      res.sendFile(path.join(__dirname, '../../images/default.png'));
       return;
     }
 
@@ -572,7 +588,7 @@ const userController = {
 
     if (req.user.id !== parseInt(userId, 10)) {
       if (!req.user.is_admin) {
-        throw new ApiError("Forbidden", 403);
+        throw new ApiError('Forbidden', 403);
       }
     }
 
@@ -581,15 +597,15 @@ const userController = {
 
       try {
         if (uploadError) {
-          if (uploadError.code === "LIMIT_FILE_SIZE") {
-            throw new ApiError("Image trop volumineuse", 400);
+          if (uploadError.code === 'LIMIT_FILE_SIZE') {
+            throw new ApiError('Image trop volumineuse', 400);
           }
           throw new ApiError(uploadError.message, 400);
         }
         // Si pas de fichier dans la requete cela veut dire que l'utilisateur
         // n'a pas sélectionner d'image
         if (!req.file) {
-          throw new ApiError("Aucune Image sélectionnée", 400);
+          throw new ApiError('Aucune Image sélectionnée', 400);
         }
 
         // On récupére le chemin de l'utilisateur en BDD
@@ -601,20 +617,20 @@ const userController = {
         const newImageName = Date.now();
 
         if (user.avatar === null) {
-          user.avatar = "empty";
+          user.avatar = 'empty';
         }
 
         const isAvatarExist = fs.existsSync(
-          path.join(__dirname, "../../", user.avatar)
+          path.join(__dirname, '../../', user.avatar),
         );
 
         // Supression de l'ancienne image de l'utilisateur si elle existe
         if (isAvatarExist) {
           fs.unlink(
-            path.join(__dirname, "../../", user.avatar),
+            path.join(__dirname, '../../', user.avatar),
             (unlinkError) => {
               if (unlinkError) throw unlinkError;
-            }
+            },
           );
         }
 
@@ -631,9 +647,9 @@ const userController = {
             where: {
               id: userId,
             },
-          }
+          },
         );
-        res.json({ message: "Image envoyée", userId });
+        res.json({ message: 'Image envoyée', userId });
       } catch (error) {
         console.error(error);
       }
