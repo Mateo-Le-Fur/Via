@@ -1,5 +1,5 @@
 <div style="background-color:#282C34; color:#B0B0B1">
-<p style="text-align:center; margin-right:20px"><img src="./app/client/src/assets/images/logo.png" alt="via-logo"/></p>
+<p style="text-align:center; margin-right:20px" align="center"><img src="./app/client/src/assets/images/logo.png" alt="via-logo"/></p>
 <h3 style="text-align:center; color:#30b3ff; font-weight:bold;">A neighbours social application</h3>
 
 </br>
@@ -12,7 +12,7 @@ It connects neighbours so they can discuss, share, offer skills, things they wan
 </br>
 <h2 style="color:#ffa64d; font-weight:bold">--- The needs ---</h2>
 
-Web and mobile social media applications generally offer a global service which allow people to connect on a large geographical level. Users can then organizer, offer and meet on a city or even larger scale.
+Web and mobile social media applications generally offer a global service which allow people to connect on a large geographical level. Users can then organize, offer and meet on a city or even larger scale.
 
 The benefit is obviously that it offers a larger choice of activites on a larger area, giving users a greater freedom.
 But this freedom comes with a loss in social bond. Moreover, each day sees new local initiatives in plenty of different areas such as food, social services, climate concern, etc.
@@ -52,14 +52,12 @@ Once a field is filled by the user, the information becomes public.
 
 <a id="activities" style="color:#30b3ff"><h4>2. Activities</h4></a>
 
-Activites are at the heart of the application. Three can be characterized by three major types:
-
+Activities are at the heart of the application. They can be characterized by three major types:
 - Request
 - Offer
 - Event
 
 Every activity should indicates several informations:
-
 - The user who created the activity
 - A date
 - A title
@@ -69,7 +67,6 @@ Every activity should indicates several informations:
 - A list of people who decided to take part in the acitivity
 
 A user is able to:
-
 - Create an activity
 - Update its own activities
 - Delete its own activities
@@ -84,19 +81,19 @@ Bookmarked activity can be unbookmarked the same way.
 
 <a id="filters" style="color:#30b3ff"><h4>4. Filters</h4></a>
 
-As many activites are created, the map can be filled with markers, making it difficult to read.
+As many activities are created, the map can be filled with markers, making it difficult to read.
 To clear it up a bit, the application lets the user filter the activity list by activity type.
 She/he then won't see any activity markers but the one she/he chose (eg. 'Guitar course').
 
 <a id="map" style="color:#30b3ff"><h4>5. Map</h4></a>
 
 The interactive map is the main interface of the application.
-User can navigate throught it and zoom on an interested location.
+User can navigate through it and zoom on an interested location.
 One user can click on markers to open a small window showing activity informations, user profile and comments.
 
 <a id="comments" style="color:#30b3ff"><h4>6. Comments</h4></a>
 
-Once a user has opened an activity window, she/he can post comments on it, letting her/him ask about thz activity or offer some more information.
+Once a user has opened an activity window, she/he can post comments on it, letting her/him ask about the activity or offer some more information.
 
 </br>
 <a id="technologies"><h2 style="color:#ffa64d; font-weight:bold">--- Technologies ---</h2></a>
