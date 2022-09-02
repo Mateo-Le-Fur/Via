@@ -127,13 +127,9 @@ const activity = {
   async getCommentsSSE(req, res) {
     const { id } = req.user;
 
-    console.log('hi !');
-
     sseHandlerComments.newConnection(id, res);
 
     sseHandlerComments.broadcast('init', 'comment');
-
-    // console.log(data);
 
     res.on('close', () => {
       sseHandlerComments.closeConnection(id);
