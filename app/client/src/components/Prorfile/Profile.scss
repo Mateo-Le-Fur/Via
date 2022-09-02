@@ -19,7 +19,10 @@
       color: vars.$quaternary-color;
     }
     .editForm {
+
       padding-top: 1.3rem;
+      padding-left: 1rem;
+
       @media (max-width: 600px) {
         padding: 0;
       }
@@ -101,7 +104,9 @@
             fill: vars.$tertiary-color;
           }
           .input-profile{
-         
+            &::placeholder{
+              color: vars.$primary-color;
+          }  
             height: 60%;
             border: none;
             outline: none;
@@ -197,7 +202,7 @@
         color: white;
         border: none;
         background-color: vars.$tertiary-color;
-        width: 27%;
+        width: 30%;
         border-radius: 7px;
         box-shadow: -4px 0px 4px 2px rgba(204, 204, 204, 0.25);
       }

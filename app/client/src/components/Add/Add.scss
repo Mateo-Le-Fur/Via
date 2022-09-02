@@ -15,29 +15,41 @@
         height: 20px;
     }
     .editForm {
-        padding-top: 1rem;
-        width: 95%;
+        padding-top: 2.5rem;
+        padding-left: 1rem;
+      @media (max-width: 600px) {
+        
+        width: 100%;
+      }
+        width: 97%;
         display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
         justify-content: space-between;
-        margin-bottom: 4.5rem;
-        .field{
-            width: 49%;
-            margin-bottom: 2rem;
+        margin-bottom: 1rem;
+        .field-add{
+            width: 100%;
+            height: 2rem;
+            gap: 1%;
+            display: flex;
+            align-items: flex-end;
+            margin-bottom: .2rem;
             &.field-address{
                 position: relative;
                 .suggestionBox{
                     position: absolute;
                     bottom: 0;
-                    transform: translateY(97%);
-                    background-color: white;
-                    width: 100%;
+                    left: 5%;
+                    transform: translateY(100%);
+                    background-color: rgb(250, 250, 250);
+                    width: 80%;
                     overflow: auto;
                     max-height: 100px;
                     border-radius: 10px;
+                  
                     cursor: pointer;
                     > div {
+                        padding: .1rem;
+                        font-size: .8rem;
                         &:hover{
                             background-color: vars.$primary-color;
                             color: white;
@@ -45,114 +57,234 @@
                     }
                 }
             }
-            &-input {
-                padding: .2rem .6rem;
-                font-size: 1em;
-                height: 2rem;
-            }
-            &-label{
-                left: unset;
-                right: 0.7rem;
+            .smIcon{
+         
+                font-size: 1.3rem;
+                fill: vars.$tertiary-color;
               }
-    }
-    .areaContainer{
-      width: 100%;
-      height: 100px;
-      margin-bottom: 2rem;
-      textarea {
-        width: 100%;
-        height: 100%;
-        resize: none;
-        padding: .7em;
-        font-size: 1.3em;
-        outline: none;
-        border: 1px solid vars.$gray;
-        box-shadow: vars.$box-shadow;
-        border-radius: 1rem;
-        color: vars.$primary-color;
-        &::placeholder{
-          color: vars.$primary-color;
-        }
-        &:focus{
-          border-color: vars.$primary-color ;
-        }
-      }
-    }
-    .dateContainer{
-        margin-bottom: 2rem;
-        width: 49%;
-        @media(max-width: 600px){
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .date{
+            .add-input{
+            &::placeholder{
+                color: vars.$primary-color;
+            }  
+            height: 60%;
+            outline: none;
+            width: 80%;
+            color: vars.$primary-color;
             border: 1px solid vars.$gray;
             box-shadow: vars.$box-shadow;
             border-radius: 1rem;
-            &:focus{
-                border-color: vars.$primary-color ;
-
+            padding: .7rem;
+           
             }
+            &.field-types{
+                height: 50px;
+                margin: .5rem 0;
+                align-items: center;
+                .types-container{
+                    display: flex;
+                    align-items: center;
+                    padding-left: .8rem;
+                    gap: 6%;
+                    @media (max-width: 600px) {
+                        padding-left: 0;
+                        gap: 3%;
+                      }
+                    width: 80%;
+                    height: 100%;
+
+                    .icon{
+                        font-size: 2.4rem;
+                        border: none;
+                        fill: white;
+                        &.active{
+                            border: 1px solid vars.$secondary-color;
+                            fill: vars.$secondary-color;
+                        }
+                    }
+                }
+            }
+         
         }
-    }
-    .typeContainer{
-        @media(max-width: 600px){
+
+        .areaContainer{
+            margin-top: .5rem;
             width: 100%;
             height: 200px;
-        }
-        width: 35%;
-        border: 1px solid vars.$gray;
-        box-shadow: vars.$box-shadow;
-        border-radius: 1rem;
-        height: 320px;
-        display: flex; 
-        flex-direction: column;
-        align-items: center;
-        padding: .3rem;
-        > span {
-            padding: .2rem .6rem;
-            font-size: 1em;
-            color: vars.$primary-color;
-            height: 10%;
-        }
-        .activityList{
-            height: 90%;
-            width: 100%;
+           
+            gap: 1%;
             display: flex;
-            flex-wrap: wrap;
-            padding: .6rem 1rem;
-            justify-content: space-between;
-            > div {
-                @media(max-width: 600px){
-                    width: 30%;
-                }
-                width: 49%;
-                height: 30%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
+            .smIcon{
+              font-size: 1.3rem;
+              fill: vars.$tertiary-color;
             }
-        }
-        &:focus{
-            border-color: vars.$primary-color ;
+            textarea {
+              width: 80%;
+              height: 100%;
+              resize: none;
+              font-size: .9rem;
+              outline: none;
+              padding: .4rem;
+              border: 1px solid vars.$gray;
+              box-shadow: vars.$box-shadow;
+              border-radius: 1rem;
+              color: vars.$primary-color;
+              &::placeholder{
+                color: vars.$primary-color;
+              }
+            
+              
+            }
+          }
+    //     .field{
+    //         width: 49%;
+    //         margin-bottom: 2rem;
+    //         &.field-address{
+    //             position: relative;
+    //             .suggestionBox{
+    //                 position: absolute;
+    //                 bottom: 0;
+    //                 transform: translateY(97%);
+    //                 background-color: white;
+    //                 width: 100%;
+    //                 overflow: auto;
+    //                 max-height: 100px;
+    //                 border-radius: 10px;
+    //                 cursor: pointer;
+    //                 > div {
+    //                     &:hover{
+    //                         background-color: vars.$primary-color;
+    //                         color: white;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //         &-input {
+    //             padding: .2rem .6rem;
+    //             font-size: 1em;
+    //             height: 2rem;
+    //         }
+    //         &-label{
+    //             left: unset;
+    //             right: 0.7rem;
+    //           }
+    // }
+    // .areaContainer{
+    //   width: 100%;
+    //   height: 100px;
+    //   margin-bottom: 2rem;
+    //   textarea {
+    //     width: 100%;
+    //     height: 100%;
+    //     resize: none;
+    //     padding: .7em;
+    //     font-size: 1.3em;
+    //     outline: none;
+    //     border: 1px solid vars.$gray;
+    //     box-shadow: vars.$box-shadow;
+    //     border-radius: 1rem;
+    //     color: vars.$primary-color;
+    //     &::placeholder{
+    //       color: vars.$primary-color;
+    //     }
+    //     &:focus{
+    //       border-color: vars.$primary-color ;
+    //     }
+    //   }
+    // }
+    // .dateContainer{
+    //     margin-bottom: 2rem;
+    //     width: 49%;
+    //     @media(max-width: 600px){
+    //         width: 100%;
+    //         display: flex;
+    //         align-items: center;
+    //         justify-content: center;
+    //     }
+    //     .date{
+    //         border: 1px solid vars.$gray;
+    //         box-shadow: vars.$box-shadow;
+    //         border-radius: 1rem;
+    //         &:focus{
+    //             border-color: vars.$primary-color ;
 
-        }
-    }
+    //         }
+    //     }
+    // }
+    // .typeContainer{
+    //     @media(max-width: 600px){
+    //         width: 100%;
+    //         height: 200px;
+    //     }
+    //     width: 35%;
+    //     border: 1px solid vars.$gray;
+    //     box-shadow: vars.$box-shadow;
+    //     border-radius: 1rem;
+    //     height: 320px;
+    //     display: flex; 
+    //     flex-direction: column;
+    //     align-items: center;
+    //     padding: .3rem;
+    //     > span {
+    //         padding: .2rem .6rem;
+    //         font-size: 1em;
+    //         color: vars.$primary-color;
+    //         height: 10%;
+    //     }
+    //     .activityList{
+    //         height: 90%;
+    //         width: 100%;
+    //         display: flex;
+    //         flex-wrap: wrap;
+    //         padding: .6rem 1rem;
+    //         justify-content: space-between;
+    //         > div {
+    //             @media(max-width: 600px){
+    //                 width: 30%;
+    //             }
+    //             width: 49%;
+    //             height: 30%;
+    //             display: flex;
+    //             align-items: center;
+    //             justify-content: center;
+    //         }
+    //     }
+    //     &:focus{
+    //         border-color: vars.$primary-color ;
+
+    //     }
+    // }
+    // .buttonContainer{
+    //   width: 100%;
+    //   display: flex;
+    //   align-items: center;
+    //   padding-top: 1rem;
+    //   justify-content: center;
+    //   .btn{
+    //     @media(max-width: 600px){
+    //         width: 40%;
+    //     }
+    //     width: 30%;
+    //     text-align: center;
+    //   }
+    // }
     .buttonContainer{
-      width: 100%;
-      display: flex;
-      align-items: center;
-      padding-top: 1rem;
-      justify-content: center;
-      .btn{
-        @media(max-width: 600px){
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding-top: .5rem;
+       
+        justify-content: center;
+        .btn{
+          @media (max-width: 600px){
             width: 40%;
+          }
+          color: white;
+          border: none;
+          background-color: vars.$tertiary-color;
+          width: 30%;
+          border-radius: 7px;
+          box-shadow: -4px 0px 4px 2px rgba(204, 204, 204, 0.25);
         }
-        width: 30%;
-        text-align: center;
-      }
-    }
+      } 
     }
 }
