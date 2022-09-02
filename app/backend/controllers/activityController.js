@@ -62,7 +62,7 @@ const activity = {
     activities = activities.map((element) => {
       let data = element;
 
-      const date = dateFormat.convertActivityDate(data);
+      const date = dateFormat.convertActivityDate(data.date);
 
       data = { ...data, date };
 
@@ -104,7 +104,7 @@ const activity = {
     activity = activity.get();
     const getUser = activity.user.get();
 
-    const date = dateFormat.convertActivityDate(activity);
+    const date = dateFormat.convertActivityDate(activity.date);
 
     const result = {
       ...getUser,

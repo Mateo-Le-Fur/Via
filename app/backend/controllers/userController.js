@@ -177,7 +177,7 @@ const userController = {
 
     let result = getUpdatedActivity.get();
 
-    const date = dateFormat.convertActivityDate(result);
+    const date = dateFormat.convertActivityDate(result.date);
 
     result = {
       ...result, nickname: result.user.nickname, type: result.types[0].label, date,
@@ -265,7 +265,7 @@ const userController = {
     const result = activities.map((elem) => {
       let data = elem.get();
 
-      const date = dateFormat.convertActivityDate(data);
+      const date = dateFormat.convertActivityDate(data.date);
 
       data = {
         ...data, nickname: data.user.nickname, type: data.types[0].label, date,
