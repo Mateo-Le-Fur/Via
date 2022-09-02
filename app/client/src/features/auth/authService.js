@@ -22,8 +22,8 @@ const checkUser = async () => {
 }
 
 // Logout user
-const logout = async () => {
-  const response = await privateReq.get('/auth/logout')
+const logout = async (userId) => {
+  const response = await privateReq.post('/auth/logout', {userId})
   console.log(response)
   return response.data
 }

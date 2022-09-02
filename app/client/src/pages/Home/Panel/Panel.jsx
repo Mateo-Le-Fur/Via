@@ -6,6 +6,7 @@ import Profile from '../../../components/Prorfile/Profile';
 import Add from '../../../components/Add/Add';
 import Bookmark from '../../../components/Bookmark/Bookmark';
 import Dashboard from '../../../components/Dashboard/Dashboard';
+import { RiH1 } from 'react-icons/ri';
 const Panel = () => {
  const {panel} = useSelector(state => state.global);
  const dispatch = useDispatch()
@@ -18,14 +19,14 @@ const Panel = () => {
     }}>
         <MdOutlineClose className='x' />
     </span>
-        <div className="cover">
-        <h1>
-            {panel === "profile" && "Profil"}
-            {panel === "add" && "Ajouter une activité"}
-            {panel === "bookmark" && "Favoris"}
-            {panel === "dashboard" && "Tableau de bord"}
-            </h1>
-        </div>
+      {panel !== "profile" && (
+           <div className="cover">
+           {panel === "add" && <h1>Ajouter une activité</h1>}
+           {panel === "bookmark" && <h1>Favoris</h1>}
+           {panel === "dashboard" && <h1>Tableau de bord</h1>}
+ 
+       </div>
+      )}  
         <div className="container">
           {panel === "profile" && <Profile user={user} />}
           {panel === "add" && <Add />}
