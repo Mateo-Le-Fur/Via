@@ -148,10 +148,21 @@ const activity = {
     }
 
     const activity = await Activity.findAll({
-      include: ['comments'],
+      include: [
+        {
+          model: Comment,
+          as: 'comments',
+        },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['nickname'],
+        },
+      ],
       where: {
         city: getUser.city,
       },
+      attributes: ['id'],
       order: [
         [{ model: Comment, as: 'comments' }, 'created_at', 'asc'],
       ],
@@ -163,46 +174,25 @@ const activity = {
 
     const activities = JSON.parse(JSON.stringify(activity));
 
+    const data = [];
+    activities.forEach((activity) => {
+      activity.comments.forEach((comment) => {
+        let result = comment;
+        result = { ...result,
+          nickname: activity.user.nickname,
+          avatar: `http://localhost:8080/api/user/${result.user_id}/avatar`,
+          date: dateFormat.convertActivityDate(result.created_at),
+        };
+        data.push(result);
+      });
+    });
     // const resultComments = activities.map((element) => {
     //   const data = element;
 
     //   return data.comments.length;
     // });
 
-    const users = await User.findAll({
-      where: {
-        city: getUser.city,
-      },
-    });
-
-    const userArr = [];
-
-    users.forEach((user) => {
-      userArr.push({ id: user.id, nickname: user.nickname });
-    });
-
-    const val = [];
-
-    activities.forEach((activity) => {
-      activity.comments.forEach((comment) => {
-        if (comment !== undefined) {
-          const newUserArr = userArr.filter(
-            (user) => user.id === comment.user_id,
-          );
-
-          const newComment = {
-            ...comment,
-            user: newUserArr[0].nickname,
-            avatar: `http://localhost:8080/api/user/${comment.user_id}/avatar`,
-            date: dateFormat.convertActivityDate(comment.created_at),
-          };
-
-          val.push(newComment);
-        }
-      });
-    });
-
-    res.json(val);
+    res.json(data);
   },
 
   async createComment(req, res) {
