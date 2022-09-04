@@ -193,6 +193,7 @@ const activity = {
     // });
 
     res.json(data);
+
   },
 
   async createComment(req, res) {
