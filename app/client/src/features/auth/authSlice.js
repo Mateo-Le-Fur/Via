@@ -7,6 +7,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: '',
+  messages: []
 }
 
 // Register new user
@@ -102,6 +103,47 @@ export const deleteAccount = createAsyncThunk('auth/delete', async (_, thunkAPI)
   }
 })
 
+
+// message
+export const getMessages = createAsyncThunk(
+  'messages/get',
+  async (_, thunkAPI) => {
+    const currentUserId = thunkAPI.getState().auth.user.id
+    try {
+      return await authService.getMessages(currentUserId)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
+export const addMessage = createAsyncThunk(
+  'messages/add',
+  async (data, thunkAPI) => {
+    const currentUserId = thunkAPI.getState().auth.user.id
+    const { recipientId, message } = data
+    try {
+      return await authService.addMessage(currentUserId, recipientId, message)
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString()
+
+      return thunkAPI.rejectWithValue(message)
+    }
+  }
+)
+
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -112,6 +154,9 @@ export const authSlice = createSlice({
       state.isSuccess = false
       state.message = ''
     },
+    realTimeMessages: (state, action) => {
+      state.messages.push(action.payload) 
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -187,8 +232,28 @@ export const authSlice = createSlice({
         state.user = null
         state.message = action.payload
       })
+      .addCase(getMessages.fulfilled, (state, action) => {
+        state.isLoading = false
+        state.messages = action.payload
+      })
+      .addCase(getMessages.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
+      .addCase(addMessage.pending, (state, action) => {
+        state.isLoading = true
+            })
+      .addCase(addMessage.fulfilled, (state, action) => {
+        state.isLoading = false
+      })
+      .addCase(addMessage.rejected, (state, action) => {
+        state.isLoading = false
+        state.isError = true
+        state.message = action.payload
+      })
   },
 })
 
-export const { reset } = authSlice.actions
+export const { reset, realTimeMessages } = authSlice.actions
 export default authSlice.reducer

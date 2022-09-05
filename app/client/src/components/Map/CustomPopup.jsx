@@ -14,6 +14,7 @@ import {
 
 import { FaStar, FaChevronLeft, FaPhone, FaUser } from 'react-icons/fa';
 import { addComment, createBookmark, deleteActivity, deleteBookmark, participate, updateActivity } from '../../features/activity/activitySlice';
+import { addMessage } from '../../features/auth/authSlice';
 
 const CustomPopup = ({ id, type }) => {
   const { participations } = useSelector(state => state.activity)
@@ -105,7 +106,15 @@ const CustomPopup = ({ id, type }) => {
     }
   }
 
-  
+  // message
+  const [inputMessage, setInputMessage] = useState("")
+  const submitMessage = (e) => {
+    e.preventDefault()
+    if (inputMessage && inputMessage.length < 250){
+      dispatch(addMessage({recipientId: activity.user_id, message: inputMessage}))
+      setInputMessage("")
+    }
+  }
 
     return (
       <Popup ref={popupRef}>
@@ -205,6 +214,10 @@ const CustomPopup = ({ id, type }) => {
                   </>
               )}
              
+             <form  className={inputMessage.length > 250 ? "message form-error" : "message"}  onSubmit={submitMessage}>
+                  <textarea lassName={inputMessage.length > 250 ? "input-error" : ""}  placeholder='Envoyer un message...' value={inputMessage} onChange={(e) => setInputMessage(e.target.value)}></textarea> 
+                  <button className={inputMessage.length > 250 ? "disabled" : ""} disabled={inputMessage.length > 250} style={{fontSize: "1.2rem"}} type='submit'><FaPaperPlane /></button>
+                </form>
             </div>}
             {
               mode === "comments" && !edit && <div className='commentsContainer'>

@@ -1,0 +1,58 @@
+@use "../../vars";
+@use "sass:color";
+
+.chat{
+    width: 100%;
+    height: 96%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+        .message{
+            &.mine{
+                background-color: lighten(vars.$primary-color, 25%);
+                color: white;
+            }
+            margin: .3rem;
+            display: flex;
+            flex-direction: column;
+         
+            border: 1px solid vars.$gray;
+            border-radius: 1rem;
+            box-shadow: vars.$box-shadow;
+            .row{
+                margin-top: .3rem;
+                height: 40%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .avatar-img{
+                    width: 9%;
+                    height: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    img{
+                        width: 80%;
+                        height: 90%;
+                        border-radius: 50%;
+                        border: 1px solid vars.$primary-color;
+                    }
+                }   
+                .nickname-box{
+                    color: vars.$primary-color;
+                    margin-right: .5rem;
+                }
+
+            }
+            .content{
+                height: 60%;
+                width: 100%;
+                font-size: .8rem;
+                padding: .7rem;
+                min-height: 80px;
+                overflow: auto;
+            }
+        }
+    }
+    

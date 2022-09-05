@@ -6,6 +6,7 @@ import Profile from '../../../components/Prorfile/Profile';
 import Add from '../../../components/Add/Add';
 import Bookmark from '../../../components/Bookmark/Bookmark';
 import Dashboard from '../../../components/Dashboard/Dashboard';
+import Chat from '../../../components/Chat/Chat';
 const Panel = () => {
  const {panel} = useSelector(state => state.global);
  const dispatch = useDispatch()
@@ -23,7 +24,8 @@ const Panel = () => {
            {panel === "add" && <h1>Ajouter une activité</h1>}
            {panel === "bookmark" && <h1>Favoris</h1>}
            {panel === "dashboard" && <h1>Tableau de bord</h1>}
- 
+           {panel === "chat" && <h1>Conversations</h1>}
+
        </div>
       )}  
         <div className="container">
@@ -31,6 +33,7 @@ const Panel = () => {
           {panel === "add" && <Add />}
           {panel === "bookmark" && <Bookmark />}
           {panel === "dashboard" && <Dashboard />}
+          {panel === "chat" && <Chat />}
         </div>
     </div>
   )

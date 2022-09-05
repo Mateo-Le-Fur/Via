@@ -35,6 +35,11 @@
         height: 300px;
         gap: .3rem;
         li {
+            &.chat-icon{
+                @media (max-width: 600px){
+                    display: none;
+                }
+            }
             border-radius: 50%;
             margin-bottom: 1rem;
             &.filterLi{

@@ -43,6 +43,20 @@ const deleteAccount = async (userId) => {
 }
 
 
+// chat
+ // get messages 
+ const getMessages = async (currentUserId) => {
+  const res = await privateReq.get(`/user/${currentUserId}/message/`)
+  return res.data
+  }
+
+// add message
+const addMessage = async (cuurentUserId, recipientId, message) => {
+  const res = await privateReq.post(`/user/${cuurentUserId}/message/`, {recipientId, message})
+  console.log(res.data)
+  return res.data.message
+  }
+
 
 const authService = {
   register,
@@ -51,6 +65,8 @@ const authService = {
   checkUser,
   updateUser,
   deleteAccount,
+  getMessages,
+  addMessage
 }
 
 export default authService

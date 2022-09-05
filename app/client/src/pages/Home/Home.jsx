@@ -9,8 +9,10 @@ import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
 import { getActivities, getBookmarks, getComments, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
+import { getMessages, realTimeMessages } from '../../features/auth/authSlice'
 let participeSource;
 let commentSource;
+let messagesSource;
 
 
 const Home = () => {
@@ -41,6 +43,7 @@ const Home = () => {
       dispatch(getActivities())
       dispatch(getBookmarks())
       dispatch(getComments())
+      dispatch(getMessages())
    }, [dispatch])
 
    useEffect(() => {
@@ -74,11 +77,29 @@ const Home = () => {
     }
 
     commentSource = new EventSource(`/api/activity/sse/comments/`)
-  
+    
     commentSource.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
     });
+  },  [])
+
+
+  useEffect(() => {
+    if (messagesSource) {
+      console.log('exist!')
+      messagesSource.close();
+    }
+
+
+  
+    messagesSource = new EventSource(`/api/user/message/sse`)
+  
+    messagesSource.addEventListener("Messages", (e) => {
+      const data  = JSON.parse(e.data);
+      dispatch(realTimeMessages(data))
+    });
+  
   },  [])
 
   return (

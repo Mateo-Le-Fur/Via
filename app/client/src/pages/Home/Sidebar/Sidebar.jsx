@@ -3,7 +3,7 @@ import "./Sidebar.scss";
 import { logout } from '../../../features/auth/authSlice';
 import {FaUser, FaPlus, FaStar, FaFilter, FaLeaf, FaFootballBall, FaHandsHelping, FaTools} from "react-icons/fa"
 import {GiCook, GiPalette, } from "react-icons/gi"
-import {BsGrid3X3GapFill} from "react-icons/bs"
+import {BsGrid3X3GapFill, BsFillChatLeftDotsFill} from "react-icons/bs"
 import {RiLogoutBoxRFill} from "react-icons/ri"
 import { activePanel, activeFilter, handleShowFilter, handleShowSidebar } from '../../../features/global/globalSlice';
 import {MdAdminPanelSettings} from "react-icons/md"
@@ -28,6 +28,9 @@ const Sidebar = () => {
         <div>
         <li onClick={() => handlePanel('profile')}>
             <FaUser className={panel === "profile" ? "icon active": "icon"} />
+        </li>
+        <li className='chat-icon'  onClick={() => handlePanel('chat')}>
+            <BsFillChatLeftDotsFill className={panel === "chat" ? "icon active": "icon"} />
         </li>
         <li onClick={() => handlePanel('add')}>
             <FaPlus  className={panel === "add" ? "icon active": "icon"}/>
