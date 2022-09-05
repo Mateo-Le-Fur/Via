@@ -20,6 +20,7 @@ module.exports = Joi.object({
     .required()
     .messages({
       'string.empty': 'champ requis',
+      'any.required': 'Veuillez sélectionner une ville.',
     }),
 
   email: Joi.string()

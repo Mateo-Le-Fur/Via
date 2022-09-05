@@ -320,15 +320,15 @@ const activity = {
   async getParticipationsInRealTime(req, res) {
     const { id } = req.user;
 
+    sseHandlerParticipate.newConnection(id, res);
+
     const user = await User.findByPk(id, { raw: true });
 
     if (!user) throw new ApiError('Aucun utilisateur trouvé', 403);
 
-    sseHandlerParticipate.newConnection(id, res);
-
     let getParticipates = await activity.getParticipations(req);
 
-    if (getParticipates.length === 0) getParticipates = 'null';
+    getParticipates = getParticipates.length > 0 ? getParticipates : 'null';
 
     sseHandlerParticipate.broadcast(getParticipates, user.city);
 
