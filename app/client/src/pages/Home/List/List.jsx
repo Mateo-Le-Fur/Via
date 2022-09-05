@@ -25,16 +25,6 @@ const List = ({activities}) => {
         {activities.map(activity => (
           <Card kind='list' key={activity.id} activity={activity} />
         ))}
-          {/* <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>       
-          <Card  kind="list"/>        */}
         </div>
     </div>
   )

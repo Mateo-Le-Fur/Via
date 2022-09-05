@@ -4,7 +4,6 @@ import {MdOutlineClose} from "react-icons/md"
 import {FaUser} from "react-icons/fa"
 import {FaPlus} from "react-icons/fa"
 import {FaStar} from "react-icons/fa"
-import {MdAdminPanelSettings} from "react-icons/md"
 
 import "./Modal.scss";
 import Profile from '../../../components/Prorfile/Profile';

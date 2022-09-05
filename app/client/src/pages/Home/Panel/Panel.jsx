@@ -6,7 +6,6 @@ import Profile from '../../../components/Prorfile/Profile';
 import Add from '../../../components/Add/Add';
 import Bookmark from '../../../components/Bookmark/Bookmark';
 import Dashboard from '../../../components/Dashboard/Dashboard';
-import { RiH1 } from 'react-icons/ri';
 const Panel = () => {
  const {panel} = useSelector(state => state.global);
  const dispatch = useDispatch()

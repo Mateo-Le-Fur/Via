@@ -3,8 +3,10 @@ node_modules
 .eslintrc.js
 .env
 *.log
-*.log
 /upload
 /images
 localhost-cert.pem
 localhost-privkey.pem
+/app/backend/log/*.log
+/app/images/*.webp
+.idea

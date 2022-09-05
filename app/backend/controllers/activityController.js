@@ -178,7 +178,8 @@ const activity = {
     activities.forEach((activity) => {
       activity.comments.forEach((comment) => {
         let result = comment;
-        result = { ...result,
+        result = {
+          ...result,
           nickname: activity.user.nickname,
           avatar: `http://localhost:8080/api/user/${result.user_id}/avatar`,
           date: dateFormat.convertActivityDate(result.created_at),
@@ -193,7 +194,6 @@ const activity = {
     // });
 
     res.json(data);
-
   },
 
   async createComment(req, res) {
@@ -322,9 +322,15 @@ const activity = {
 
     sseHandlerParticipate.newConnection(id, res);
 
-    const getActivities = await activity.getParticipations(req);
+    const user = await User.findByPk(id, { raw: true });
 
-    sseHandlerParticipate.broadcast(getActivities, getActivities[0].city);
+    if (!user) throw new ApiError('Aucun utilisateur trouvé', 403);
+
+    let getParticipates = await activity.getParticipations(req);
+
+    getParticipates = getParticipates.length > 0 ? getParticipates : 'null';
+
+    sseHandlerParticipate.broadcast(getParticipates, user.city);
 
     res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);
