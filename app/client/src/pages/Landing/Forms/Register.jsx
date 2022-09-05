@@ -1,12 +1,35 @@
 import { useFormik } from "formik"
+import { useState } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import * as Yup from "yup"
 import { register } from '../../../features/auth/authSlice'
+import { handleHideSuggestionBox, handleShowSuggestionBox } from "../../../features/global/globalSlice"
 import "./Forms.scss"
+import SuggestionBox from "./SeuggestionBox"
 
 const Register = () => {
     const {isLoading, isError} = useSelector(state => state.auth)
     const dispatch = useDispatch()
+    const { showSuggestionBox } = useSelector((state) => state.global);
+
+  // Address
+  const [city, setCity] = useState();
+
+  // const handleChangeCity = () => {
+    
+  //   console.log("hey")
+  //   if (e.target.value.length > 0) {
+  //     dispatch(handleShowSuggestionBox());
+  //   } else {
+  //     dispatch(handleHideSuggestionBox());
+  //   }
+  // };
+
+  const handleCity = (value) => {
+    registerForm.setFieldValue("city", value)
+    setCity(value);
+  };
+    
     const registerForm = useFormik({
         initialValues: {
           nickname: "",
@@ -25,7 +48,8 @@ const Register = () => {
     
         }),
         onSubmit: (values) => {
-          dispatch(register(values))
+          const {email, nickname, password, confirmPassword} = values
+          dispatch(register({nickname, email, password, confirmPassword, city}))
         }
       })
   return (
@@ -37,10 +61,24 @@ const Register = () => {
         <label htmlFor="nickname" className={registerForm.touched.nickname && registerForm.errors.nickname ? "field-label error" : "field-label"} >Pseudo</label>
         {registerForm.touched.nickname && registerForm.errors.nickname ? <p>{registerForm.errors.nickname}</p> : null}
       </div>
-      <div className={registerForm.values.city.length > 0 ? "field field--has-content" : "field"}>
-        <input type="text" id="city" className={registerForm.touched.city && registerForm.errors.city ? "field-input error" : "field-input"} name="city" placeholder="Ville" onBlur={registerForm.handleBlur} onChange={registerForm.handleChange} value={registerForm.values.city} />
+      <div className={registerForm.values.city.length > 0 ? "field field-address field--has-content" : "field field-address"}>
+        <input type="text" id="city" className={registerForm.touched.city && registerForm.errors.city ? "field-input error" : "field-input"} name="city" placeholder="Ville" onBlur={registerForm.handleBlur} onChange={(e) => {
+          registerForm.setFieldValue("city", e.target.value)
+          if (e.target.value.length > 0) {
+                dispatch(handleShowSuggestionBox());
+              } else {
+                dispatch(handleHideSuggestionBox());
+              }
+          }} value={registerForm.values.city} />
         <label htmlFor="city" className={registerForm.touched.city && registerForm.errors.city ? "field-label error" : "field-label"} >Ville</label>
         {registerForm.touched.email && registerForm.errors.city ? <p>{registerForm.errors.city}</p> : null}
+        {showSuggestionBox && (
+          <SuggestionBox
+            inputCity={registerForm.values.city}
+            handleCity={handleCity}
+          />
+       
+        )}
       </div>
       <div className={registerForm.values.email.length > 0 ? "field field--has-content" : "field"}>
         <input type="text" id="email" className={registerForm.touched.email && registerForm.errors.email ? "field-input error" : "field-input"} name="email" placeholder="Email " onBlur={registerForm.handleBlur} onChange={registerForm.handleChange} value={registerForm.values.email} />
