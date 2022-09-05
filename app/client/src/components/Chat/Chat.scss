@@ -2,28 +2,25 @@
 @use "sass:color";
 
 .chat{
-    width: 100%;
     height: 96%;
     display: flex;
     flex-direction: column;
-    
+    width: 100%;    
     overflow: auto;
-        .message{
-            &.mine{
-                margin-left: 0;
-                margin-right: auto;
-                background-color: lighten(vars.$primary-color, 25%);
-                color: white;
-            }
-            margin-left: auto;
-            margin-right: 0;
+    align-items: flex-end;
+        .message{   
             margin: .3rem;
             display: flex;
             flex-direction: column;
-            width: 50%;
+            width: 70%;
             border: 1px solid vars.$gray;
             border-radius: 1rem;
             box-shadow: vars.$box-shadow;
+            &.mine{
+                background-color: lighten(vars.$primary-color, 25%);
+                color: white;
+                align-self: flex-start;
+            }
             .row{
                 margin-top: .3rem;
                 height: 40%;
@@ -65,5 +62,6 @@
                 font-style: italic;
             }
         }
+    
     }
     
