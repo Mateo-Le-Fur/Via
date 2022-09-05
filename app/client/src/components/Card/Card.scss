@@ -5,11 +5,11 @@
         min-width: 200px;
     }
     min-width: 400px;
-
     box-shadow: vars.$box-shadow;
     display: flex;
     flex-direction: column;
     border-radius: 10px;
+    min-height: 200px;
     overflow: hidden;
     margin-bottom: 1rem;
     background-color: white;
@@ -47,7 +47,7 @@
     .middle{
         height: 70%;
         overflow: auto;
-     
+       
         .row{
             padding: .1rem;
             display: flex;
@@ -69,6 +69,7 @@
             margin-top: .3rem;
             padding: 0 .7rem;
             word-wrap: break-word;
+            min-height: 100px;
         }
     }
 
