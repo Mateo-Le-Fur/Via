@@ -1,5 +1,9 @@
+import { useSelector } from "react-redux"
+
  
 const Message = ({mine, message}) => {
+  const {user} = useSelector(state => state.auth)
+
   return (
     <div className={mine ? "message mine" : "message"}>
     <div className="row">
@@ -7,7 +11,7 @@ const Message = ({mine, message}) => {
         <img src={message.avatar} alt="" />
         </div>
         <div className="nickname-box">
-            {message.user}
+            {message.exp_user_id !== user.id ? message.user : "Vous"}
         </div>
     </div>
     <div className="content">
