@@ -538,6 +538,8 @@ const userController = {
 
       userMessages.push(newMessage);
     });
+    
+    userMessages.sort((a, b) => b.created_at - a.created_at);
 
     res.json(userMessages);
   },
