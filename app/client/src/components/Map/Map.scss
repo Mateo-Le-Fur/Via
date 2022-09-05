@@ -42,18 +42,15 @@
             flex-direction: column;
             width: 100%;
             height: 100%;
-
+            // Edit 
             .editContainer {
                 display: flex;
                 flex-direction: column;
-                
                 .activityHeader {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
                     padding: .5rem 0;
-                 
-
                     input {
                         border: none;
                         font-size: 1.5rem;
@@ -64,7 +61,6 @@
                         }
                     }
                 }
-
                 .dateContainer {
                     display: flex;
                     input{
@@ -85,14 +81,12 @@
 
                 .locationContainer {
                     display: flex;
-
                     .smIcon {
                         font-size: 1.3rem;
                         @media (max-width: 600px) {
                             font-size: 1rem;
                         }
                     }
-
                     input {
                         border: none;
                         outline: none;
@@ -102,7 +96,6 @@
                         }
                     }
                 }
-
                 .descriptionContainer {
                     margin-top: 1rem;
                     @media (max-width: 600px) {
@@ -113,6 +106,7 @@
                     textarea{
                         width: 100%;
                         height: 150px;
+                        overflow: hidden;
                         @media (max-width: 600px) {
                             font-size: .8rem;
                             height: 100px;

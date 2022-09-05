@@ -7,16 +7,6 @@ import { deleteActivity } from "../../../features/activity/activitySlice";
 
 const DataTable = ({kind, columns, rows}) => {
   const dispatch = useDispatch()
-    // const handleDelete = (id) => {
-    //   if(kind === "users"){
-    //     // dispatch(deleteUser(id))
-    //     console.log(id)
-    //   } else if (kind === "activities"){
-
-    //     dispatch(deleteActivity())
-    //   }
-    // }
-
     const actionColumn = [
         {
           field: "action",

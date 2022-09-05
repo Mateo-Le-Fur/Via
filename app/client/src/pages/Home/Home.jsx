@@ -8,19 +8,17 @@ import Modal from "./Modal/Modal"
 import List from './List/List'
 import CustomLayer from '../../components/Map/CustomLayer'
 import { useEffect, useMemo, useState } from 'react'
-import { getActivities, getBookmarks, getComments, getFirstParticipations, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
-import { checkUser } from '../../features/auth/authSlice'
+import { getActivities, getBookmarks, getComments, realTimeComments, realTimeParticipations } from '../../features/activity/activitySlice'
 let participeSource;
 let commentSource;
 
 
 const Home = () => {
-  const { user, message } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.auth)
   const {filter} = useSelector(state => state.global)
   const [markerGroups, setMarkerGroups] = useState([])
   const dispatch = useDispatch()
   const {activities} = useSelector(state => state.activity)
-  const {participations} = useSelector(state => state.activity)
 
   const groupMarkers = useMemo(() => {
     if(activities.length > 0 ){
@@ -90,7 +88,6 @@ const Home = () => {
         {markerGroups && markerGroups.map((group) => (
         <CustomLayer key={group[0]} group={group}/>
       ))}
- 
         </Map>
       )}
       <OutsideWrapper component="sidebar">

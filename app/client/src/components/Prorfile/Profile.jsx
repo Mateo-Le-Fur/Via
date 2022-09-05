@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import "./Profile.scss";
-import img from "../../assets/images/no-user.png";
 import Card from "../Card/Card";
-import {RiFileEditFill, } from "react-icons/ri"
-import {BsFillTelephoneFill} from "react-icons/bs"
-import {HiLocationMarker, HiInformationCircle} from "react-icons/hi"
-import {FaBuilding} from "react-icons/fa"
-import {FaCog} from "react-icons/fa"
+import { RiFileEditFill, } from "react-icons/ri"
+import { BsFillTelephoneFill } from "react-icons/bs"
+import { HiLocationMarker, HiInformationCircle } from "react-icons/hi"
+import { FaCog } from "react-icons/fa"
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,13 +13,11 @@ import {
 } from "../../features/global/globalSlice";
 import SuggestionBox from "./SeuggestionBox";
 import { deleteAccount, reset, updateUser } from "../../features/auth/authSlice";
-import OutsideWrapper from "../../hooks/ClickOutsideHook";
-// import { checkUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
   const { activities } = useSelector((state) => state.activity);
   const [filtered, setFiltered] = useState([]);
-  const { user, isError, message, isSuccess} = useSelector((state) => state.auth);
+  const { user, isError, message, isSuccess } = useSelector((state) => state.auth);
   const { showSuggestionBox } = useSelector((state) => state.global);
 
   useEffect(() => {
@@ -29,21 +25,14 @@ const Profile = () => {
   }, [activities, user.id]);
 
   const dispatch = useDispatch();
+
+  // Form 
   const [form, setForm] = useState({
     firstname: user.firstname ? user.firstname : "",
     lastname: user.lastname ? user.lastname : "",
     phone: user.phone ? user.phone : "",
     description: user.description ? user.description : "",
   });
-
-
-  useEffect(() => {
-    if (message) {
-      setTimeout(() => {
-        dispatch(reset());
-      }, 3000);
-    }
-  }, [message, dispatch]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -68,24 +57,18 @@ const Profile = () => {
     setAddress(value);
   };
 
-  // Avatar
+  // Avatar upload
   const [avatar, setAvatar] = useState(user.url);
-
-  // getUserAvatar(user.id);
 
   const handleAvatar = (e) => {
     const formData = new FormData();
     const reader = new FileReader();
     const file = e.target.files[0];
-
     formData.append("image", file);
-
     reader.onloadend = () => {
       setAvatar(reader.result);
     };
-
     reader.readAsDataURL(file);
-
     uploadImage(user.id, formData);
   };
 
@@ -98,17 +81,6 @@ const Profile = () => {
     } catch (error) { }
   }
 
-  // async function getUserAvatar(id) {
-  //   const userAvatar = await fetch(`/api/user/${id}/avatar`, {
-  //     method: "GET",
-  //   });
-  //   if (userAvatar.ok) {
-  //     setTimeout(() => {
-  //       setAvatar(userAvatar.url);
-  //     }, 1000);
-  //   }
-  // }
-
   // submit
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -117,15 +89,23 @@ const Profile = () => {
     dispatch(updateUser({ userId: user.id, userData: { ...form, address } }));
   };
 
+  // Delete account
   const [showDelete, setShowDelete] = useState(false)
 
+  useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        dispatch(reset());
+      }, 3000);
+    }
+  }, [message, dispatch]);
+
+
   if (user) {
-
     return (
-
       <div className="profile">
         {isError && message && <p className="server-error">{message}</p>}
-        {isSuccess  && message && <p className="server-success">{message}</p>}
+        {isSuccess && message && <p className="server-success">{message}</p>}
         <form className="editForm" onSubmit={handleSubmit}>
           <div className="avatar">
             <input
@@ -135,28 +115,26 @@ const Profile = () => {
               name="avatar"
             />
             <label htmlFor="avatar">
-              <img src={avatar} alt="avatar" /> 
+              <img src={avatar} alt="avatar" />
             </label>
             <div className="cog" onClick={() => setShowDelete(!showDelete)}>
-              <FaCog style={{fill: "white"}} />
-              </div>
+              <FaCog style={{ fill: "white" }} />
+            </div>
             {showDelete && (
-                 <div className="delete" onClick={() => dispatch(deleteAccount(user.id))}>
-                 Supprimer mon compte
-               </div>
+              <div className="delete" onClick={() => dispatch(deleteAccount(user.id))}>
+                Supprimer mon compte
+              </div>
             )}
-         
           </div>
           <div className="pseudo">
-          {!showDelete && (
-            <h2>{user.nickname}</h2>
-
+            {!showDelete && (
+              <h2>{user.nickname}</h2>
             )}
           </div>
           <div
             className="profile-field"
-          > 
-            <RiFileEditFill className="smIcon"/>
+          >
+            <RiFileEditFill className="smIcon" />
             <input
               className="input-profile"
               name="firstname"
@@ -170,8 +148,7 @@ const Profile = () => {
           <div
             className="profile-field"
           >
-          <RiFileEditFill className="smIcon"/>
-
+            <RiFileEditFill className="smIcon" />
             <input
               value={form.lastname}
               name="lastname"
@@ -183,7 +160,7 @@ const Profile = () => {
             />
           </div>
           <div
-              className="profile-field"
+            className="profile-field"
           >
             <BsFillTelephoneFill className="smIcon" />
             <input
@@ -198,8 +175,8 @@ const Profile = () => {
           </div>
           <div
             className="profile-field field-address"
-          > 
-          <HiLocationMarker className="smIcon"/>
+          >
+            <HiLocationMarker className="smIcon" />
             <input
               value={inputAddress}
               className="input-profile"
@@ -209,16 +186,13 @@ const Profile = () => {
               onChange={handleChangeAddress}
             />
             {showSuggestionBox && (
-          
+
               <SuggestionBox
                 inputAddress={inputAddress}
                 handleAddress={handleAddress}
               />
-           
             )}
-         
           </div>
-          
           <div className="areaContainer">
             <HiInformationCircle className="smIcon" />
             <textarea
