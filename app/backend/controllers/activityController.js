@@ -328,7 +328,7 @@ const activity = {
 
     let getParticipates = await activity.getParticipations(req);
 
-    getParticipates = getParticipates.length > 0 ? getParticipates : 'null';
+    getParticipates = getParticipates.length > 0 ? getParticipates : null;
 
     sseHandlerParticipate.broadcast(getParticipates, user.city);
 
