@@ -2,10 +2,10 @@
 @use 'sass:color';
 
 
-  @font-face {
-    font-family: 'Roboto';
-    src: url('./assets/fonts/Roboto-Regular.ttf');
-  }
+@font-face {
+  font-family: 'Roboto';
+  src: url('./assets/fonts/Roboto-Regular.ttf');
+}
 
 * {
   margin: 0;
@@ -14,49 +14,51 @@
 }
 
 
-body{
+body {
   font-family: 'Roboto', sans-serif;
   overflow: hidden;
 }
 
-li{
+li {
   list-style: none;
 }
 
-.server-error{
+.server-error {
   padding-bottom: 1rem;
   color: tomato;
 }
 
-.server-success{
+.server-success {
   padding-bottom: 1rem;
   color: vars.$quaternary-color;
 }
 
-.btn{
+.btn {
   padding: .5rem 2rem;
   text-align: center;
   border-radius: 1rem;
   color: vars.$primary-color;
   background-color: lighten(vars.$primary-color, 35%);
-  border: 1px solid  vars.$primary-color;
+  border: 1px solid vars.$primary-color;
   cursor: pointer;
   transition: color .5s ease-in-out;
-  &.disabled{
+
+  &.disabled {
     cursor: not-allowed;
     background-color: lighten(vars.$primary-color, 45%);
-    &:hover{
-      background: linear-gradient(25deg, darken(vars.$tertiary-color, 20%) 20%, lighten(vars.$primary-color, 20%) 100%); 
+
+    &:hover {
+      background: linear-gradient(25deg, darken(vars.$tertiary-color, 20%) 20%, lighten(vars.$primary-color, 20%) 100%);
     }
   }
-  &:hover{
-    background: linear-gradient(25deg, darken(vars.$tertiary-color, 10%) 20%, lighten(vars.$primary-color, 20%) 100%); 
+
+  &:hover {
+    background: linear-gradient(25deg, darken(vars.$tertiary-color, 10%) 20%, lighten(vars.$primary-color, 20%) 100%);
     color: #fff;
   }
-  &:active{
+
+  &:active {
     scale: 0.8
   }
 
 }
-
-

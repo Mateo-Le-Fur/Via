@@ -63,7 +63,6 @@ const CustomPopup = ({ id, type }) => {
 
   const handleDate = (e) => {
     // const parsedDate = Date.parse(e.target.value)
-
     setDate(e.target.value)
   }
 

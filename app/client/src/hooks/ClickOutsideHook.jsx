@@ -4,14 +4,12 @@ import { useDispatch } from 'react-redux';
 import { activePanel, handleHideList, handleHideSidebar, handleHideSuggestionBox} from '../features/global/globalSlice';
 
 /**
- * Hook that alerts clicks outside of the passed ref
+ *Click outside hook
  */
 function useClickOuside(ref, component) {
   const dispatch = useDispatch()
   useEffect(() => {
-    /**
-     * Alert if clicked on outside of element
-     */
+  
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
     
@@ -39,7 +37,7 @@ function useClickOuside(ref, component) {
 }
 
 /**
- * Component that alerts if you click outside of it
+ * Wrapper 
  */
 export default function OutsideWrapper(props) {
   const wrapperRef = useRef(null);

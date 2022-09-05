@@ -15,16 +15,6 @@ const Register = () => {
   // Address
   const [city, setCity] = useState();
 
-  // const handleChangeCity = () => {
-    
-  //   console.log("hey")
-  //   if (e.target.value.length > 0) {
-  //     dispatch(handleShowSuggestionBox());
-  //   } else {
-  //     dispatch(handleHideSuggestionBox());
-  //   }
-  // };
-
   const handleCity = (value) => {
     registerForm.setFieldValue("city", value)
     setCity(value);
