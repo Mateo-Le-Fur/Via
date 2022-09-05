@@ -84,7 +84,11 @@ const userController = {
       }
     }
 
-    const city = extract(req.body.address);
+    let city = extract(req.body.address);
+
+    if (!city) {
+      city = getUser.city;
+    }
 
     const newBody = {
       ...req.body, lat, long, city,
