@@ -7,11 +7,14 @@ const Message = ({mine, message}) => {
         <img src={message.avatar} alt="" />
         </div>
         <div className="nickname-box">
-            Nickname
+            {message.user}
         </div>
     </div>
     <div className="content">
       {message.message}
+    </div>
+    <div className="message-date">
+      {message.date}
     </div>
 </div>
   )
