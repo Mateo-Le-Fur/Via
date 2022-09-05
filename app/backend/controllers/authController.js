@@ -50,7 +50,6 @@ const auth = {
         long: coordinates[1],
         url: '',
       },
-
     );
 
     createdUser = createdUser.get();

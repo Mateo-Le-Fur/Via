@@ -3,9 +3,7 @@ const axios = require('axios').default;
 const ApiError = require('../errors/apiError');
 
 async function getCoordinates(query, type = 'municipality') {
-  if (!query) {
-    return;
-  }
+  if (!query) return;
 
   const result = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${query}&type=${type}&limit=1`);
   const geometry = result.data;
