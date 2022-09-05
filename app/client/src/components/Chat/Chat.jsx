@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 const Chat = () => {
 
 
+
    const {messages, user} = useSelector(state => state.auth)
   return (
     <div className="chat">
@@ -16,10 +17,7 @@ const Chat = () => {
         ): (
             <p>Vous n'avez pas encore de message</p>
         )}
-     
-   
-     
- 
+  
     </div>
   )
 }
