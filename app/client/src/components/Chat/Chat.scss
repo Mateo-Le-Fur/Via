@@ -2,28 +2,75 @@
 @use "sass:color";
 
 .chat{
-    width: 100%;
     height: 96%;
     display: flex;
     flex-direction: column;
-    
+    width: 100%;    
     overflow: auto;
-        .message{
-            &.mine{
-                margin-left: 0;
-                margin-right: auto;
-                background-color: lighten(vars.$primary-color, 25%);
-                color: white;
+    align-items: flex-end;
+    .message{
+        &.mine{
+            align-self: flex-start;
+          
+        }
+        width: 70%;
+        animation: grow .3s cubic-bezier(.01,.75,.96,.6);
+        .nickname-box{
+            color: vars.$primary-color;
+            margin-right: .5rem;
+            display: flex;
+            width: 100%;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+            span{
+                padding: 0 1rem;
             }
-            margin-left: auto;
-            margin-right: 0;
+            &.mine{
+                justify-content: unset;
+                span{
+                    justify-self: flex-start;
+                  
+                }
+            }
+        }
+
+        .message-box{   
             margin: .3rem;
             display: flex;
             flex-direction: column;
-            width: 50%;
-            border: 1px solid vars.$gray;
+            background-color: lighten(vars.$gray, 20%);
+            color: black;
             border-radius: 1rem;
             box-shadow: vars.$box-shadow;
+            position: relative;
+            &::before {
+                content: '';
+                position: absolute;
+                top: -1rem;
+                right: 1rem;
+                width: 0;
+                height: 0;
+                border-style: solid;
+                border-width: 0 0 1rem 1rem;
+                transform: rotate(90deg);
+                border-color: transparent transparent lighten(vars.$gray,20%) transparent;
+              }
+            &.mine{
+                background-color: lighten(vars.$primary-color, 25%);
+                color: white;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: -1rem;
+                    left: 1rem;
+                    width: 0;
+                    height: 0;
+                    border-style: solid;
+                    border-width: 0 0 1rem 1rem;
+                    transform: rotate(0);
+                    border-color: transparent transparent lighten(vars.$primary-color, 25%) transparent;
+                  }
+            }
             .row{
                 margin-top: .3rem;
                 height: 40%;
@@ -43,11 +90,6 @@
                         border: 1px solid vars.$primary-color;
                     }
                 }   
-                .nickname-box{
-                    color: vars.$primary-color;
-                    margin-right: .5rem;
-                }
-
             }
             .content{
                 height: 60%;
@@ -56,6 +98,8 @@
                 padding: .7rem;
                 min-height: 80px;
                 overflow: auto;
+                
+                font-size: 1.1rem;
             }
             .message-date{
                 align-self: flex-end;
@@ -66,4 +110,15 @@
             }
         }
     }
+    }
     
+
+    @keyframes grow {
+        0% {
+          transform: scale(0.5);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      
