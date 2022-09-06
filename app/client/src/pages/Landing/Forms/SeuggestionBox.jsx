@@ -2,31 +2,32 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { handleHideSuggestionBox } from "../../../features/global/globalSlice";
 import { useDispatch } from "react-redux";
+import { FaArrowRight } from "react-icons/fa"
 
-const SuggestionBox = ({inputCity, handleCity }) => {
+
+const SuggestionBox = ({ inputCity, handleCity }) => {
 
   const dispatch = useDispatch()
-
   const [suggestions, setSuggestions] = useState([])
+
   useEffect(() => {
     const queryAPI = async () => {
       const res = await axios.get(`https://api-adresse.data.gouv.fr/search/?q=${inputCity}&type=municipality&autocomplete=1`)
-      if(res.data.features.length > 0){
+      if (res.data.features.length > 0) {
         setSuggestions(res.data.features)
       }
     }
-
     queryAPI()
-
-  }, [inputCity ])
+  }, [inputCity])
 
   return (
     <div className="suggestionBox">
-      {suggestions.length > 0 &&  suggestions.map(suggestion => (
+      {suggestions.length > 0 && suggestions.map(suggestion => (
         <div key={suggestion.properties.label} onClick={() => {
           handleCity(suggestion.properties.label)
           dispatch(handleHideSuggestionBox())
         }}>
+          <FaArrowRight className="arrow" />
           {suggestion.properties.label}
         </div>
       ))}

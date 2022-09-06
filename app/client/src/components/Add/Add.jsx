@@ -11,7 +11,9 @@ import { activePanel, handleHideSidebar, handleHideSuggestionBox, handleShowSugg
 import { RiFileEditFill } from "react-icons/ri"
 import { HiCalendar, HiInformationCircle, HiLocationMarker } from "react-icons/hi"
 import { BsFillTagsFill } from "react-icons/bs"
+
 const Add = () => {
+
   const { showSuggestionBox } = useSelector(state => state.global)
   const { isSuccess, isError, message } = useSelector(state => state.activity)
   const dispatch = useDispatch()
@@ -85,7 +87,6 @@ const Add = () => {
 
   }, [message, isError, isSuccess, dispatch])
 
-
   return (
     <div className='add'>
       {isError && message && <p className='server-error'>{message}</p>}
@@ -100,7 +101,7 @@ const Add = () => {
         </div>
         <div className="field-add field-address">
           <HiLocationMarker className='smIcon' />
-          <input value={inputAddress} className='add-input' type="text" id="address" placeholder='Adresse' onChange={handleChangeAddress} />
+          <input autoComplete="off" value={inputAddress} className='add-input' type="text" id="address" placeholder='Adresse' onChange={handleChangeAddress} />
           {showSuggestionBox && <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress} />}
         </div>
         <div className='field-add field-types'>
@@ -141,4 +142,5 @@ const Add = () => {
     </div>
   )
 }
+
 export default Add

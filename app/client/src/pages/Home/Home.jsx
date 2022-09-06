@@ -22,6 +22,7 @@ const Home = () => {
   const dispatch = useDispatch()
   const {activities} = useSelector(state => state.activity)
 
+  // get markers by group
   const groupMarkers = useMemo(() => {
     if(activities.length > 0 ){
     const array = activities.map(activity => (
@@ -45,44 +46,35 @@ const Home = () => {
       dispatch(getComments())
       dispatch(getMessages())
    }, [dispatch])
-
    useEffect(() => {
     setMarkerGroups(groupMarkers)
   }, [groupMarkers])
 
- 
+  // SSE participations
   useEffect(() => {
-
-
     if (participeSource) {
       participeSource.close();
     }
-
     if( user){
       participeSource = new EventSource(`/api/activity/sse/participate/${user.city}`)
       participeSource.addEventListener(`${user.city}`, (e) => {
         const data  = JSON.parse(e.data);
         dispatch(realTimeParticipations(data))
       });
-
     } 
-
-   
-  }, [])
+  }, []) //eslint-disable-line
 
   useEffect(() => {
     if (commentSource) {
       console.log('exist!')
       commentSource.close();
     }
-
     commentSource = new EventSource(`/api/activity/sse/comments/`)
-    
     commentSource.addEventListener("comment", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeComments(data))
     });
-  },  [])
+  },  []) //eslint-disable-line
 
 
   useEffect(() => {
@@ -90,17 +82,12 @@ const Home = () => {
       console.log('exist!')
       messagesSource.close();
     }
-
-
-  
     messagesSource = new EventSource(`/api/user/message/sse`)
-  
     messagesSource.addEventListener("Messages", (e) => {
       const data  = JSON.parse(e.data);
       dispatch(realTimeMessages(data))
     });
-  
-  },  [])
+  },  []) //eslint-disable-line
 
   return (
     <div className='home'>

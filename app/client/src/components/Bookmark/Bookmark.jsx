@@ -4,6 +4,7 @@ import Card from '../Card/Card';
 import "./Bookmark.scss";
 
 const Bookmark = () => {
+
   const { activities } = useSelector(state => state.activity)
   const { bookmarks } = useSelector(state => state.activity)
   useEffect(() => {
@@ -23,4 +24,5 @@ const Bookmark = () => {
     </div>
   )
 }
+
 export default Bookmark

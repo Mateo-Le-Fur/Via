@@ -5,26 +5,38 @@ form {
     flex-direction: column;
     align-items: center;
     width: 80%;
+
     .field {
         width: 100%;
         position: relative;
         margin-bottom: 1rem;
+
         &.field-address{
             position: relative;
             .suggestionBox{
                 position: absolute;
+                display: flex; 
+                z-index: 4000;
+                flex-direction: column;
                 bottom: 0;
                 transform: translateY(100%);
-                background-color: rgb(250, 250, 250);
+                background-color: white;
+                box-shadow: 0px 3px 13px -7px #000000;
+                -webkit-transform: translateY(100%);
                 width: 100%;
                 overflow: auto;
                 max-height: 100px;
                 border-radius: 10px;
-                z-index: 60000;
                 cursor: pointer;
                 > div {
-                    padding: .1rem;
                     font-size: .8rem;
+                    display: flex;
+                    align-items: center;
+                    padding: .3rem;
+                    gap: 9px;
+                    .arrow{
+                      fill: vars.$primary-color;
+                    }
                     &:hover{
                         background-color: vars.$primary-color;
                         color: white;
@@ -32,7 +44,6 @@ form {
                 }
             }
         }
-
         &-input {
             width: 100%;
             padding: .7em;
@@ -91,7 +102,6 @@ form {
         }
     }
 
-
     @keyframes labelSlideUpAndShow {
         0% {
             transform: translateY(1em);
@@ -111,7 +121,6 @@ form {
     }
 }
 
-.btn{
+.btn {
     width: 60%;
-
 }

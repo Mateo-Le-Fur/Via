@@ -1,37 +1,35 @@
 import Login from "./Forms/Login";
 import Register from "./Forms/Register";
-import {useState} from "react";
+import { useState } from "react";
 import "./Landing.scss";
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { reset } from '../../features/auth/authSlice';
 import logo from "../../assets/images/logo.png"
 
 const LandingForm = () => {
-    const [isMember, setIsMember] = useState(true)
-    const toggleMember = () => {
-      setIsMember(!isMember)
+  const [isMember, setIsMember] = useState(true)
+  const toggleMember = () => {
+    setIsMember(!isMember)
+  }
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { isLoading, user, message } = useSelector(state => state.auth)
+
+  useEffect(() => {
+    if (message) {
+      setTimeout(() => {
+        dispatch(reset())
+      }, 3000)
     }
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
 
-    const {isLoading ,user, message} = useSelector(state => state.auth)
+    if (!isLoading && user) {
+      navigate("/home")
+    }
 
-    useEffect(() => {
-      if(message){
-        setTimeout(() => {
-          dispatch(reset())
-        }, 3000)
-      }
-      
-      if(!isLoading && user){
-        navigate("/home")
-      }
-      
-    }, [user, message, isLoading, navigate, dispatch])
-
-
+  }, [user, message, isLoading, navigate, dispatch])
 
   return (
     <div className="landingForm">

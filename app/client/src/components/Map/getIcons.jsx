@@ -1,5 +1,4 @@
 import { divIcon } from 'leaflet';
-
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
   FaLeaf,
