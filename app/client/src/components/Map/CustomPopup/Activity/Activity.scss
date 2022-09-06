@@ -1,0 +1,64 @@
+@use "../../../../vars";
+
+.activityContainer {
+    display: flex;
+    flex-direction: column;
+    .activityHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: .5rem 0;
+        h1 {
+            font-size: 1.2rem;
+            color: vars.$primary-color;
+            @media (max-width: 600px) {
+                font-size: 1rem;
+            }
+        }
+        span {
+            color: vars.$primary-color;
+            @media (max-width: 600px) {
+                font-size: .8rem;
+            }
+            em {
+                font-weight: bold;
+                font-size: 1.1rem;
+                padding-left: .2rem;
+                cursor: pointer;
+                text-decoration: underline;
+                @media (max-width: 600px) {
+                    font-size: .8rem;
+                }
+               
+              
+            }
+        }
+    }
+    .dateContainer {
+        display: flex;
+        .smIcon {
+            font-size: 1.3rem;
+        }
+        @media (max-width: 600px) {
+            font-size: 1rem;
+        }
+    }
+    .locationContainer {
+        display: flex;
+        .smIcon {
+            font-size: 1.3rem;
+            @media (max-width: 600px) {
+                font-size: 1rem;
+            }
+        }
+    }
+    .descriptionContainer {
+        margin-top: 1rem;
+        padding: .3rem;
+        overflow: auto;
+        @media (max-width: 600px) {
+            font-size: .9rem;
+            margin-top: .3rem;
+        }
+    }
+}
