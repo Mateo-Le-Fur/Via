@@ -29,7 +29,7 @@ const Comments = ({ activity, handleSetMode, comments }) => {
         {comments.length > 0 ? comments.filter(comment => comment.activity_id === activity.id).map(comment => (
           <div key={comment.id} className="comment">
             <div className="head">
-              <div><img src={comment.avatar} alt="" /> <span>{comment.user}</span></div>
+              <div><img src={comment.avatar} alt="" /> <span>{comment.nickname}</span></div>
               <div>{comment.date}</div>
             </div>
             <div className="content">
