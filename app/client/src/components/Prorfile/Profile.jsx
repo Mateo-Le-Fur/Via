@@ -183,6 +183,7 @@ const Profile = () => {
               className="input-profile"
               type="text"
               id="address"
+              autoComplete="off"
               placeholder="Adresse"
               onChange={handleChangeAddress}
             />

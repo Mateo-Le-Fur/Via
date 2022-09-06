@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios";
 import { handleHideSuggestionBox } from "../../../features/global/globalSlice";
 import { useDispatch } from "react-redux";
+import { FaArrowRight } from "react-icons/fa"
+
 
 const SuggestionBox = ({ inputCity, handleCity }) => {
 
@@ -25,6 +27,7 @@ const SuggestionBox = ({ inputCity, handleCity }) => {
           handleCity(suggestion.properties.label)
           dispatch(handleHideSuggestionBox())
         }}>
+          <FaArrowRight className="arrow" />
           {suggestion.properties.label}
         </div>
       ))}

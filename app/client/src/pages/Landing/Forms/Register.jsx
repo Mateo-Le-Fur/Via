@@ -54,7 +54,7 @@ const Register = () => {
           {registerForm.touched.nickname && registerForm.errors.nickname ? <p>{registerForm.errors.nickname}</p> : null}
         </div>
         <div className={registerForm.values.city.length > 0 ? "field field-address field--has-content" : "field field-address"}>
-          <input type="text" id="city" className={registerForm.touched.city && registerForm.errors.city ? "field-input error" : "field-input"} name="city" placeholder="Ville" onBlur={registerForm.handleBlur} onChange={(e) => {
+          <input type="text" id="city" autoComplete="off" className={registerForm.touched.city && registerForm.errors.city ? "field-input error" : "field-input"} name="city" placeholder="Ville" onBlur={registerForm.handleBlur} onChange={(e) => {
             registerForm.setFieldValue("city", e.target.value)
             if (e.target.value.length > 0) {
               dispatch(handleShowSuggestionBox());

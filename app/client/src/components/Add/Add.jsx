@@ -101,7 +101,7 @@ const Add = () => {
         </div>
         <div className="field-add field-address">
           <HiLocationMarker className='smIcon' />
-          <input value={inputAddress} className='add-input' type="text" id="address" placeholder='Adresse' onChange={handleChangeAddress} />
+          <input autoComplete="off" value={inputAddress} className='add-input' type="text" id="address" placeholder='Adresse' onChange={handleChangeAddress} />
           {showSuggestionBox && <SuggestionBox inputAddress={inputAddress} handleAddress={handleAddress} />}
         </div>
         <div className='field-add field-types'>
