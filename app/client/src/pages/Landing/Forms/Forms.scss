@@ -5,13 +5,16 @@ form {
     flex-direction: column;
     align-items: center;
     width: 80%;
+
     .field {
         width: 100%;
         position: relative;
         margin-bottom: 1rem;
-        &.field-address{
+
+        &.field-address {
             position: relative;
-            .suggestionBox{
+
+            .suggestionBox {
                 position: absolute;
                 bottom: 0;
                 transform: translateY(100%);
@@ -22,10 +25,12 @@ form {
                 border-radius: 10px;
                 z-index: 60000;
                 cursor: pointer;
-                > div {
+
+                >div {
                     padding: .1rem;
                     font-size: .8rem;
-                    &:hover{
+
+                    &:hover {
                         background-color: vars.$primary-color;
                         color: white;
                     }
@@ -91,7 +96,6 @@ form {
         }
     }
 
-
     @keyframes labelSlideUpAndShow {
         0% {
             transform: translateY(1em);
@@ -111,7 +115,6 @@ form {
     }
 }
 
-.btn{
+.btn {
     width: 60%;
-
 }

@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import userService from "./userService"
 
 const initialState = {
@@ -9,7 +9,6 @@ const initialState = {
   isLoading: false,
   message: "",
 }
-
 
 export const getUser = createAsyncThunk(
   'user/get',
@@ -23,7 +22,6 @@ export const getUser = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -41,7 +39,6 @@ export const getUsers = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -81,7 +78,6 @@ export const deleteUser = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -134,13 +130,12 @@ export const userSlice = createSlice({
       // })
       .addCase(deleteUser.fulfilled, (state, action) => {
         console.log(action.payload)
-        state.isLoading = false 
+        state.isLoading = false
         state.isError = false
         state.users = state.users.filter(user => user.id !== action.payload)
       })
-
   }
 })
 
-export const {reset} = userSlice.actions
+export const { reset } = userSlice.actions
 export default userSlice.reducer

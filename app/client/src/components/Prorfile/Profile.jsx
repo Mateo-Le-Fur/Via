@@ -15,6 +15,7 @@ import SuggestionBox from "./SeuggestionBox";
 import { deleteAccount, reset, updateUser } from "../../features/auth/authSlice";
 
 const Profile = () => {
+
   const { activities } = useSelector((state) => state.activity);
   const [filtered, setFiltered] = useState([]);
   const { user, isError, message, isSuccess } = useSelector((state) => state.auth);

@@ -31,7 +31,7 @@ const globalSlice = createSlice({
         handleShowList: (state) => {
             state.showList = true
         },
-        handleHideList : (state) => {
+        handleHideList: (state) => {
             state.showList = false
         },
         handleShowSuggestionBox: (state) => {
@@ -43,6 +43,6 @@ const globalSlice = createSlice({
     }
 })
 
-export const {handleShowSidebar, handleHideSidebar,activePanel, handleShowFilter, activeFilter, handleShowList, handleHideList, handleShowSuggestionBox, handleHideSuggestionBox} = globalSlice.actions
+export const { handleShowSidebar, handleHideSidebar, activePanel, handleShowFilter, activeFilter, handleShowList, handleHideList, handleShowSuggestionBox, handleHideSuggestionBox } = globalSlice.actions
 
 export default globalSlice.reducer

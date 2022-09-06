@@ -23,7 +23,6 @@ export const register = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -32,20 +31,19 @@ export const register = createAsyncThunk(
 // Login user
 export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
   try {
-        return await authService.login(user)
+    return await authService.login(user)
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString()
-
     return thunkAPI.rejectWithValue(message)
   }
 })
 
 export const checkUser = createAsyncThunk('auth/checkUser', async (_, thunkAPI) => {
   try {
-        return await authService.checkUser()
+    return await authService.checkUser()
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -59,19 +57,16 @@ export const checkUser = createAsyncThunk('auth/checkUser', async (_, thunkAPI) 
 export const updateUser = createAsyncThunk(
   'user/update',
   async (data, thunkAPI) => {
-    const {userId, userData} = data
-    console.log(data)
+    const { userId, userData } = data
     try {
-      return await authService.updateUser(userId,userData)
+      return await authService.updateUser(userId, userData)
     } catch (error) {
-      console.log(error)
       const message =
         (error.response &&
           error.response.data &&
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -80,7 +75,7 @@ export const updateUser = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
   const userId = thunkAPI.getState().auth.user.id
   try {
-        return await authService.logout(userId)
+    return await authService.logout(userId)
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -93,7 +88,7 @@ export const logout = createAsyncThunk('auth/logout', async (_, thunkAPI) => {
 export const deleteAccount = createAsyncThunk('auth/delete', async (_, thunkAPI) => {
   const userId = thunkAPI.getState().auth.user.id
   try {
-        return await authService.deleteAccount(userId)
+    return await authService.deleteAccount(userId)
   } catch (error) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
@@ -104,7 +99,7 @@ export const deleteAccount = createAsyncThunk('auth/delete', async (_, thunkAPI)
 })
 
 
-// message
+// Chat
 export const getMessages = createAsyncThunk(
   'messages/get',
   async (_, thunkAPI) => {
@@ -118,7 +113,6 @@ export const getMessages = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -138,7 +132,6 @@ export const addMessage = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -155,7 +148,7 @@ export const authSlice = createSlice({
       state.message = ''
     },
     realTimeMessages: (state, action) => {
-      state.messages.push(action.payload) 
+      state.messages.push(action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -243,7 +236,7 @@ export const authSlice = createSlice({
       })
       .addCase(addMessage.pending, (state, action) => {
         state.isLoading = true
-            })
+      })
       .addCase(addMessage.fulfilled, (state, action) => {
         state.isLoading = false
       })

@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getActivity, deleteActivity } from '../../features/activity/activitySlice';
 import { activePanel, handleHideList, handleHideSidebar } from '../../features/global/globalSlice';
 
-
 const Card = ({ kind, activity }) => {
 
   const { participations } = useSelector(state => state.activity)
@@ -88,4 +87,5 @@ const Card = ({ kind, activity }) => {
     );
   }
 }
+
 export default Card;

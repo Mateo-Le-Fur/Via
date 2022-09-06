@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, ZoomControl } from 'react-leaflet'
 import "./Map.scss";
 
 const Map = ({center, children, zoom, zoomControl, blur, dragging, scrollWheelZoom, doubleClickZoom}) => {
+  
   return (
     <MapContainer center={center} zoomControl={false} zoom={zoom} doubleClickZoom={doubleClickZoom} scrollWheelZoom={scrollWheelZoom} attributionControl={false} dragging={!dragging} className={blur ? "map-blur" : ""}>
         <TileLayer
@@ -10,8 +11,8 @@ const Map = ({center, children, zoom, zoomControl, blur, dragging, scrollWheelZo
         />
         {zoomControl && <ZoomControl/>}
         {children && children}
-    
       </MapContainer>
   )
 }
+
 export default Map

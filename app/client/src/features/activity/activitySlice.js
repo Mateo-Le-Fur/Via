@@ -13,9 +13,9 @@ const initialState = {
   comments: []
 }
 
+// Activities
 export const createActivity = createAsyncThunk(
   'activity/create',
-
   async (activityData, thunkAPI) => {
     const userId = thunkAPI.getState().auth.user.id
     try {
@@ -27,7 +27,6 @@ export const createActivity = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -45,7 +44,6 @@ export const getActivity = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -63,12 +61,10 @@ export const getActivities = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
-
 
 export const updateActivity = createAsyncThunk(
   'activity/update',
@@ -84,7 +80,6 @@ export const updateActivity = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -103,12 +98,12 @@ export const deleteActivity = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
+// Bookmarks
 export const getBookmarks = createAsyncThunk(
   'bookmarks/get',
   async (_, thunkAPI) => {
@@ -122,7 +117,6 @@ export const getBookmarks = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -141,7 +135,6 @@ export const createBookmark = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -160,7 +153,6 @@ export const deleteBookmark = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -185,6 +177,7 @@ export const deleteBookmark = createAsyncThunk(
 //   }
 // )
 
+// Participations
 export const participate = createAsyncThunk(
   'participations/participate',
   async (activityId, thunkAPI) => {
@@ -198,12 +191,12 @@ export const participate = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
+// Comments
 export const getComments = createAsyncThunk(
   'comments/gets',
   async (_, thunkAPI) => {
@@ -216,7 +209,6 @@ export const getComments = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
@@ -236,27 +228,27 @@ export const addComment = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString()
-
       return thunkAPI.rejectWithValue(message)
     }
   }
 )
 
+// Slice
 export const activitySlice = createSlice({
   name: "actvity",
   initialState,
   reducers: {
     reset: (state) => {
-      state.isError =  false
-  state.isSuccess = false
- state.isLoading =false
-  state.message = ""
+      state.isError = false
+      state.isSuccess = false
+      state.isLoading = false
+      state.message = ""
     },
     realTimeParticipations: (state, action) => {
       state.participations = action.payload
     },
     realTimeComments: (state, action) => {
-      state.comments.push(action.payload) 
+      state.comments.push(action.payload)
     }
   },
   extraReducers: (builder) => {
@@ -375,10 +367,9 @@ export const activitySlice = createSlice({
       })
       .addCase(addComment.pending, (state, action) => {
         state.isLoading = true
-            })
+      })
       .addCase(addComment.fulfilled, (state, action) => {
         state.isLoading = false
-        
       })
       .addCase(addComment.rejected, (state, action) => {
         state.isLoading = false

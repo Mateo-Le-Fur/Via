@@ -33,4 +33,5 @@ const SuggestionBox = ({inputAddress, handleAddress }) => {
     </div>
   )
 }
+
 export default SuggestionBox

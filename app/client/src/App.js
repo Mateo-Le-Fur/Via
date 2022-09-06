@@ -10,38 +10,35 @@ import { checkUser } from './features/auth/authSlice';
 import Spinner from './components/Spinner/Spinner';
 
 function App() {
-
   
-const dispatch = useDispatch()
+  const dispatch = useDispatch()
 
-const {isLoading} = useSelector(state => state.auth)
+  const { isLoading } = useSelector(state => state.auth)
 
-useEffect(() => {
-  dispatch(checkUser())
-}, [dispatch])
+  useEffect(() => {
+    dispatch(checkUser())
+  }, [dispatch])
 
-if(isLoading){
+  if (isLoading) {
     return <Spinner />
-}
+  }
 
   return (
- 
-      <div className='App'>
-        <Routes>
-          <Route path='/' element={<Landing />} />
-          <Route
-            path='/home'
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path='*' element={<NotFound />} />
-          <Route />
-        </Routes>
-      </div>
-  
+    <div className='App'>
+      <Routes>
+        <Route path='/' element={<Landing />} />
+        <Route
+          path='/home'
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<NotFound />} />
+        <Route />
+      </Routes>
+    </div>
   );
 }
 
