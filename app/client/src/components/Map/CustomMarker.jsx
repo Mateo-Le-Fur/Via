@@ -2,7 +2,7 @@ import React, { memo, useEffect, useMemo, useRef } from 'react'
 import { Marker, useMap } from 'react-leaflet'
 import { useDispatch, useSelector } from 'react-redux'
 import "./Map.scss"
-import CustomPopup from './CustomPopup'
+import CustomPopup from './CustomPopup/CustomPopup'
 import getIcons from "./getIcons"
 import { getActivity } from '../../features/activity/activitySlice'
 

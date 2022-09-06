@@ -1,0 +1,70 @@
+@use "../../../../vars";
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    width: 100% !important;
+    .left {
+        width: 20% !important;
+        > div {
+            .actionIcon {
+                font-size: 1.6rem;
+            }
+        }
+    }
+    .middle{
+        width: 65%!important;
+        display: flex !important;
+        align-items: center;
+        font-size: .8rem;
+        justify-content: center !important;
+        flex-direction: row;
+        @media (max-width: 600px){
+            font-size: .6rem;
+        }
+        > div{
+            color: vars.$primary-color;
+            display: flex;
+            height: 100%;
+            align-items: center;
+            justify-content: center;
+            > span{
+                padding-left: .1rem;
+            }
+            &:nth-child(2){
+                width: 10% !important;
+            }
+            &:nth-child(3){
+                width: 80% !important;
+            }
+            &.actionMiddle{
+                cursor: pointer;
+            }
+        }
+    }
+    .right {
+        flex: 3;
+        display: flex;
+        width: 15%;
+        > div {
+            width: 100% !important;
+            display: flex;
+            justify-content: flex-end;
+            .starIcon {
+                font-size: 1.6rem;
+                cursor: pointer;
+                fill: vars.$primary-color;
+                transition: fill .3s ease-in-out;
+                &.bookmark{
+                    fill: vars.$secondary-color;
+                }
+                &:hover {
+                    fill: vars.$tertiary-color;
+                }
+                &:active {
+                    transform: scale(.6);
+                }
+            }
+        }
+    }
+}
