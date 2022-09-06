@@ -4,17 +4,19 @@
 .chat{
     height: 96%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     width: 100%;    
     overflow: auto;
-    align-items: flex-end;
+    align-items: flex-start;
+
     .message{
         &.mine{
-            align-self: flex-start;
+            align-self: flex-end;
           
         }
         width: 70%;
         animation: grow .3s cubic-bezier(.01,.75,.96,.6);
+        margin-bottom: 1rem;
         .nickname-box{
             color: vars.$primary-color;
             margin-right: .5rem;

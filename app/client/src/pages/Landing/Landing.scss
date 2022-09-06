@@ -61,15 +61,15 @@
             min-height: 75%;
 
             .logo {
-                height: 110px;
+                height: 150px;
                 width: 200px;
                 display: flex;
                 justify-content: center;
-
+                align-items: center;
                 img {
-                    object-fit: cover;
+                    object-fit:fill;
                     width: 70%;
-                    height: 100%;
+                    height: 70%;
                 }
             }
 
