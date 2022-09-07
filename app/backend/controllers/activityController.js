@@ -3,25 +3,25 @@
 /* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable camelcase */
-const { Activity, User, Type, Comment } = require("../models");
-const ApiError = require("../errors/apiError");
-const dateFormat = require("../services/dateFormat");
-const SSEHandler = require("../services/SSEHandler");
-const sequelize = require("../config/sequelize");
+const { Activity, User, Type, Comment } = require('../models');
+const ApiError = require('../errors/apiError');
+const dateFormat = require('../services/dateFormat');
+const SSEHandler = require('../services/SSEHandler');
+const sequelize = require('../config/sequelize');
 
 // On créer une instance du sseHandler avec le nom du salon de communication
-const sseHandlerParticipate = new SSEHandler("Participations");
-const sseHandlerComments = new SSEHandler("Commentaires");
+const sseHandlerParticipate = new SSEHandler('Participations');
+const sseHandlerComments = new SSEHandler('Commentaires');
 
 const activity = {
-  url: "http://localhost:8080",
+  url: 'http://localhost:8080',
 
   async getActivities(req, res) {
     const { id } = req.user;
 
     const getUser = await User.findByPk(id, {
       raw: true,
-      attributes: ["city"],
+      attributes: ['city'],
     });
 
     if (!getUser) {
@@ -32,13 +32,13 @@ const activity = {
       include: [
         {
           model: User,
-          as: "user",
-          attributes: ["nickname"],
+          as: 'user',
+          attributes: ['nickname'],
         },
         {
           model: Type,
-          as: "types",
-          attributes: ["label"],
+          as: 'types',
+          attributes: ['label'],
         },
       ],
       where: {
@@ -46,9 +46,9 @@ const activity = {
       },
       attributes: {
         include: [
-          "user.nickname",
-          "types.label",
-          [sequelize.literal("label"), "type"],
+          'user.nickname',
+          'types.label',
+          [sequelize.literal('label'), 'type'],
         ],
       },
       raw: true,
@@ -81,19 +81,19 @@ const activity = {
       include: [
         {
           model: User,
-          as: "user",
+          as: 'user',
           attributes: {
-            exclude: ["password"],
+            exclude: ['password'],
           },
         },
         {
           model: Type,
-          as: "types",
-          attributes: ["label"],
+          as: 'types',
+          attributes: ['label'],
         },
       ],
       attributes: {
-        include: ["types.label", [sequelize.literal("label"), "type"]],
+        include: ['types.label', [sequelize.literal('label'), 'type']],
       },
     });
 
@@ -129,9 +129,9 @@ const activity = {
 
     sseHandlerComments.newConnection(id, res);
 
-    sseHandlerComments.broadcast("init", "comment");
+    sseHandlerComments.broadcast('init', 'comment');
 
-    res.on("close", () => {
+    res.on('close', () => {
       sseHandlerComments.closeConnection(id);
     });
   },
@@ -140,7 +140,7 @@ const activity = {
     const { id } = req.user;
 
     const getUser = await User.findByPk(id, {
-      attributes: ["city"],
+      attributes: ['city'],
     });
 
     if (!getUser) {
@@ -151,26 +151,29 @@ const activity = {
       include: [
         {
           model: Comment,
-          as: "comments",
-        },
-        {
-          model: User,
-          as: "user",
-          attributes: ["nickname"],
+          as: 'comments',
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['nickname'],
+            },
+          ],
         },
       ],
       where: {
         city: getUser.city,
       },
-      attributes: ["id"],
-      order: [[{ model: Comment, as: "comments" }, "created_at", "asc"]],
+      attributes: ['id'],
+      order: [[{ model: Comment, as: 'comments' }, 'created_at', 'asc']],
     });
 
     if (!activity) {
-      throw new ApiError("Aucune activité trouvé", 400);
+      throw new ApiError('Aucune activité trouvé', 400);
     }
 
     const activities = JSON.parse(JSON.stringify(activity));
+
 
     const data = [];
     activities.forEach((activity) => {
@@ -178,7 +181,7 @@ const activity = {
         let result = comment;
         result = {
           ...result,
-          nickname: activity.user.nickname,
+          nickname: result.user.nickname,
           avatar: `http://localhost:8080/api/user/${result.user_id}/avatar`,
           date: dateFormat.convertActivityDate(result.created_at),
         };
@@ -199,7 +202,7 @@ const activity = {
     const { userId } = req.body;
 
     if (!req.body.text) {
-      throw new ApiError("Le commentaire ne peut être vide", 400);
+      throw new ApiError('Le commentaire ne peut être vide', 400);
     }
 
     let comment = await Comment.create({
@@ -217,7 +220,7 @@ const activity = {
       date: dateFormat.convertActivityDate(comment.get().created_at),
     };
 
-    sseHandlerComments.broadcast(comment, "comment");
+    sseHandlerComments.broadcast(comment, 'comment');
 
     res.end();
   },
@@ -228,35 +231,35 @@ const activity = {
     const { id } = req.user;
 
     if (id !== parseInt(userId, 10)) {
-      throw new ApiError("Forbidden", 403);
+      throw new ApiError('Forbidden', 403);
     }
 
     const getActivity = await Activity.findByPk(activityId, {
-      attributes: ["id", "city"],
+      attributes: ['id', 'city'],
     });
 
     if (!getActivity) {
-      throw new ApiError("Aucune activité trouvé", 400);
+      throw new ApiError('Aucune activité trouvé', 400);
     }
 
     const user = await User.findByPk(userId, {
       include: [
         {
           model: Activity,
-          as: "participations",
-          attributes: ["id"],
+          as: 'participations',
+          attributes: ['id'],
         },
       ],
     });
 
     if (!user) {
-      throw new ApiError("Aucune utilisateur trouvé", 400);
+      throw new ApiError('Aucune utilisateur trouvé', 400);
     }
 
     if (user.dataValues.city !== getActivity.dataValues.city) {
       throw new ApiError(
-        "Vous ne pouvez pas parcitiper à une activité de cette ville",
-        403
+        'Vous ne pouvez pas parcitiper à une activité de cette ville',
+        403,
       );
     }
 
@@ -268,7 +271,7 @@ const activity = {
 
     sseHandlerParticipate.broadcast(data, data[0].city);
 
-    res.status(200).json({ msg: "Participe" });
+    res.status(200).json({ msg: 'Participe' });
   },
 
   // ne renvoie plus de json, retourne un tableau
@@ -276,23 +279,23 @@ const activity = {
     const { id } = req.user;
 
     const user = await User.findByPk(id, {
-      attributes: ["city"],
+      attributes: ['city'],
       raw: true,
     });
 
     if (!user) {
-      throw new ApiError("Utilisateur introuvable", 400);
+      throw new ApiError('Utilisateur introuvable', 400);
     }
 
     let activity = await Activity.findAll({
       include: [
         {
           model: User,
-          as: "userParticip",
-          attributes: ["id"],
+          as: 'userParticip',
+          attributes: ['id'],
         },
       ],
-      attributes: ["id", "city"],
+      attributes: ['id', 'city'],
       where: {
         city: user.city,
       },
@@ -322,7 +325,7 @@ const activity = {
 
     const user = await User.findByPk(id, { raw: true });
 
-    if (!user) throw new ApiError("Aucun utilisateur trouvé", 403);
+    if (!user) throw new ApiError('Aucun utilisateur trouvé', 403);
 
     let getParticipates = await activity.getParticipations(req);
 
@@ -330,7 +333,7 @@ const activity = {
 
     sseHandlerParticipate.broadcast(getParticipates, user.city);
 
-    res.on("close", () => {
+    res.on('close', () => {
       sseHandlerParticipate.closeConnection(id);
     });
   },
