@@ -497,6 +497,8 @@ const userController = {
       }
     }
 
+    const user = await User.findByPk(userId);
+
     const userMessages = [];
 
     const sentMessages = await Message.findAll({
@@ -509,8 +511,8 @@ const userController = {
     sentMessages.forEach((message) => {
       const newMessage = {
         ...message.get(),
-        user: message.dest_user.nickname,
-        avatar: `http://localhost:8080/api/user/${message.dest_user.id}/avatar`,
+        user: user.get().nickname,
+        avatar: `http://localhost:8080/api/user/${user.get().id}/avatar`,
         date: dateFormat.convertActivityDate(message.get().created_at),
       };
 
@@ -538,8 +540,6 @@ const userController = {
 
       userMessages.push(newMessage);
     });
-    
-    userMessages.sort((a, b) => b.created_at - a.created_at);
 
     userMessages.sort((a, b) => b.created_at - a.created_at);
 
